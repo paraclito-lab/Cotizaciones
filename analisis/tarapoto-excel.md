@@ -1,7 +1,7 @@
 # Análisis: COTIZCION_TARAPOTO.xlsx
 
 Archivo distinto a los demás: no es una cotización terminada, es una **hoja de trabajo
-interna real** (mantenimiento de una balanza plataforma) que Gera no había limpiado antes de
+interna real** (mantenimiento de una balanza plataforma) que no se había limpiado antes de
 guardarla. Por eso vale más que varias cotizaciones ya terminadas — muestra el proceso, no
 solo el resultado. Analizado el 13/09/2026.
 
@@ -11,7 +11,7 @@ solo el resultado. Analizado el 13/09/2026.
 cuarta, sin embargo, deja ver el costeo interno completo de la balanza:
 
 - Una lista de insumos/repuestos con su costo, varios todavía en S/0 (celdas y de acero,
-  cable multiconductor, caja sumatoria) — es decir, precios que Gera aún no había confirmado
+  cable multiconductor, caja sumatoria) — es decir, precios que aún no se habían confirmado
   al momento de guardar el archivo.
 - Una columna de **preguntas pendientes al cliente o a sí mismo**, escritas tal cual mientras
   pensaba: "¿cuál es el precio de la cadena de brazo?", "¿se va a pintar la estructura?",
@@ -38,7 +38,7 @@ sale de una fórmula fija sino de una decisión caso por caso.
 - Punto 5 (checklist de consideraciones): la idea de dejar preguntas pendientes antes de
   cotizar, vista aquí de forma improvisada, se decidió formalizar por tipo de servicio.
 - Punto 2 (mano de obra por localidad): el caso del pasaje a Cuzco confirmó que la logística
-  cambia según dónde se hace el trabajo, antes de que Gera lo explicara directamente en el
+  cambia según dónde se hace el trabajo, antes de que se explicara directamente en el
   chat.
 - Punto 7 (numeración): el código `8201-MES-DIA-#` visto acá fue el disparador para preguntar
   por la numeración y terminar definiendo `COT-AAAA-NNN`.

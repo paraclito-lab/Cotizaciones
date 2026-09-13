@@ -10,3 +10,8 @@ archivo con los datos ya estructurados, más el dato crudo tal como aparece en e
 | `2026-09-comas-pintado.md` | 9053-2026 | Tottus - Comas | Pintado electrostático (con foto) | 1,534.00 |
 | `2026-09-angamos-motor.md` | 9127-2026 | Tottus - Angamos | Cambio de motor (con foto) | 2,950.00 |
 | `2026-08-moyobamba.md` | 100-2026 | HB Precio - Moyobamba | Mantenimiento + repuestos (carretillas) — **formato de referencia elegido como estándar** | 5,396.14 |
+
+El PDF original de Moyobamba (`100-STOCKAS MOYOBAMBA.pdf`) también está en esta carpeta —
+es el único PDF real que se conserva completo, porque de ahí sale la imagen de encabezado en
+`plantilla/headers/`. Los precios de esa cotización están en `catalogo.md`, no en este archivo
+(algunos ya se corrigieron y no coinciden con lo que dice el PDF — ver `catalogo.md`).

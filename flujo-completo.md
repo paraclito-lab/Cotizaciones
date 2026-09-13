@@ -10,7 +10,7 @@ flowchart TD
     B --> C{Checklist del tipo\nde servicio resuelto?}
     C -->|No| C1[Bloquea: preguntas pendientes\nej. pintura, N° trabajadores,\ncosto real de pasaje]
     C1 -.resolver.-> C
-    C -->|Sí| D[Buscar repuestos en\nCatálogo_Items — precio fijo,\nno cambia por zona]
+    C -->|Sí| D[Buscar repuestos en\ncatalogo.md — precio fijo,\nno cambia por zona]
 
     D --> E{Ubicación}
     E -->|Lima / Local| F["Mano de obra = personas x tarifa\n(S/100 o S/200) x 2\n(amanecida = doble día)"]
@@ -42,7 +42,7 @@ flowchart TD
     U --> V{Después del trabajo:\n¿se registró costo real?}
     V -->|No| V1[Pendiente: seguimiento de\ncosto real vs. cotizado]
     V -->|Sí| W[Comparar margen real\nvs. margen cotizado]
-    W --> X[Alimenta Catálogo_Items\ny criterios para la\npróxima cotización]
+    W --> X[Alimenta catalogo.md\ny criterios para la\npróxima cotización]
 
     V1 -.anotar caso.-> Y[casuistica.md]
     Q -->|Caso raro / duda nueva| Y
@@ -56,6 +56,8 @@ inline al instante en el chat (sin tocar ni descargar nada), y sí muestra el di
 Telegram llega como documento que hay que abrir aparte, un paso extra en cada revisión.
 
 Para no duplicar trabajo ni arriesgar que la vista previa y el PDF final se vean distintos: se
-arma **una sola plantilla en HTML/CSS** (el diseño de Moyobamba-100). Esa misma plantilla se
-renderiza a PNG para la vista previa rápida, y a PDF solo cuando ya está aprobada, para el
-envío real por correo.
+arma **una sola plantilla HTML** por tipo de servicio, hecha de la imagen real del encabezado
+(logo, marca, curvas, título del servicio) + el N° de cotización superpuesto como texto real
+(ver `plantilla/README.md` para el detalle técnico y por qué no se recreó el diseño desde
+cero). Esa misma plantilla se renderiza a PNG para la vista previa rápida, y a PDF solo cuando
+ya está aprobada, para el envío real por correo.

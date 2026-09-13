@@ -1,20 +1,25 @@
 # Sistema de cotizaciones — en construcción
 
 Repositorio privado, separado de la web pública (`webmunay`), donde se deja por escrito, en
-lenguaje claro, las reglas reales con las que Gera (LF Munay Perú) cotiza — antes de
-convertirlas en un Excel o un bot. La idea: que la lógica se pueda revisar, corregir y
-versionar como cualquier otro cambio de código, en vez de vivir solo en una conversación de
-chat.
+lenguaje claro, las reglas reales con las que se cotiza en LF Munay Perú — antes de
+convertirlas en un bot. La idea: que la lógica se pueda revisar, corregir y versionar como
+cualquier otro cambio de código, en vez de vivir solo en una conversación de chat.
 
-## Archivos de este repositorio
+**Nada de esto está automatizado todavía.** Es toda la etapa de diseño: reglas, catálogo,
+formato del PDF/PNG y flujo de aprobación, ya decididos y listos para programarse.
 
-- **criterios-actuales.md** — la "foto" más reciente de las reglas de cotización ya
-  confirmadas por Gera (personal por tipo de equipo, tarifas, márgenes, etc.). Se actualiza
-  cada vez que se confirma o corrige un criterio.
-- **casuistica.md** — bitácora de casos nuevos, excepciones y dudas que van apareciendo con
-  el uso real (ej: un tipo de trabajo no contemplado, un cliente que pidió algo raro, un
-  precio que no cuadró). No se borra nada, solo se agrega — sirve como historial de por qué
-  el sistema cambió de una forma u otra.
+## Mapa del repositorio
+
+| Carpeta / archivo | Qué es |
+|---|---|
+| `criterios-actuales.md` | Las reglas de negocio decididas (mano de obra por localidad, márgenes, checklist, numeración, flujo de aprobación, cómo se interactúa por Telegram). Es el documento que más se actualiza. |
+| `catalogo.md` | **Única** fuente de precios de repuestos. Si un precio no está aquí, no es oficial. |
+| `casuistica.md` | Bitácora de casos nuevos o dudas que no encajan en las reglas actuales. Se agrega, no se borra. |
+| `flujo-completo.md` | El diagrama (mermaid) de punta a punta del proceso, desde la solicitud hasta el registro del costo real. |
+| `analisis/` | Por qué se tomó cada decisión: qué tenían de malo los Excel originales y qué reveló la hoja de trabajo real de la balanza de Tarapoto. |
+| `ejemplos-reales/` | Cotizaciones reales ya entregadas a clientes, estructuradas, usadas como referencia de formato y precios. |
+| `branding/` | Logo y fondo decorativo de la marca. |
+| `plantilla/` | Cómo se arma el PDF/PNG de cada cotización (imágenes de encabezado por tipo de servicio + texto dinámico superpuesto) y las coordenadas exactas para agregar un tipo de servicio nuevo. |
 
 ## Cómo se usa
 
@@ -23,5 +28,11 @@ Cuando algo no está claro en una cotización real, dos caminos:
 1. Si bloquea la cotización actual → se pregunta directo (en el chat con Claude o entre
    el equipo).
 2. Si es una casuística nueva que no bloquea pero vale la pena registrar para el futuro →
-   se anota en `casuistica.md` con la plantilla de abajo, y en algún momento se revisa en
-   conjunto para decidir si cambia una regla en `criterios-actuales.md`.
+   se anota en `casuistica.md`, y en algún momento se revisa en conjunto para decidir si
+   cambia una regla en `criterios-actuales.md`.
+
+## Pendiente de aclarar
+
+Quién confirma cada regla no siempre ha quedado registrado con precisión (el historial de
+conversación asumió por error que se hablaba con el dueño de la empresa). Cuando se confirme
+el rol de cada persona que participa, se ajustan las menciones en estos documentos.

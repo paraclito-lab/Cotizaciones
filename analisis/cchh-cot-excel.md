@@ -1,6 +1,6 @@
 # Análisis: CCHH_COT-1.xlsx (Excel histórico de cotizaciones)
 
-Archivo que Gera usaba antes de este sistema para cotizar. Analizado el 13/09/2026.
+Archivo que se usaba antes de este sistema para cotizar. Analizado el 13/09/2026.
 
 ## Qué contenía
 
@@ -28,21 +28,25 @@ con ese nivel de detalle.
 
 ## Qué se rescató
 
-- **38 repuestos y servicios** con su precio, deduplicados y organizados por categoría →
-  quedaron en `Sistema_Cotizaciones_MunayPeru.xlsx` (hoja Catálogo_Items). Nota: varios de
-  estos precios luego se detectaron desactualizados frente a las cotizaciones reales de
-  septiembre 2026 (ver `tarapoto-excel.md` y `ejemplos-reales/`) — el catálogo prioriza ahora
-  la fuente más reciente (Moyobamba, ver `criterios-actuales.md` punto 1).
+En su momento se armó un Excel nuevo (`Sistema_Cotizaciones_MunayPeru.xlsx`, en el repo
+`webmunay`) con lo rescatado de este archivo. **Ese Excel quedó descontinuado** — los precios
+viven ahora en `catalogo.md` de este repo, y el formato del PDF/PNG en `plantilla/`. Se deja
+la referencia solo para que quede claro de dónde salió cada dato:
+
+- **38 repuestos y servicios** con su precio, deduplicados y organizados por categoría.
+  Varios de estos precios luego se detectaron desactualizados frente a las cotizaciones reales
+  de septiembre 2026 (ver `tarapoto-excel.md` y `ejemplos-reales/`) — la fuente vigente de
+  precios es `catalogo.md`.
 - **19 cotizaciones históricas** (fecha, resumen, subtotal, IGV, total) migradas a una sola
-  tabla → hoja Histórico_Cotizaciones del mismo Excel. KPIs calculados: total facturado
-  histórico S/70,275.84, ticket promedio S/3,698.73, 63% de los trabajos en exterior.
+  tabla. KPIs calculados: total facturado histórico S/70,275.84, ticket promedio S/3,698.73,
+  63% de los trabajos en exterior.
 - **El modelo de costeo de "COTIZACION MOTOR"** (costo real → margen → precio final) se usó
-  como base para diseñar la hoja Costos_Operativos y el análisis interno de margen de la
-  Plantilla_Cotización.
+  como base para la lógica de costo/margen que hoy está en `criterios-actuales.md` puntos 2 y
+  4.
 
 ## Decisión pendiente que generó
 
 El precio de "mantenimiento de carretilla" variaba de S/50 a S/650 por unidad en este archivo
-sin ningún criterio visible — esto fue lo que llevó a preguntarle a Gera por qué, y la
+sin ningún criterio visible — esto fue lo que llevó a preguntar por qué, y la
 respuesta (mano de obra depende de localidad, no es un precio fijo) está documentada en
 `criterios-actuales.md` punto 2.

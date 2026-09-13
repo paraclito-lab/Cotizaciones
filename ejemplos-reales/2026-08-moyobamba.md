@@ -32,14 +32,7 @@ resaltado en amarillo).
 - **Total**: S/ 5,396.14
 
 **Patrón confirmado**: la fila 1 es siempre la mano de obra de mantenimiento (por cantidad de
-carretillas); las filas siguientes son repuestos individuales suministrados, cada uno con su
-propio precio (que debe coincidir con el catálogo, ver `criterios-actuales.md` en la raíz del
-repo).
-
-**Nota de precios vs. catálogo actual**: algunos precios de esta cotización no coinciden
-exactamente con los que había en `Sistema_Cotizaciones_MunayPeru.xlsx` (ej. protector soporte
-de pistón aquí S/29 igual, pero rueda de carga aquí S/65 vs. S/40 en el catálogo anterior,
-trapecio y ejes aquí S/300 vs. S/250 antes). Esto confirma que el catálogo de repuestos
-necesita actualizarse con estos precios más recientes (septiembre 2026) — pendiente de
-decidir con Gera si se toma el más reciente como válido o si depende de otro factor (ej.
-proveedor, inflación).
+carretillas); las filas siguientes son repuestos individuales suministrados. Los precios
+vigentes de cada repuesto están en `catalogo.md`, no en esta tabla — los de aquí son el dato
+crudo tal como salió en este PDF, y ya se sabe que al menos uno (rueda de carga, S/65 aquí) se
+corrigió a S/40 al validarlo (ver `catalogo.md`).

@@ -1,33 +1,27 @@
-# Criterios de cotización — confirmados por Gera
+# Criterios de cotización — confirmados en conversación
 
-Última actualización: 13/09/2026. Este documento resume lo confirmado hasta ahora en
+Última actualización: 14/09/2026. Este documento resume lo confirmado hasta ahora en
 conversación; no es un sistema todavía, es la base de reglas sobre la que se va a construir.
 
 ## 1. Repuestos → precio constante
 
 El precio de un repuesto (retenes, ruedas, resortes, ejes, etc.) **no cambia según la
-localidad**. Es el mismo en Lima o en provincia. Ver catálogo en
-`Sistema_Cotizaciones_MunayPeru.xlsx` (hoja Catálogo_Items).
+localidad**. Es el mismo en Lima o en provincia. **La tabla de precios vive en `catalogo.md`**
+(no aquí, y no en ningún Excel) — ese archivo es la única fuente de verdad, para no tener el
+mismo precio escrito en dos lugares que se puedan desincronizar.
 
 **Fuente de verdad ante conflicto de precio o nombre — DECIDIDO**: cuando dos cotizaciones
 reales tengan un precio o nombre distinto para lo que parece ser el mismo repuesto, se toma
-como válido lo que aparece en la cotización de **Moyobamba (N° 100-2026)**, por ser la más
-reciente confirmada por Gera. Ejemplo ya detectado: "rueda direccional" (Moyobamba, S/95) y
-"rueda giratoria y/o delantera" (Porongoche, S/95) se unifican como el mismo ítem.
+como punto de partida lo que aparece en la cotización de **Moyobamba (N° 100-2026)** por ser
+la más reciente, pero **se valida siempre antes de darlo por definitivo** — ya pasó que un
+precio de Moyobamba resultó incorrecto (ver `catalogo.md`, rueda de carga). Toda vista previa
+es una oportunidad de corregir el catálogo, no solo de aprobar o rechazar la cotización.
 
 **Personal para servicios que no son carretilla/balanza (estructuras, motores, pintado)**: no
 hay dato confirmado todavía. Mientras tanto se usa como referencia el modelo de costeo de la
-hoja "COTIZACION MOTOR" (del Excel `CCHH_COT-1.xlsx` original) — no para copiar un número de
-personas, sino para la lógica de costo → ganancia → precio. Sigue pendiente de confirmar con
-Gera caso por caso.
-
-**Corrección de precio (14/09/2026) — la rueda de carga NO es S/65**: al revisar la primera
-vista previa, Gera confirmó que el precio de venta real de la **rueda de carga es S/40**, no
-S/65 como aparecía en la cotización de Moyobamba. Es decir, Moyobamba no es infalible como
-fuente — sirve como referencia pero cada precio se valida con Gera antes de darlo por
-definitivo. Precio de **resortes de retorno confirmado en S/55** (coincide con Moyobamba, sin
-cambios). Queda como recordatorio: toda vista previa debe tratarse como una oportunidad de
-corregir el catálogo, no solo de aprobar o rechazar la cotización puntual.
+hoja "COTIZACION MOTOR" (ver `analisis/cchh-cot-excel.md`) — no para copiar un número de
+personas, sino para la lógica de costo → ganancia → precio. Sigue pendiente de confirmar caso
+por caso.
 
 ## 2. Mano de obra → depende de la localidad
 
@@ -58,7 +52,7 @@ corregir el catálogo, no solo de aprobar o rechazar la cotización puntual.
 - El precio final suele **ajustarse a un número "redondo"** cercano (ej. S/2,490, S/2,980,
   múltiplos de S/500) — es una decisión comercial, no una fórmula automática.
 - **Importante**: el margen sugerido NUNCA debe aplicarse automático — el sistema debe
-  proponerlo y Gera lo confirma o ajusta antes de enviar.
+  proponerlo y el equipo lo confirma o ajusta antes de enviar.
 
 **Precio mínimo — DECIDIDO (14/09/2026)**: el mantenimiento de carretillas hidráulicas tiene
 un **piso de S/250 por unidad**, sin importar lo que dé la fórmula de mano de obra (personas ×
@@ -69,13 +63,13 @@ es específico de carretillas.
 
 ## 5. Checklist de consideraciones antes de enviar
 
-Idea inicial de Gera (vista en la hoja de cotización de una balanza en Tarapoto): antes de
+Idea vista en la hoja de cotización de una balanza en Tarapoto: antes de
 cerrar una cotización, dejar una lista de preguntas/consideraciones pendientes por tipo de
 servicio (ej. para una balanza: ¿se pinta la estructura?, ¿qué tipo de pintura?, ¿cuántos
 trabajadores?, ¿cuál es el costo real del pasaje?). Enviar una cotización es un compromiso de
 precio, así que no debería salir con preguntas sin resolver.
 
-**Pendiente de decidir con Gera**: si el checklist es el mismo para todo tipo de servicio o si
+**Pendiente de decidir**: si el checklist es el mismo para todo tipo de servicio o si
 cada categoría de servicio (carretillas, balanzas, estructuras, motores) tiene su propio set
 de preguntas.
 
@@ -92,8 +86,8 @@ trabajo:
 - Margen real obtenido vs. margen cotizado.
 
 Esto permitiría, con el tiempo, tener un costo de referencia más preciso por tipo de servicio
-y localidad (en vez de solo el rango histórico de precios cotizados que ya tiene el Excel
-actual), y detectar cuando una cotización se está subestimando.
+y localidad (en vez de solo el precio cotizado que hay hoy en `catalogo.md`), y detectar
+cuando una cotización se está subestimando.
 
 ## 7. Numeración de cotización — DECIDIDO
 
@@ -111,13 +105,14 @@ Datos reales de la empresa (tomados de las cotizaciones ya entregadas a clientes
 - Dirección: Calle Los Álamos Mz L Lt 5 - Pachacamac
 - Celular: 946 763 582
 - Email: lfmunayperu@gmail.com
-- Logo: círculo con degradado naranja/turquesa/negro formando una "M" (pendiente de recibir
-  el archivo original en buena calidad).
+- Logo: círculo con degradado naranja/turquesa/negro formando una "M" (ya guardado en
+  `branding/logo.png`).
 
 Formato de PDF a usar de aquí en adelante: el visto en la cotización N° 100-2026 (Moyobamba,
 HB Precio) — encabezado con logo, franjas turquesa/naranja, N° de cotización en una cápsula
 verde, tabla con Sub Total resaltado en amarillo. Reemplaza al formato simple sin color (visto
-en la cotización N° 107-2026, Porongoche) que queda descontinuado.
+en la cotización N° 107-2026, Porongoche) que queda descontinuado. La implementación técnica
+de este formato (cómo se genera el PDF/PNG real) está en `plantilla/README.md`.
 
 La redacción de la tabla de ítems varía según tipo de servicio, y así se mantiene (no se
 fuerza un único formato de fila):
@@ -145,7 +140,7 @@ no al revés.
 5. **Registro trazable** — cada cotización guarda su historial completo: quién la pidió, qué
    correcciones tuvo, quién la aprobó, cuándo se marcó lista, cuándo se envió realmente.
 
-**Pendiente de decidir con Gera**: después de cuánto tiempo / cuántas cotizaciones sin
+**Pendiente de decidir**: después de cuánto tiempo / cuántas cotizaciones sin
 corrección se evalúa automatizar el paso 4 (y probablemente solo para el tipo de servicio más
 estandarizado — mantenimiento rutinario de carretillas — no para estructuras/motores).
 
