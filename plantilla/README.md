@@ -68,9 +68,15 @@ El JSON lleva `numero`, `titulo`, `cliente`, `local`, `atencion`, `fecha`, la li
 1. Incrusta `headers/base.jpg` y superpone el N° y el título en las coordenadas de arriba.
 2. Arma la tabla, **calcula subtotal, IGV 18% y total** (nunca se escriben a mano).
 3. Achica y encuadra las fotos a 90×90 (máximo 3 por ítem).
-4. Renderiza **PNG** (vista previa, se ve al instante en el celular) y **PDF** (A4, una
-   página, el entregable que va por correo) desde el mismo HTML — así no pueden verse
-   distintos.
+4. Renderiza **PNG** (vista previa, se ve al instante en el celular) y **PDF** desde el mismo
+   HTML — así no pueden verse distintos.
+
+   El PDF va en **A4 horizontal**, igual que las cotizaciones reales ya entregadas (el PDF de
+   referencia de Moyobamba mide 841.8 × 595.2 pts, o sea A4 apaisado). La escala **se calcula
+   sola** a partir del alto real del contenido: una cotización corta llena el ancho de la
+   hoja, y una larga se achica lo justo para entrar en una sola página. Probado con 4 y con
+   12 ítems: una página en ambos casos. Por debajo de 0.55 de escala ya sería ilegible, así
+   que en ese caso pasa a una segunda página en vez de seguir achicando.
 5. Imprime alertas de la validación automática (`criterios-actuales.md` punto 9, paso 2):
    ítems en S/0, N° que no cumple `COT-AAAA-NNN`, más de 3 fotos.
 

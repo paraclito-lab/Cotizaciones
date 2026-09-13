@@ -29,3 +29,16 @@ convertirse en una regla nueva dentro de `criterios-actuales.md`.
   `analisis/tarapoto-excel.md`), y se documentó la regla en `criterios-actuales.md` punto 8.
 - **¿Debería ser una regla permanente?** Sí — ya se agregó como regla de coherencia
   título↔contenido en `criterios-actuales.md`.
+
+### 14/09/2026 — El PDF salía en vertical y quedaba con media hoja en blanco
+
+- **Contexto**: primera prueba del generador (`plantilla/generar.py`) con una cotización de 4
+  ítems.
+- **Qué pasó**: el PNG se veía bien, pero el PDF salía en A4 vertical con el contenido apenas
+  ocupando el tercio superior de la hoja. Se veía como un documento mal armado.
+- **Cómo se resolvió esta vez**: se revisó el PDF real ya entregado (Moyobamba N°100) y resultó
+  medir 841.8 × 595.2 pts, es decir **A4 horizontal** — el formato vertical nunca fue el de la
+  empresa. Se cambió el generador a apaisado y se le agregó un cálculo de escala que mide el
+  alto real del contenido para llenar la hoja sin cortar.
+- **¿Debería ser una regla permanente?** Sí — ya está en `plantilla/README.md`. Aprendizaje de
+  fondo: **ante una duda de formato, medir el PDF real en vez de asumir el valor por defecto.**

@@ -93,6 +93,14 @@ def chromium():
     return c[0] if c else None
 
 
+# El PDF va en A4 HORIZONTAL, igual que las cotizaciones reales ya entregadas
+# (el PDF de referencia de Moyobamba mide 841.8 x 595.2 pts = A4 apaisado).
+MARGEN_MM = 8
+PX_POR_MM = 96 / 25.4
+A4_ANCHO_MM, A4_ALTO_MM = 297, 210          # apaisado
+ESCALA_MIN, ESCALA_MAX = 0.55, 1.30
+
+
 def render(html, base_salida):
     from playwright.sync_api import sync_playwright
     ruta_html = base_salida + ".html"
@@ -103,8 +111,19 @@ def render(html, base_salida):
         pg.goto("file://" + ruta_html)
         pg.wait_for_timeout(400)
         pg.locator(".sheet").screenshot(path=base_salida + ".png")
-        pg.pdf(path=base_salida + ".pdf", format="A4", print_background=True,
-               scale=0.8, margin={"top": "8mm", "bottom": "8mm", "left": "8mm", "right": "8mm"})
+
+        # Escala que llena la hoja sin dejar espacio muerto: se ajusta al ancho, y si la
+        # cotización es larga se achica lo necesario para que entre en una sola página.
+        caja = pg.locator(".sheet").bounding_box()
+        disp_w = (A4_ANCHO_MM - 2 * MARGEN_MM) * PX_POR_MM
+        disp_h = (A4_ALTO_MM - 2 * MARGEN_MM) * PX_POR_MM
+        escala = min(disp_w / caja["width"], disp_h / caja["height"], ESCALA_MAX)
+        escala = max(escala, ESCALA_MIN)     # más abajo sería ilegible: mejor una 2da página
+
+        m = f"{MARGEN_MM}mm"
+        pg.pdf(path=base_salida + ".pdf", format="A4", landscape=True, print_background=True,
+               scale=round(escala, 3),
+               margin={"top": m, "bottom": m, "left": m, "right": m})
         nav.close()
     return base_salida + ".png", base_salida + ".pdf"
 
