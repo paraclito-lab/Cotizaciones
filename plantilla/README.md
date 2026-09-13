@@ -1,7 +1,7 @@
 # Plantilla técnica del PDF/PNG de cotización
 
-Decisión de arquitectura (14/09/2026) para que generar una cotización sea rápido y siempre
-fiel a la marca real, sin depender de recrear el diseño a mano cada vez.
+Decisión de arquitectura (14/09/2026, revisada el mismo día) para que generar una cotización
+sea rápido y siempre fiel a la marca real, sin depender de recrear el diseño a mano cada vez.
 
 ## El problema que esto resuelve
 
@@ -10,51 +10,56 @@ nunca calza exacto con el diseño real — se probó 3 veces (curvas gruesas inv
 extraídas pálidas mal posicionadas, tipografía y jerarquía de títulos al revés) y cada versión
 quedaba distinta al PDF real que ya usan. Recrear el diseño completo en HTML no es eficiente.
 
-## La solución: imagen real de fondo + texto dinámico superpuesto
+## La solución: una sola imagen base + todo lo variable como texto real superpuesto
 
-En vez de recrear el diseño, se usa **la imagen real del encabezado** (tomada directo de un
-PDF ya entregado, en alta resolución) como fondo fijo, y se superpone **solo el campo que
-cambia en esa zona** (el N° de cotización) como texto HTML real, en la posición exacta medida
-sobre la imagen original.
+Se usa **una única imagen real del encabezado** (`plantilla/headers/base.jpg`, tomada directo
+de un PDF ya entregado, en alta resolución) con las dos zonas que cambian **vaciadas y
+pintadas de blanco**, y encima se superponen como texto HTML real:
 
-- Todo lo que NO cambia por tipo de servicio (logo, "LF MUNAY PERÚ", RUC/dirección/cel/email,
-  las curvas decorativas, "COTIZACIÓN DE SERVICIOS") queda perfecto porque es literalmente la
-  imagen real, no una recreación.
-- Lo único dinámico en el encabezado es el **N° de cotización**, superpuesto en HTML/CSS en
-  la posición calibrada (ver abajo), así que sigue siendo texto real y editable.
-- El nombre del servicio ("MANTENIMIENTO DE CARRETILLAS HIDRÁULICAS", "MANTENIMIENTO DE
-  BALANZAS", etc.) no cambia cotización por cotización, cambia por **tipo de servicio** — por
-  eso no hace falta que sea dinámico por cada cotización, alcanza con tener **una imagen de
-  encabezado distinta por cada tipo de servicio**.
+- El **N° de cotización** (cambia en cada cotización).
+- El **título del servicio** ("MANTENIMIENTO DE CARRETILLAS HIDRÁULICAS", "MANTENIMIENTO DE
+  BALANZAS", etc. — cambia según el tipo de trabajo).
 
-## Cómo agregar un tipo de servicio nuevo
+Todo lo que nunca cambia (logo, "LF MUNAY PERÚ", RUC/dirección/cel/email, las curvas
+decorativas, "COTIZACIÓN DE SERVICIOS") queda perfecto porque es literalmente la imagen real,
+no una recreación.
 
-1. Tomar un PDF real ya entregado de ese tipo de servicio (o pedir uno).
-2. Renderizarlo en alta resolución: `pdftoppm -r 400 -png archivo.pdf pagina`
-3. Recortar la franja del encabezado completo (logo + marca + títulos), sin el cuerpo de la
-   tabla.
-4. Ubicar el recuadro verde del N° de cotización (buscando el color de borde ~RGB(30,170,120))
-   y "vaciarlo" pintándolo de blanco.
-5. Guardar como `plantilla/headers/<tipo-servicio>.jpg`.
-6. Usar las mismas coordenadas de la cápsula (son iguales en todos los formatos que comparten
-   la plantilla base, ver abajo) para superponer el N° dinámico.
+**Por qué el título también quedó dinámico y no como una imagen por tipo de servicio**: la
+primera versión guardaba una imagen distinta por cada tipo de servicio (con el título ya
+"horneado" en la imagen). Funcionaba, pero cualquier ajuste de texto — corregir una palabra,
+agregar un tipo de servicio nuevo — obligaba a rehacer todo el proceso de recorte otra vez.
+Con el título como texto real, cambiarlo es editar una línea; **una sola imagen base sirve
+para cualquier servicio**.
 
-## Coordenadas calibradas de la cápsula del N° (formato base, ej. Moyobamba-100)
+## Coordenadas calibradas (sobre `plantilla/headers/base.jpg`)
 
-Como porcentaje del tamaño de la imagen del encabezado (para que escale a cualquier ancho):
+Como porcentaje del tamaño de la imagen (para que escale a cualquier ancho):
 
-- `left: 70.49%`
-- `top: 32.14%`
-- `width: 17.75%`
-- `height: 25.41%`
+| Campo | left | top | width | height |
+|---|---|---|---|---|
+| N° de cotización (cápsula) | 70.49% | 32.14% | 17.75% | 25.41% |
+| Título del servicio | 11.85% | 79.18% | 73.06% | 13.27% |
 
-Estilo del texto superpuesto: borde verde 2px (`#1f9e6e`), esquinas totalmente redondeadas,
-fondo blanco, texto verde oscuro (`#17795f`) en negrita, centrado.
+Estilos:
+- **N°**: borde verde 2px (`#1f9e6e`), esquinas totalmente redondeadas, fondo blanco, texto
+  verde oscuro (`#17795f`) en negrita ~15px, centrado.
+- **Título**: fuente serif (Georgia / Times New Roman), negrita, ~30px, color verde oscuro
+  (`#17795f`), centrado. Si un título es más largo que "MANTENIMIENTO DE CARRETILLAS
+  HIDRÁULICAS" puede necesitar reducir el tamaño de fuente para no desbordar — pendiente de
+  resolver cuando aparezca un caso así (ver `casuistica.md`).
+
+## Cómo se genera una cotización nueva (resumen técnico)
+
+1. Cargar `plantilla/headers/base.jpg` como fondo.
+2. Superponer el N° (`COT-AAAA-NNN`) y el título del servicio en las coordenadas de arriba.
+3. Completar el resto de la plantilla (cliente, local, atención, fecha, tabla de ítems,
+   totales) como HTML normal.
+4. Renderizar a PNG (vista previa) o PDF (entregable final) desde el mismo HTML.
 
 ## Pendiente
 
-- Preparar el header de **Balanzas** (falta un PDF real limpio de ese tipo de servicio).
-- Preparar headers para **estructuras/motores/pintado** si van a usar el mismo formato base.
 - Si algún día se consigue el archivo fuente editable (AI/Figma/PSD) del diseño, se puede
   reemplazar este método por una plantilla 100% vectorial — pero mientras no exista, este
   método es el más eficiente y fiel disponible.
+- Definir qué pasa si el título de un servicio nuevo no cabe en una sola línea con el tamaño
+  de fuente actual.
