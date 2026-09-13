@@ -42,7 +42,7 @@ por caso.
 |---|---|
 | Carretilla hidráulica | 2 |
 | Balanza | 3 |
-| Otros (estructuras metálicas, motores AC, planchado/pintado, etc.) | **por confirmar** |
+| Servicios Generales (estructuras, motores, eléctrico/electromecánico, pintado, etc.) | **por confirmar** |
 
 ## 4. Margen de ganancia
 
@@ -70,7 +70,7 @@ trabajadores?, ¿cuál es el costo real del pasaje?). Enviar una cotización es 
 precio, así que no debería salir con preguntas sin resolver.
 
 **Pendiente de decidir**: si el checklist es el mismo para todo tipo de servicio o si
-cada categoría de servicio (carretillas, balanzas, estructuras, motores) tiene su propio set
+cada categoría de servicio (carretillas, balanzas, Servicios Generales) tiene su propio set
 de preguntas.
 
 ## 6. Seguimiento de costos reales (aún no existe)
@@ -119,10 +119,13 @@ fuerza un único formato de fila):
 - **Carretillas**: una fila de "mantenimiento" (mano de obra, por cantidad de unidades) +
   filas separadas por cada repuesto suministrado.
 - **Balanzas**: redacción propia (más técnica: calibración, nivelación, alineamiento, etc.).
-- **Resto de servicios** (estructuras, motores, pintado electrostático, etc.): una fila con
-  foto del equipo/trabajo + descripción + precio final.
+- **Servicios Generales** (estructuras, motores, eléctrico/electromecánico, pintado
+  electrostático, y cualquier servicio nuevo que todavía no tenga categoría propia): una fila
+  con foto del equipo/trabajo (opcional) + descripción + precio final. Es a propósito un cajón
+  amplio — no se subdivide más (ej. "Eléctrico" separado de "Estructuras") salvo que en el uso
+  real se note que hace falta.
 
-**Fotos en "sustento técnico" — DECIDIDO (14/09/2026)**: para el tipo "resto de servicios",
+**Fotos en "sustento técnico" — DECIDIDO (14/09/2026)**: para el tipo "Servicios Generales",
 la foto es **opcional** — si el técnico no manda ninguna, la cotización sale solo con texto,
 no bloquea la generación. Si manda entre 1 y 3 fotos, se aceptan **tal cual, sin exigir
 calidad** (no se rechaza una foto oscura o borrosa), y el sistema las achica y encuadra

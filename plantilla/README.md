@@ -56,7 +56,7 @@ Estilos:
    totales) como HTML normal.
 4. Renderizar a PNG (vista previa) o PDF (entregable final) desde el mismo HTML.
 
-## Fila con foto (tipo "resto de servicios") — construida y probada
+## Fila con foto (tipo "Servicios Generales") — construida y probada
 
 Para motores/estructuras/pintado (ver `criterios-actuales.md` punto 8), la fila de ítem lleva
 la descripción + hasta 3 fotos + precio. Probado con las 3 fotos reales del PDF de Angamos
