@@ -54,6 +54,15 @@ por caso.
 - **Importante**: el margen sugerido NUNCA debe aplicarse automático — el sistema debe
   proponerlo y confirmarse/ajustarse antes de enviar.
 
+**Naturaleza del precio hoy — DECIDIDO (14/09/2026)**: los precios de mano de obra que se
+cobran hoy (del orden de S/650–690 por carretilla) son **precios de referencia por
+experiencia**, no el resultado de una fórmula. No existe todavía una fórmula que los reproduzca
+y no se va a inventar una: **se va a deducir con datos reales**. Desde el 15/09/2026 arranca un
+**mes de prueba** en el que cada cotización y cada trabajo se registran con el detalle
+necesario (personas, amanecidas, costo real) — al cierre del mes se analiza esa data y recién
+ahí se define la fórmula, o se confirma que el precio de referencia estaba bien. Se revisa y se
+mejora mes a mes.
+
 **Precio mínimo — DECIDIDO (14/09/2026)**: el mantenimiento de carretillas hidráulicas tiene
 un **piso de S/250 por unidad**, sin importar lo que dé la fórmula de mano de obra (personas ×
 tarifa × 2 ÷ cantidad). Si la fórmula da menos de S/250 (por ejemplo, muchas unidades entre
@@ -73,33 +82,42 @@ precio, así que no debería salir con preguntas sin resolver.
 cada categoría de servicio (carretillas, balanzas, Servicios Generales) tiene su propio set
 de preguntas.
 
-## 6. Seguimiento de costos reales — DECIDIDO (14/09/2026)
+## 6. Seguimiento de costos reales — DECIDIDO (14/09/2026, ampliado)
 
-Hasta ahora no había manera de comparar lo cotizado contra lo que realmente costó el
-trabajo — por lo tanto no se sabía con certeza si una cotización específica ganó, perdió, o
-cobró justo. Se armó un **registro** (Google Sheet, fuera de este repo — es dato operativo que
-cambia todo el tiempo, no encaja en control de versiones de código) con una fila por
-cotización, llenada en 3 momentos:
+Hasta ahora no había manera de comparar lo cotizado contra lo que realmente costó el trabajo —
+por lo tanto no se sabía con certeza si una cotización específica ganó, perdió, o cobró justo.
+Se armó un **registro** (Google Sheet, fuera de este repo — es dato operativo que cambia todo
+el tiempo, no encaja en control de versiones) con una fila por cotización, llenada en 3
+momentos:
 
-1. **Al cotizar**: N°, fecha, cliente/local, tipo de servicio, descripción, subtotal/IGV/total
-   cotizado.
+1. **Al cotizar**: N°, fecha, cliente/local, tipo de servicio, descripción, **cantidad de
+   unidades**, subtotal/IGV/total cotizado.
 2. **Cuando el cliente responde**: Estado (Cotizado / Enviado / Ganado / Perdido / Sin
-   respuesta).
-3. **Al terminar el trabajo** (solo si se ganó): costo real de repuestos, mano de obra,
-   logística. El costo total, la ganancia real y el margen real **se calculan solos por
-   fórmula** — nunca se escriben a mano.
+   respuesta) y, si se perdió, **el motivo** (precio alto, plazo, otro proveedor, etc.) — sin
+   el motivo, el % de cotizaciones ganadas es un número que no dice qué hacer distinto.
+3. **Al terminar el trabajo** (solo si se ganó): fecha, **cuántas personas fueron**, **cuántas
+   amanecidas tomó**, y el costo real de repuestos, mano de obra y logística. El costo total,
+   la ganancia, el margen, las unidades por amanecida y el precio por unidad **se calculan
+   solos por fórmula** — nunca se escriben a mano.
 
-Una hoja aparte ("Resumen") calcula KPIs automáticos: total cotizado, % de cotizaciones
-ganadas, ganancia real total, y margen real promedio **por tipo de servicio** (Carretillas /
-Balanzas / Servicios Generales) — así se ve cuál de los 3 deja más margen de verdad, no solo
-cuál factura más.
+**Personas y amanecidas son las dos casillas más importantes del archivo.** Son exactamente los
+datos que hoy faltan para poder calcular un precio en vez de estimarlo (ver punto 4). Si quedan
+vacías durante el mes de prueba, al cierre habrá datos de facturación pero no se podrá deducir
+la fórmula, que es el objetivo del mes. La hoja "Resumen" incluye un contador de trabajos con
+esas casillas sin llenar, justamente para que no pase desapercibido.
 
-Con el tiempo esto da un costo de referencia más preciso que el precio cotizado fijo de
-`catalogo.md`, y permite detectar cuándo una cotización se está subestimando antes de que se
-vuelva costumbre.
+**La ganancia se calcula sobre el subtotal, no sobre el total.** El IGV no es ingreso de la
+empresa: se cobra al cliente y se le entrega a SUNAT. Contarlo como ganancia la infla alrededor
+de un 36%.
 
-**Pendiente**: el bot todavía no escribe en este registro automáticamente — mientras no exista
-el bot, se llena a mano.
+La hoja "Resumen" calcula solo: KPIs comerciales (total cotizado, % ganadas, facturado),
+rentabilidad real por tipo de servicio (Carretillas / Balanzas / Servicios Generales), el
+conteo de motivos de pérdida, y un bloque de **calibración de la fórmula de precio**: unidades
+por amanecida, costo real de mano de obra por amanecida, y precio promedio por unidad. Ese
+bloque es el que se lee al cierre del mes de prueba.
+
+**Pendiente**: el registro se llena a mano; escribirlo automáticamente desde el sistema queda
+para después de que el proceso manual demuestre que funciona.
 
 ## 7. Numeración de cotización — DECIDIDO
 

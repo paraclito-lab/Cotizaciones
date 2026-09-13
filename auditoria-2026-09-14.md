@@ -5,8 +5,9 @@ plantilla, flujo, registro de costos) contra el objetivo declarado: **cotizar r�
 con el mismo formato, sin errores de precio, y sabiendo después si cada trabajo ganó o perdió
 dinero**.
 
-Cada hallazgo tiene: qué está mal o falta, por qué importa, y qué hacer. Nada de esto está
-corregido todavía — este documento es el diagnóstico, no el arreglo.
+Cada hallazgo tiene: qué está mal o falta, por qué importa, y qué hacer. Los hallazgos que ya
+se resolvieron llevan una nota ✅ al final; el diagnóstico original se deja escrito igual, para
+que quede el registro de qué estaba mal y por qué.
 
 ---
 
@@ -16,14 +17,20 @@ Lo que está bien y no hay que tocar: la arquitectura de la plantilla (imagen re
 superpuesto), la separación repo privado / web pública, el catálogo como fuente única, la
 bitácora de casuística, y la decisión de que el margen nunca se aplique automático.
 
-Lo que bloquea: **la fórmula de precio documentada no reproduce ninguna cotización real**
-(hallazgo 1). Mientras eso no se resuelva, no se puede programar nada que calcule precios — y
-ese era el objetivo central. Es el único hallazgo que detiene todo lo demás.
+El hallazgo central: **la fórmula de precio documentada no reproduce ninguna cotización
+real** (A1). No se resolvió inventando una fórmula mejor, sino cambiando el enfoque: el precio
+actual es de referencia, y la fórmula se va a **deducir de un mes de datos reales** que arranca
+el 15/09/2026. El registro de costos se rediseñó para capturar exactamente lo que ese análisis
+va a necesitar.
 
-Conteo: 3 bloqueantes, 6 vacíos críticos, 5 contradicciones, 4 defectos en el registro de
-costos, 3 mejoras de oportunidad.
+Conteo: 21 hallazgos — 3 bloqueantes, 6 vacíos, 5 contradicciones, 4 defectos del registro, 3
+oportunidades. **8 ya resueltos o reencuadrados** (A1, A3, B2, D1, D2, D3, D4, y parte de C5);
+13 abiertos.
 
 ---
+
+> **Estado al 14/09/2026 (noche)**: los hallazgos **A1, A3, B2 y D1–D4 ya fueron resueltos o
+> reencuadrados** — ver las notas ✅ dentro de cada uno. El resto sigue abierto.
 
 ## A. BLOQUEANTES (impiden programar el cálculo)
 
@@ -53,8 +60,14 @@ al técnico) o el PRECIO (lo que se le cobra al cliente)?** El punto 4 dice que 
 margen de 60–80%, lo que sugiere que es costo — pero entonces el punto 4 y el punto 2 están
 mezclando las dos cosas sin decirlo.
 
-**Acción**: definir en una sola sesión (a) cuántas carretillas por amanecida, (b) qué decide
-S/100 vs S/200, (c) si esa tarifa es costo o precio. Con eso la fórmula se vuelve programable.
+**✅ REENCUADRADO (14/09/2026)**: no se va a inventar una fórmula ni se va a resolver con una
+sesión de preguntas. El precio actual es **un precio de referencia por experiencia**, y la
+fórmula se va a **deducir de datos reales**: desde el 15/09/2026 corre un **mes de prueba**
+registrando cada trabajo, y al cierre se analiza. Para que eso funcione, el registro se amplió
+con las columnas **N° de personas**, **N° de amanecidas**, **cantidad de unidades**, más un
+bloque de KPIs de calibración (unidades por amanecida, costo real por amanecida, precio
+promedio por unidad). Sin esas columnas, el mes de datos no podría responder la pregunta.
+Deja de ser un bloqueante y pasa a ser el objetivo del mes 1.
 
 ### A2. La fila 1 de carretillas incluye repuestos que no están en el catálogo
 
@@ -80,8 +93,9 @@ los precios reales son S/650 y S/690 por unidad — **2.6× el piso**. Un piso q
 debajo de todo lo que se cobra en la práctica nunca se va a activar, y si alguna vez se activa
 va a producir una cotización muy por debajo de lo normal sin que nadie lo note.
 
-**Acción**: revisar si S/250 era un piso de *precio al cliente* o un piso de *costo*. Si es
-precio, probablemente debería estar más cerca de S/450–500.
+**✅ REENCUADRADO**: queda como está durante el mes de prueba. El KPI "precio promedio por
+unidad" del Resumen va a mostrar el piso real, y con ese dato se ajusta al cierre del mes en
+vez de adivinarlo ahora.
 
 ---
 
@@ -116,8 +130,12 @@ Si es así, es un error grave de diseño: **`catalogo.md` no dice si su columna 
 que cuesta o lo que se cobra.** Toda cotización generada con esa tabla cobraría el costo sin
 margen.
 
-**Acción urgente**: definir si `catalogo.md` es tabla de costos o de precios de venta. Lo
-correcto es que tenga **dos columnas: costo y precio de venta**.
+**✅ RESUELTO (14/09/2026)**: la columna de `catalogo.md` es **precio de venta al cliente**, y
+así quedó declarado en el propio archivo. Precios confirmados: **rueda de carga S/40** (el S/65
+de los dos PDFs fue un error o un ajuste de conveniencia puntual) y **rueda direccional S/80**
+(corrige el S/95). Queda pendiente agregar la columna de **costo de compra**, que hoy no existe
+en ninguna parte — sin ella no se puede calcular el margen repuesto por repuesto, solo el
+margen global del trabajo vía el registro.
 
 ### B3. El README describe la arquitectura vieja de la plantilla
 
@@ -207,7 +225,13 @@ salió.
 
 ---
 
-## D. DEFECTOS EN EL REGISTRO DE COSTOS (el archivo ya entregado)
+## D. DEFECTOS EN EL REGISTRO DE COSTOS
+
+**✅ LOS CUATRO CORREGIDOS (14/09/2026)** — el archivo fue reconstruido: ganancia sobre
+subtotal, fórmulas hasta la fila 500, instrucciones del LEEME con las columnas correctas, y
+columna de motivo de pérdida con su conteo en el Resumen. Se agregaron además las columnas de
+calibración (personas, amanecidas, unidades). Validado: 2,519 fórmulas, 0 errores. Se deja el
+diagnóstico original abajo como registro de qué estaba mal.
 
 ### D1. La ganancia está inflada: cuenta el IGV como ingreso propio
 
