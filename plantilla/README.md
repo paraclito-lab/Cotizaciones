@@ -56,6 +56,18 @@ Estilos:
    totales) como HTML normal.
 4. Renderizar a PNG (vista previa) o PDF (entregable final) desde el mismo HTML.
 
+## Fila con foto (tipo "resto de servicios") — construida y probada
+
+Para motores/estructuras/pintado (ver `criterios-actuales.md` punto 8), la fila de ítem lleva
+la descripción + hasta 3 fotos + precio. Probado con las 3 fotos reales del PDF de Angamos
+(cambio de motor).
+
+- Contenedor `.photo-row` (flex, `gap: 6px`) debajo del texto de la descripción.
+- Cada foto: `90x90px`, `object-fit: cover` (así se "encuadra" sin importar la proporción
+  original de la foto del celular), borde gris 1px, esquinas levemente redondeadas.
+- La foto es **opcional** — si no llega ninguna, la fila queda solo con texto.
+- Si llegan más de 3 fotos: sin resolver todavía (ver `casuistica.md`).
+
 ## Pendiente
 
 - Si algún día se consigue el archivo fuente editable (AI/Figma/PSD) del diseño, se puede
@@ -63,3 +75,4 @@ Estilos:
   método es el más eficiente y fiel disponible.
 - Definir qué pasa si el título de un servicio nuevo no cabe en una sola línea con el tamaño
   de fuente actual.
+- Definir qué pasa si llegan más de 3 fotos para un mismo ítem.

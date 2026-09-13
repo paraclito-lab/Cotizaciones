@@ -122,6 +122,14 @@ fuerza un único formato de fila):
 - **Resto de servicios** (estructuras, motores, pintado electrostático, etc.): una fila con
   foto del equipo/trabajo + descripción + precio final.
 
+**Fotos en "sustento técnico" — DECIDIDO (14/09/2026)**: para el tipo "resto de servicios",
+la foto es **opcional** — si el técnico no manda ninguna, la cotización sale solo con texto,
+no bloquea la generación. Si manda entre 1 y 3 fotos, se aceptan **tal cual, sin exigir
+calidad** (no se rechaza una foto oscura o borrosa), y el sistema las achica y encuadra
+automáticamente para que quepan en la fila de la tabla. Si manda más de 3, pendiente de
+decidir qué hacer (¿se usan las primeras 3? ¿se pide elegir?) — no se ha dado el caso todavía,
+se resuelve cuando aparezca (ver `casuistica.md`).
+
 **Regla de coherencia título↔contenido — DECIDIDO (14/09/2026)**: el título del servicio (el
 texto grande superpuesto, ver `plantilla/README.md`) y el contenido de "sustento técnico" no
 son piezas independientes — el tipo de servicio elige ambos a la vez. Un título de "Balanzas"
