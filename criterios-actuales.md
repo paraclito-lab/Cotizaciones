@@ -1,0 +1,123 @@
+# Criterios de cotización — confirmados por Gera
+
+Última actualización: 13/09/2026. Este documento resume lo confirmado hasta ahora en
+conversación; no es un sistema todavía, es la base de reglas sobre la que se va a construir.
+
+## 1. Repuestos → precio constante
+
+El precio de un repuesto (retenes, ruedas, resortes, ejes, etc.) **no cambia según la
+localidad**. Es el mismo en Lima o en provincia. Ver catálogo en
+`Sistema_Cotizaciones_MunayPeru.xlsx` (hoja Catálogo_Items).
+
+## 2. Mano de obra → depende de la localidad
+
+- **Lima / local**: tarifa por persona de S/100 o S/200 por "amanecida".
+  - **Una amanecida se cobra doble** (equivale a 2 días): el personal descansa el día
+    posterior al trabajo y no puede tomar otro servicio, así que ese día también se paga.
+  - Falta confirmar: qué decide si la amanecida es de S/100 o S/200 (¿dificultad del
+    trabajo? ¿horas? ¿tipo de cliente?).
+- **Provincia**:
+  - Si hay personal en la zona, se le pide que inspeccione y cotice en campo — **el precio
+    de su mano de obra lo decide el personal local**, no hay techo fijo desde Lima.
+  - Si el costo de personal local sale muy alto, se evalúa enviar equipo desde Lima
+    (implica sumar pasajes + viáticos + encomienda de repuestos).
+
+## 3. Personal requerido según tipo de equipo
+
+| Tipo de equipo   | N° de personas |
+|---|---|
+| Carretilla hidráulica | 2 |
+| Balanza | 3 |
+| Otros (estructuras metálicas, motores AC, planchado/pintado, etc.) | **por confirmar** |
+
+## 4. Margen de ganancia
+
+- Referencia de experiencia: **60% a 80%** sobre el costo.
+- Se puede bajar el margen si es una cantidad grande de unidades (ej. muchas carretillas de
+  un mismo cliente).
+- El precio final suele **ajustarse a un número "redondo"** cercano (ej. S/2,490, S/2,980,
+  múltiplos de S/500) — es una decisión comercial, no una fórmula automática.
+- **Importante**: el margen sugerido NUNCA debe aplicarse automático — el sistema debe
+  proponerlo y Gera lo confirma o ajusta antes de enviar.
+
+## 5. Checklist de consideraciones antes de enviar
+
+Idea inicial de Gera (vista en la hoja de cotización de una balanza en Tarapoto): antes de
+cerrar una cotización, dejar una lista de preguntas/consideraciones pendientes por tipo de
+servicio (ej. para una balanza: ¿se pinta la estructura?, ¿qué tipo de pintura?, ¿cuántos
+trabajadores?, ¿cuál es el costo real del pasaje?). Enviar una cotización es un compromiso de
+precio, así que no debería salir con preguntas sin resolver.
+
+**Pendiente de decidir con Gera**: si el checklist es el mismo para todo tipo de servicio o si
+cada categoría de servicio (carretillas, balanzas, estructuras, motores) tiene su propio set
+de preguntas.
+
+## 6. Seguimiento de costos reales (aún no existe)
+
+Hoy no hay manera de comparar lo cotizado contra lo que realmente costó el trabajo — por lo
+tanto no se sabe con certeza si una cotización específica ganó, perdió, o cobró justo.
+
+Idea a desarrollar: por cada cotización, además del monto cotizado, registrar después del
+trabajo:
+- Costo real de repuestos usados.
+- Días/personas reales de mano de obra.
+- Gastos de campo reales (pasajes, viáticos, encomienda).
+- Margen real obtenido vs. margen cotizado.
+
+Esto permitiría, con el tiempo, tener un costo de referencia más preciso por tipo de servicio
+y localidad (en vez de solo el rango histórico de precios cotizados que ya tiene el Excel
+actual), y detectar cuando una cotización se está subestimando.
+
+## 7. Numeración de cotización — DECIDIDO
+
+`COT-AAAA-NNN` (correlativo anual, reinicia cada año). Reemplaza el desorden actual: en los
+PDFs reales entregados se encontró N° 100 (28-ago), N° 107 (2-sep), N° 9053 (5-sep) y N° 9127
+(12-sep) — sin relación con la fecha, porque cada cotizador usa su propio rango de números.
+Con `COT-AAAA-NNN` hay un solo correlativo compartido, ordenable y sin choques.
+
+## 8. Marca y formato del PDF final — DECIDIDO
+
+Datos reales de la empresa (tomados de las cotizaciones ya entregadas a clientes):
+
+- Razón social: **LF MUNAY PERÚ**
+- RUC: 20605791124
+- Dirección: Calle Los Álamos Mz L Lt 5 - Pachacamac
+- Celular: 946 763 582
+- Email: lfmunayperu@gmail.com
+- Logo: círculo con degradado naranja/turquesa/negro formando una "M" (pendiente de recibir
+  el archivo original en buena calidad).
+
+Formato de PDF a usar de aquí en adelante: el visto en la cotización N° 100-2026 (Moyobamba,
+HB Precio) — encabezado con logo, franjas turquesa/naranja, N° de cotización en una cápsula
+verde, tabla con Sub Total resaltado en amarillo. Reemplaza al formato simple sin color (visto
+en la cotización N° 107-2026, Porongoche) que queda descontinuado.
+
+La redacción de la tabla de ítems varía según tipo de servicio, y así se mantiene (no se
+fuerza un único formato de fila):
+- **Carretillas**: una fila de "mantenimiento" (mano de obra, por cantidad de unidades) +
+  filas separadas por cada repuesto suministrado.
+- **Balanzas**: redacción propia (más técnica: calibración, nivelación, alineamiento, etc.).
+- **Resto de servicios** (estructuras, motores, pintado electrostático, etc.): una fila con
+  foto del equipo/trabajo + descripción + precio final.
+
+## 9. Flujo de aprobación antes de enviar — DECIDIDO (primera versión)
+
+Contexto: manejar automatización sobre datos de costos/ganancias/precios es nuevo para el
+equipo, así que el flujo arranca con el máximo de control humano y se relaja con el tiempo,
+no al revés.
+
+1. **Generación** — el sistema arma la cotización (PDF + vista previa) desde la plantilla.
+2. **Validación automática** — antes de mostrarla a nadie, se revisa: ningún ítem en S/0,
+   IGV correcto, margen dentro de un rango razonable, checklist de preguntas pendientes (ver
+   punto 5) resuelto. Si falta algo, no avanza al paso 3.
+3. **Revisión humana por Telegram** — se manda la vista previa a un especialista; puede pedir
+   correcciones (el sistema regenera y vuelve a mandar) o aprobar.
+4. **Aprobación ≠ envío** — cuando el especialista dice "envíalo", la cotización queda
+   marcada como **"Lista para enviar"**, y se notifica a la persona responsable para que sea
+   ella quien mande el correo desde Gmail. El bot NO envía el correo directamente todavía.
+5. **Registro trazable** — cada cotización guarda su historial completo: quién la pidió, qué
+   correcciones tuvo, quién la aprobó, cuándo se marcó lista, cuándo se envió realmente.
+
+**Pendiente de decidir con Gera**: después de cuánto tiempo / cuántas cotizaciones sin
+corrección se evalúa automatizar el paso 4 (y probablemente solo para el tipo de servicio más
+estandarizado — mantenimiento rutinario de carretillas — no para estructuras/motores).
