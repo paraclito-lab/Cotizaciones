@@ -48,13 +48,35 @@ Estilos:
   HIDRÁULICAS" puede necesitar reducir el tamaño de fuente para no desbordar — pendiente de
   resolver cuando aparezca un caso así (ver `casuistica.md`).
 
-## Cómo se genera una cotización nueva (resumen técnico)
+## Archivos de esta carpeta
 
-1. Cargar `plantilla/headers/base.jpg` como fondo.
-2. Superponer el N° (`COT-AAAA-NNN`) y el título del servicio en las coordenadas de arriba.
-3. Completar el resto de la plantilla (cliente, local, atención, fecha, tabla de ítems,
-   totales) como HTML normal.
-4. Renderizar a PNG (vista previa) o PDF (entregable final) desde el mismo HTML.
+| Archivo | Qué es |
+|---|---|
+| `headers/base.jpg` | La imagen real del encabezado, con las dos zonas variables vaciadas. |
+| `cotizacion.html` | La plantilla con marcadores `{{...}}`. **Acá se edita el diseño.** |
+| `generar.py` | El generador: recibe un JSON y produce el PNG y el PDF. |
+
+## Cómo se genera una cotización nueva
+
+```bash
+PLAYWRIGHT_BROWSERS_PATH=/opt/pw-browsers python3 plantilla/generar.py cotizacion.json salida/
+```
+
+El JSON lleva `numero`, `titulo`, `cliente`, `local`, `atencion`, `fecha`, la lista de `items`
+(`cant`, `descripcion`, `precio_unit`, y `fotos` opcional) y una `nota` opcional. El script:
+
+1. Incrusta `headers/base.jpg` y superpone el N° y el título en las coordenadas de arriba.
+2. Arma la tabla, **calcula subtotal, IGV 18% y total** (nunca se escriben a mano).
+3. Achica y encuadra las fotos a 90×90 (máximo 3 por ítem).
+4. Renderiza **PNG** (vista previa, se ve al instante en el celular) y **PDF** (A4, una
+   página, el entregable que va por correo) desde el mismo HTML — así no pueden verse
+   distintos.
+5. Imprime alertas de la validación automática (`criterios-actuales.md` punto 9, paso 2):
+   ítems en S/0, N° que no cumple `COT-AAAA-NNN`, más de 3 fotos.
+
+Todo esto está envuelto en la skill `cotizar` (ver `.claude/skills/cotizar/SKILL.md`), que es
+la forma normal de usarlo: se describe el trabajo en lenguaje natural y ella se encarga del
+resto.
 
 ## Fila con foto (tipo "Servicios Generales") — construida y probada
 

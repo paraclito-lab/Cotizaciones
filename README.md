@@ -5,8 +5,9 @@ lenguaje claro, las reglas reales con las que se cotiza en LF Munay Perú — an
 convertirlas en un bot. La idea: que la lógica se pueda revisar, corregir y versionar como
 cualquier otro cambio de código, en vez de vivir solo en una conversación de chat.
 
-**Nada de esto está automatizado todavía.** Es toda la etapa de diseño: reglas, catálogo,
-formato del PDF/PNG y flujo de aprobación, ya decididos y listos para programarse.
+**Estado**: las reglas, el catálogo y el formato están decididos, y la generación de la
+cotización ya está automatizada — ver `plantilla/generar.py` y la skill `cotizar`. El registro
+de costos reales se lleva en un Google Sheet aparte y se llena a mano.
 
 ## Mapa del repositorio
 
@@ -20,7 +21,8 @@ formato del PDF/PNG y flujo de aprobación, ya decididos y listos para programar
 | `analisis/` | Por qué se tomó cada decisión: qué tenían de malo los Excel originales y qué reveló la hoja de trabajo real de la balanza de Tarapoto. |
 | `ejemplos-reales/` | Cotizaciones reales ya entregadas a clientes, estructuradas, usadas como referencia de formato y precios. |
 | `branding/` | Logo y fondo decorativo de la marca. |
-| `plantilla/` | Cómo se arma el PDF/PNG de cada cotización (imágenes de encabezado por tipo de servicio + texto dinámico superpuesto) y las coordenadas exactas para agregar un tipo de servicio nuevo. |
+| `plantilla/` | Cómo se arma el PDF/PNG de cada cotización: una sola imagen real de encabezado (`headers/base.jpg`) + N° y título superpuestos como texto, la plantilla HTML y el generador `generar.py`. |
+| `.claude/skills/cotizar/` | La skill que hace todo el proceso: se describe el trabajo en lenguaje natural y devuelve la vista previa y el PDF. |
 
 ## Cómo se usa
 

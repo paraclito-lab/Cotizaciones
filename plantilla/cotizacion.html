@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<style>
+  /* ---------------------------------------------------------------------
+     Plantilla de cotización — LF MUNAY PERÚ
+     El encabezado (logo, franjas, marca, "COTIZACIÓN DE SERVICIOS") es la
+     imagen real plantilla/headers/base.jpg. Encima van, como texto real, el
+     N° de cotización y el título del servicio, en las coordenadas calibradas
+     documentadas en plantilla/README.md. No recrear el encabezado con CSS.
+     --------------------------------------------------------------------- */
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: Arial, Helvetica, sans-serif; color: #1a1a1a; background: #fff; }
+  .sheet { width: 900px; border: 2px solid #111; }
+  .header-wrap { position: relative; width: 100%; }
+  .header-img { width: 100%; display: block; }
+
+  /* Cápsula del N° — coordenadas calibradas, NO cambiar sin recalibrar */
+  .capsule {
+    position: absolute;
+    left: 70.49%; top: 32.14%;
+    width: 17.75%; height: 25.41%;
+    border: 2px solid #1f9e6e;
+    border-radius: 999px;
+    background: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; color: #17795f; font-size: 15px;
+    white-space: nowrap;
+  }
+  /* Título del servicio — coordenadas calibradas, NO cambiar sin recalibrar */
+  .title-overlay {
+    position: absolute;
+    left: 11.85%; top: 79.18%;
+    width: 73.06%; height: 13.27%;
+    display: flex; align-items: center; justify-content: center;
+    text-align: center;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-weight: 700;
+    color: #17795f;
+    font-size: 30px;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+  }
+
+  .body-pad { padding: 4px 34px 30px 34px; }
+  .meta-row { display: flex; justify-content: space-between; align-items: flex-start; margin-top: 6px; font-size: 13px; }
+  .meta-row .fields div { margin-bottom: 2px; }
+  .meta-row .fields b { display: inline-block; width: 78px; }
+  .greeting { font-size: 12.5px; margin: 10px 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  thead th { background: #1f9e6e; color: #fff; padding: 7px 8px; text-align: center; border: 1px solid #178055; }
+  tbody td { border: 1px solid #bbb; padding: 7px 8px; vertical-align: top; }
+  tbody td.num { text-align: center; }
+  tbody td.money { text-align: right; white-space: nowrap; }
+  tfoot td { border: 1px solid #bbb; padding: 6px 8px; font-weight: 700; text-align: right; }
+  tfoot tr.subtotal td { background: #fff59d; }   /* Sub Total resaltado, como el formato real */
+  tfoot tr.total td { background: #f0f0f0; font-size: 13px; }
+  .footer-note { margin-top: 14px; font-size: 10.5px; color: #666; font-style: italic; }
+
+  /* Fila con foto (Servicios Generales) — 1 a 3 fotos, opcional */
+  .photo-row { display: flex; gap: 6px; margin-top: 6px; }
+  .photo-row img { width: 90px; height: 90px; object-fit: cover; border: 1px solid #ccc; border-radius: 3px; }
+
+  @page { margin: 0; }
+</style>
+</head>
+<body>
+<div class="sheet">
+  <div class="header-wrap">
+    <img class="header-img" src="{{HEADER_SRC}}" alt="encabezado">
+    <div class="capsule">N&deg; {{NUMERO}}</div>
+    <div class="title-overlay">{{TITULO}}</div>
+  </div>
+  <div class="body-pad">
+    <div class="meta-row">
+      <div class="fields">
+        <div><b>SE&Ntilde;ORES:</b> {{CLIENTE}}</div>
+        <div><b>Local:</b> {{LOCAL}}</div>
+        <div><b>Atenci&oacute;n:</b> {{ATENCION}}</div>
+      </div>
+      <div><b>Fecha:</b> {{FECHA}}</div>
+    </div>
+
+    <div class="greeting">Nos es grato saludarlo y a la vez presentarle nuestra propuesta la cual se detalla a continuaci&oacute;n:</div>
+
+    <table>
+      <thead>
+        <tr><th style="width:5%">N&deg;</th><th style="width:6%">Cant.</th><th>Sustento t&eacute;cnico</th><th style="width:18%">Precio unitario</th><th style="width:16%">Importe total</th></tr>
+      </thead>
+      <tbody>
+{{FILAS}}
+      </tbody>
+      <tfoot>
+        <tr class="subtotal"><td colspan="4">Sub Total</td><td class="money">S/ {{SUBTOTAL}}</td></tr>
+        <tr><td colspan="4">IGV 18%</td><td class="money">S/ {{IGV}}</td></tr>
+        <tr class="total"><td colspan="4">Total</td><td class="money">S/ {{TOTAL}}</td></tr>
+      </tfoot>
+    </table>
+{{NOTA}}
+  </div>
+</div>
+</body>
+</html>
