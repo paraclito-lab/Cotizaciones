@@ -31,8 +31,3 @@ Cuando algo no está claro en una cotización real, dos caminos:
    se anota en `casuistica.md`, y en algún momento se revisa en conjunto para decidir si
    cambia una regla en `criterios-actuales.md`.
 
-## Dueño del proyecto
-
-**alopez** es el dueño de LF Munay Perú y quien inició esta automatización desde el principio.
-Las reglas de `criterios-actuales.md` que dicen "el equipo confirma/decide" se refieren a
-alopez como responsable final.

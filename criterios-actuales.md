@@ -52,7 +52,7 @@ por caso.
 - El precio final suele **ajustarse a un número "redondo"** cercano (ej. S/2,490, S/2,980,
   múltiplos de S/500) — es una decisión comercial, no una fórmula automática.
 - **Importante**: el margen sugerido NUNCA debe aplicarse automático — el sistema debe
-  proponerlo y alopez (dueño) lo confirma o ajusta antes de enviar.
+  proponerlo y confirmarse/ajustarse antes de enviar.
 
 **Precio mínimo — DECIDIDO (14/09/2026)**: el mantenimiento de carretillas hidráulicas tiene
 un **piso de S/250 por unidad**, sin importar lo que dé la fórmula de mano de obra (personas ×
@@ -69,7 +69,7 @@ servicio (ej. para una balanza: ¿se pinta la estructura?, ¿qué tipo de pintur
 trabajadores?, ¿cuál es el costo real del pasaje?). Enviar una cotización es un compromiso de
 precio, así que no debería salir con preguntas sin resolver.
 
-**Pendiente de decidir con alopez**: si el checklist es el mismo para todo tipo de servicio o si
+**Pendiente de decidir**: si el checklist es el mismo para todo tipo de servicio o si
 cada categoría de servicio (carretillas, balanzas, estructuras, motores) tiene su propio set
 de preguntas.
 
@@ -140,7 +140,7 @@ no al revés.
 5. **Registro trazable** — cada cotización guarda su historial completo: quién la pidió, qué
    correcciones tuvo, quién la aprobó, cuándo se marcó lista, cuándo se envió realmente.
 
-**Pendiente de decidir con alopez**: después de cuánto tiempo / cuántas cotizaciones sin
+**Pendiente de decidir**: después de cuánto tiempo / cuántas cotizaciones sin
 corrección se evalúa automatizar el paso 4 (y probablemente solo para el tipo de servicio más
 estandarizado — mantenimiento rutinario de carretillas — no para estructuras/motores).
 
