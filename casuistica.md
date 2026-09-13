@@ -42,3 +42,18 @@ convertirse en una regla nueva dentro de `criterios-actuales.md`.
   alto real del contenido para llenar la hoja sin cortar.
 - **¿Debería ser una regla permanente?** Sí — ya está en `plantilla/README.md`. Aprendizaje de
   fondo: **ante una duda de formato, medir el PDF real en vez de asumir el valor por defecto.**
+
+### 14/09/2026 — La cotización no llenaba la hoja y el título se desbordaba
+
+- **Contexto**: primeras pruebas del PDF apaisado, con 4 y con 12 ítems.
+- **Qué pasó**: dos problemas encadenados. (1) La hoja tenía ancho fijo de 900px, pero su alto
+  depende de cuánto texto tenga la cotización — con 12 ítems solo ocupaba el 77% del ancho de
+  la página y quedaba una franja vacía al costado. (2) Al hacer el ancho variable, el N° y el
+  título (que estaban en píxeles fijos) dejaron de escalar con la hoja y el título se salió de
+  su zona del encabezado.
+- **Cómo se resolvió esta vez**: el generador busca el ancho de hoja cuya proporción calce con
+  la del A4 apaisado, y los textos del encabezado pasaron a medirse en `cqw` (porcentaje del
+  ancho real de la hoja) en vez de píxeles. Además, si un título sigue sin entrar en una línea,
+  se le reduce la letra hasta que entre y se avisa en las alertas.
+- **¿Debería ser una regla permanente?** Sí — ya está en `plantilla/README.md`. De paso cierra
+  el pendiente que había sobre qué hacer con títulos largos.

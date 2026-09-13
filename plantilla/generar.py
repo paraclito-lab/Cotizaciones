@@ -99,6 +99,54 @@ MARGEN_MM = 8
 PX_POR_MM = 96 / 25.4
 A4_ANCHO_MM, A4_ALTO_MM = 297, 210          # apaisado
 ESCALA_MIN, ESCALA_MAX = 0.55, 1.30
+ANCHO_MIN, ANCHO_MAX = 700, 1500        # rango en el que se busca el ancho de la hoja
+
+
+def ajustar_ancho(pg, ratio_objetivo):
+    """Busca el ancho de hoja cuya proporción calce con la de la página.
+
+    El alto de la cotización depende de cuánto texto tenga, así que con un ancho fijo la
+    hoja casi nunca tiene la misma proporción que el A4 y queda una franja vacía a un lado.
+    Ensanchar la hoja acorta las filas y sube la proporción; angostarla la baja. Con unas
+    pocas pasadas de búsqueda binaria queda centrada y llenando la página.
+    """
+    lo, hi = ANCHO_MIN, ANCHO_MAX
+    mejor, mejor_dif = None, None
+    for _ in range(9):
+        medio = (lo + hi) / 2
+        pg.eval_on_selector(".sheet", "(el, w) => el.style.width = w + 'px'", medio)
+        pg.wait_for_timeout(40)
+        caja = pg.locator(".sheet").bounding_box()
+        ratio = caja["width"] / caja["height"]
+        dif = abs(ratio - ratio_objetivo)
+        if mejor_dif is None or dif < mejor_dif:
+            mejor, mejor_dif = medio, dif
+        if ratio < ratio_objetivo:
+            lo = medio          # muy angosta: queda alta, hay que ensancharla
+        else:
+            hi = medio
+    pg.eval_on_selector(".sheet", "(el, w) => el.style.width = w + 'px'", mejor)
+    pg.wait_for_timeout(60)
+
+
+def encajar_titulo(pg):
+    """Achica el título si no entra en una línea dentro de su zona del encabezado.
+
+    Los títulos largos ("MANTENIMIENTO DE CARRETILLAS HIDRÁULICAS" ya es de los más largos)
+    se salían de la cápsula del encabezado. En vez de dejarlo desbordar, se reduce el tamaño
+    de letra hasta que entre, con un piso por debajo del cual ya sería ilegible.
+    """
+    return pg.evaluate("""() => {
+        const el = document.querySelector('.title-overlay');
+        if (!el) return null;
+        const base = parseFloat(getComputedStyle(el).fontSize);
+        let px = base;
+        while (el.scrollWidth > el.clientWidth && px > base * 0.6) {
+            px -= 0.5;
+            el.style.fontSize = px + 'px';
+        }
+        return px < base ? Math.round(px * 10) / 10 : null;
+    }""")
 
 
 def render(html, base_salida):
@@ -110,13 +158,18 @@ def render(html, base_salida):
         pg = nav.new_page(viewport={"width": 940, "height": 1400}, device_scale_factor=2)
         pg.goto("file://" + ruta_html)
         pg.wait_for_timeout(400)
-        pg.locator(".sheet").screenshot(path=base_salida + ".png")
 
-        # Escala que llena la hoja sin dejar espacio muerto: se ajusta al ancho, y si la
-        # cotización es larga se achica lo necesario para que entre en una sola página.
-        caja = pg.locator(".sheet").bounding_box()
         disp_w = (A4_ANCHO_MM - 2 * MARGEN_MM) * PX_POR_MM
         disp_h = (A4_ALTO_MM - 2 * MARGEN_MM) * PX_POR_MM
+
+        # Primero se ajusta el ancho de la hoja a la proporción de la página, para que no
+        # quede una franja vacía al costado ni abajo. Se hace ANTES del PNG, para que la
+        # vista previa y el PDF sean exactamente el mismo documento.
+        ajustar_ancho(pg, disp_w / disp_h)
+        achicado = encajar_titulo(pg)
+        pg.locator(".sheet").screenshot(path=base_salida + ".png")
+
+        caja = pg.locator(".sheet").bounding_box()
         escala = min(disp_w / caja["width"], disp_h / caja["height"], ESCALA_MAX)
         escala = max(escala, ESCALA_MIN)     # más abajo sería ilegible: mejor una 2da página
 
@@ -125,7 +178,7 @@ def render(html, base_salida):
                scale=round(escala, 3),
                margin={"top": m, "bottom": m, "left": m, "right": m})
         nav.close()
-    return base_salida + ".png", base_salida + ".pdf"
+    return base_salida + ".png", base_salida + ".pdf", achicado
 
 
 def main():
@@ -149,7 +202,9 @@ def main():
         alertas.append(f"el N° '{cot['numero']}' no sigue el formato COT-AAAA-NNN")
 
     base = os.path.join(salida, cot["numero"])
-    png, pdf = render(html, base)
+    png, pdf, achicado = render(html, base)
+    if achicado:
+        alertas.append(f"el título es largo: se redujo la letra a {achicado}px para que entrara")
 
     print(f"Sub Total  S/ {money(sub)}")
     print(f"IGV 18%    S/ {money(igv)}")

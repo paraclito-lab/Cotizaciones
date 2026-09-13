@@ -43,10 +43,13 @@ Como porcentaje del tamaño de la imagen (para que escale a cualquier ancho):
 Estilos:
 - **N°**: borde verde 2px (`#1f9e6e`), esquinas totalmente redondeadas, fondo blanco, texto
   verde oscuro (`#17795f`) en negrita ~15px, centrado.
-- **Título**: fuente serif (Georgia / Times New Roman), negrita, ~30px, color verde oscuro
-  (`#17795f`), centrado. Si un título es más largo que "MANTENIMIENTO DE CARRETILLAS
-  HIDRÁULICAS" puede necesitar reducir el tamaño de fuente para no desbordar — pendiente de
-  resolver cuando aparezca un caso así (ver `casuistica.md`).
+- **Título**: fuente serif (Georgia / Times New Roman), negrita, color verde oscuro
+  (`#17795f`), centrado.
+
+**Los dos tamaños de letra se miden en `cqw`, no en px** (`1.67cqw` el N°, `3.33cqw` el
+título — equivalen a 15px y 30px sobre una hoja de 900px). Así escalan solos cuando el ancho
+de la hoja cambia. Además, si un título no entra en una línea, el generador le baja el tamaño
+hasta que entre (con un piso del 60% para que no quede ilegible) y lo avisa en las alertas.
 
 ## Archivos de esta carpeta
 
@@ -72,11 +75,17 @@ El JSON lleva `numero`, `titulo`, `cliente`, `local`, `atencion`, `fecha`, la li
    HTML — así no pueden verse distintos.
 
    El PDF va en **A4 horizontal**, igual que las cotizaciones reales ya entregadas (el PDF de
-   referencia de Moyobamba mide 841.8 × 595.2 pts, o sea A4 apaisado). La escala **se calcula
-   sola** a partir del alto real del contenido: una cotización corta llena el ancho de la
-   hoja, y una larga se achica lo justo para entrar en una sola página. Probado con 4 y con
-   12 ítems: una página en ambos casos. Por debajo de 0.55 de escala ya sería ilegible, así
-   que en ese caso pasa a una segunda página en vez de seguir achicando.
+   referencia de Moyobamba mide 841.8 × 595.2 pts, o sea A4 apaisado).
+
+   **El ancho de la hoja no es fijo: se calcula.** Con un ancho fijo de 900px, el alto depende
+   de cuánto texto tenga la cotización, así que su proporción casi nunca coincidía con la del
+   A4 y quedaba una franja vacía a un costado (con 12 ítems llegaba a desperdiciar el 23% del
+   ancho). El generador hace una búsqueda binaria del ancho cuya proporción calce con la de la
+   página, y recién ahí calcula la escala. Probado con 4 y con 12 ítems: una sola página,
+   centrada y llena en ambos casos.
+
+   Por debajo de 0.55 de escala ya sería ilegible, así que en ese caso pasa a una segunda
+   página en vez de seguir achicando.
 5. Imprime alertas de la validación automática (`criterios-actuales.md` punto 9, paso 2):
    ítems en S/0, N° que no cumple `COT-AAAA-NNN`, más de 3 fotos.
 
@@ -101,6 +110,4 @@ la descripción + hasta 3 fotos + precio. Probado con las 3 fotos reales del PDF
 - Si algún día se consigue el archivo fuente editable (AI/Figma/PSD) del diseño, se puede
   reemplazar este método por una plantilla 100% vectorial — pero mientras no exista, este
   método es el más eficiente y fiel disponible.
-- Definir qué pasa si el título de un servicio nuevo no cabe en una sola línea con el tamaño
-  de fuente actual.
 - Definir qué pasa si llegan más de 3 fotos para un mismo ítem.
