@@ -21,6 +21,14 @@ hoja "COTIZACION MOTOR" (del Excel `CCHH_COT-1.xlsx` original) — no para copia
 personas, sino para la lógica de costo → ganancia → precio. Sigue pendiente de confirmar con
 Gera caso por caso.
 
+**Corrección de precio (14/09/2026) — la rueda de carga NO es S/65**: al revisar la primera
+vista previa, Gera confirmó que el precio de venta real de la **rueda de carga es S/40**, no
+S/65 como aparecía en la cotización de Moyobamba. Es decir, Moyobamba no es infalible como
+fuente — sirve como referencia pero cada precio se valida con Gera antes de darlo por
+definitivo. Precio de **resortes de retorno confirmado en S/55** (coincide con Moyobamba, sin
+cambios). Queda como recordatorio: toda vista previa debe tratarse como una oportunidad de
+corregir el catálogo, no solo de aprobar o rechazar la cotización puntual.
+
 ## 2. Mano de obra → depende de la localidad
 
 - **Lima / local**: tarifa por persona de S/100 o S/200 por "amanecida".
@@ -51,6 +59,13 @@ Gera caso por caso.
   múltiplos de S/500) — es una decisión comercial, no una fórmula automática.
 - **Importante**: el margen sugerido NUNCA debe aplicarse automático — el sistema debe
   proponerlo y Gera lo confirma o ajusta antes de enviar.
+
+**Precio mínimo — DECIDIDO (14/09/2026)**: el mantenimiento de carretillas hidráulicas tiene
+un **piso de S/250 por unidad**, sin importar lo que dé la fórmula de mano de obra (personas ×
+tarifa × 2 ÷ cantidad). Si la fórmula da menos de S/250 (por ejemplo, muchas unidades entre
+pocos días de mano de obra), se cobra el mínimo de S/250 igual. Pendiente de confirmar si este
+mismo concepto de "precio mínimo" aplica a otros tipos de servicio (balanzas, estructuras) o
+es específico de carretillas.
 
 ## 5. Checklist de consideraciones antes de enviar
 
