@@ -122,6 +122,14 @@ fuerza un único formato de fila):
 - **Resto de servicios** (estructuras, motores, pintado electrostático, etc.): una fila con
   foto del equipo/trabajo + descripción + precio final.
 
+**Regla de coherencia título↔contenido — DECIDIDO (14/09/2026)**: el título del servicio (el
+texto grande superpuesto, ver `plantilla/README.md`) y el contenido de "sustento técnico" no
+son piezas independientes — el tipo de servicio elige ambos a la vez. Un título de "Balanzas"
+nunca debe ir con contenido de "Carretillas" (o viceversa). Se detectó este error en una
+prueba (se cambió el título a balanza pero se dejó el contenido de carretillas) — al generar
+una cotización, el tipo de servicio debe ser un solo dato que determina título + patrón de
+contenido juntos, nunca dos campos que se llenan por separado.
+
 ## 9. Flujo de aprobación antes de enviar — DECIDIDO (primera versión)
 
 Contexto: manejar automatización sobre datos de costos/ganancias/precios es nuevo para el

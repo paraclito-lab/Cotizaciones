@@ -17,5 +17,15 @@ convertirse en una regla nueva dentro de `criterios-actuales.md`.
 
 ## Casos registrados
 
-_(vacío por ahora — el primer caso real que no encaje en `criterios-actuales.md` se anota
-aquí)._
+### 14/09/2026 — Título de servicio no coincidía con el contenido
+
+- **Contexto**: prueba de la plantilla para demostrar que el título del encabezado ahora es
+  texto editable (ver `plantilla/README.md`). Se cambió el título de "MANTENIMIENTO DE
+  CARRETILLAS HIDRÁULICAS" a "MANTENIMIENTO DE BALANZAS" para probar.
+- **Qué pasó**: el título cambió, pero la tabla de "sustento técnico" se dejó igual (contenido
+  de repuestos de carretillas), quedando una cotización incoherente — título de balanza con
+  contenido de carretilla.
+- **Cómo se resolvió esta vez**: se rehizo el ejemplo con contenido real de balanza (tomado de
+  `analisis/tarapoto-excel.md`), y se documentó la regla en `criterios-actuales.md` punto 8.
+- **¿Debería ser una regla permanente?** Sí — ya se agregó como regla de coherencia
+  título↔contenido en `criterios-actuales.md`.
