@@ -73,21 +73,33 @@ precio, así que no debería salir con preguntas sin resolver.
 cada categoría de servicio (carretillas, balanzas, Servicios Generales) tiene su propio set
 de preguntas.
 
-## 6. Seguimiento de costos reales (aún no existe)
+## 6. Seguimiento de costos reales — DECIDIDO (14/09/2026)
 
-Hoy no hay manera de comparar lo cotizado contra lo que realmente costó el trabajo — por lo
-tanto no se sabe con certeza si una cotización específica ganó, perdió, o cobró justo.
+Hasta ahora no había manera de comparar lo cotizado contra lo que realmente costó el
+trabajo — por lo tanto no se sabía con certeza si una cotización específica ganó, perdió, o
+cobró justo. Se armó un **registro** (Google Sheet, fuera de este repo — es dato operativo que
+cambia todo el tiempo, no encaja en control de versiones de código) con una fila por
+cotización, llenada en 3 momentos:
 
-Idea a desarrollar: por cada cotización, además del monto cotizado, registrar después del
-trabajo:
-- Costo real de repuestos usados.
-- Días/personas reales de mano de obra.
-- Gastos de campo reales (pasajes, viáticos, encomienda).
-- Margen real obtenido vs. margen cotizado.
+1. **Al cotizar**: N°, fecha, cliente/local, tipo de servicio, descripción, subtotal/IGV/total
+   cotizado.
+2. **Cuando el cliente responde**: Estado (Cotizado / Enviado / Ganado / Perdido / Sin
+   respuesta).
+3. **Al terminar el trabajo** (solo si se ganó): costo real de repuestos, mano de obra,
+   logística. El costo total, la ganancia real y el margen real **se calculan solos por
+   fórmula** — nunca se escriben a mano.
 
-Esto permitiría, con el tiempo, tener un costo de referencia más preciso por tipo de servicio
-y localidad (en vez de solo el precio cotizado que hay hoy en `catalogo.md`), y detectar
-cuando una cotización se está subestimando.
+Una hoja aparte ("Resumen") calcula KPIs automáticos: total cotizado, % de cotizaciones
+ganadas, ganancia real total, y margen real promedio **por tipo de servicio** (Carretillas /
+Balanzas / Servicios Generales) — así se ve cuál de los 3 deja más margen de verdad, no solo
+cuál factura más.
+
+Con el tiempo esto da un costo de referencia más preciso que el precio cotizado fijo de
+`catalogo.md`, y permite detectar cuándo una cotización se está subestimando antes de que se
+vuelva costumbre.
+
+**Pendiente**: el bot todavía no escribe en este registro automáticamente — mientras no exista
+el bot, se llena a mano.
 
 ## 7. Numeración de cotización — DECIDIDO
 
