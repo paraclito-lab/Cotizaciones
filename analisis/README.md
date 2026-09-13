@@ -10,7 +10,8 @@ alguna vez se pone en duda, el porqué está acá, no solo el "qué".
   arma realmente un costeo (costo → ganancia → precio) y el hábito de dejar preguntas
   pendientes antes de cerrar una cotización.
 
-Los archivos originales (.xlsx) no están subidos aquí todavía — están guardados por Gera y
-Claude los procesó en sesión. Si se quiere conservar el archivo crudo como respaldo además del
-análisis, se puede subir a `fuentes-originales/` (pendiente de decidir si vale la pena, ver
-nota al final de cada análisis).
+**Decidido**: los archivos .xlsx originales NO se suben al repo — tienen errores y
+redundancias propias del sistema anterior que no vale la pena arrastrar. Lo que sí queda,
+y es suficiente, es el análisis (este archivo y los dos siguientes) y el formato real ya
+limpio en `ejemplos-reales/`. Criterio general: se sube lo necesario para trabajar, no todo lo
+que existió alguna vez.
