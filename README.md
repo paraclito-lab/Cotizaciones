@@ -31,8 +31,8 @@ Cuando algo no está claro en una cotización real, dos caminos:
    se anota en `casuistica.md`, y en algún momento se revisa en conjunto para decidir si
    cambia una regla en `criterios-actuales.md`.
 
-## Pendiente de aclarar
+## Dueño del proyecto
 
-Quién confirma cada regla no siempre ha quedado registrado con precisión (el historial de
-conversación asumió por error que se hablaba con el dueño de la empresa). Cuando se confirme
-el rol de cada persona que participa, se ajustan las menciones en estos documentos.
+**alopez** es el dueño de LF Munay Perú y quien inició esta automatización desde el principio.
+Las reglas de `criterios-actuales.md` que dicen "el equipo confirma/decide" se refieren a
+alopez como responsable final.
