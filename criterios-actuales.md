@@ -133,3 +133,24 @@ no al revés.
 **Pendiente de decidir con Gera**: después de cuánto tiempo / cuántas cotizaciones sin
 corrección se evalúa automatizar el paso 4 (y probablemente solo para el tipo de servicio más
 estandarizado — mantenimiento rutinario de carretillas — no para estructuras/motores).
+
+## 10. Cómo se interactúa por Telegram — DECIDIDO
+
+Se evaluaron 3 formas (formato de texto fijo, formulario/Mini App de Telegram, conversación
+libre con IA) y se eligió la más simple e intuitiva:
+
+- **Carga del técnico → conversación libre, sin formato fijo.** El técnico escribe como si le
+  hablara a una persona (ej: "hice mantenimiento a 5 carretillas en Tottus San Miguel, cambié
+  10 ruedas de carga, atendió Carlos Ramos"). El bot, con un modelo de lenguaje detrás,
+  entiende el mensaje, arma los campos y **pregunta de vuelta en lenguaje natural** si falta
+  algo (ubicación, dato del checklist, etc.) — igual que una conversación normal. Siempre
+  confirma lo que entendió antes de generar el PNG ("Entendí: 5 carretillas, Tottus San
+  Miguel... ¿correcto?"), porque hay dinero de por medio y un malentendido no debe colarse.
+- **Aprobación del especialista → botones, no texto.** Debajo del PNG de vista previa,
+  botones `[✅ Enviar]  [✏️ Corregir]  [❌ Rechazar]`. Tocar un botón es más simple y rápido
+  que escribir "envíalo"; si toca "Corregir", ahí sí se abre a texto libre para decir qué
+  cambiar.
+- **Descartado por ahora**: un formulario / Mini App de Telegram (más estructurado pero menos
+  natural y más trabajo de construcción) y un formato de texto con etiquetas fijas (obliga a
+  recordar una sintaxis). Quedan como opción futura si la conversación libre resulta lenta o
+  poco confiable en el uso real.
