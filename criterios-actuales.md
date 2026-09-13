@@ -9,6 +9,18 @@ El precio de un repuesto (retenes, ruedas, resortes, ejes, etc.) **no cambia seg
 localidad**. Es el mismo en Lima o en provincia. Ver catálogo en
 `Sistema_Cotizaciones_MunayPeru.xlsx` (hoja Catálogo_Items).
 
+**Fuente de verdad ante conflicto de precio o nombre — DECIDIDO**: cuando dos cotizaciones
+reales tengan un precio o nombre distinto para lo que parece ser el mismo repuesto, se toma
+como válido lo que aparece en la cotización de **Moyobamba (N° 100-2026)**, por ser la más
+reciente confirmada por Gera. Ejemplo ya detectado: "rueda direccional" (Moyobamba, S/95) y
+"rueda giratoria y/o delantera" (Porongoche, S/95) se unifican como el mismo ítem.
+
+**Personal para servicios que no son carretilla/balanza (estructuras, motores, pintado)**: no
+hay dato confirmado todavía. Mientras tanto se usa como referencia el modelo de costeo de la
+hoja "COTIZACION MOTOR" (del Excel `CCHH_COT-1.xlsx` original) — no para copiar un número de
+personas, sino para la lógica de costo → ganancia → precio. Sigue pendiente de confirmar con
+Gera caso por caso.
+
 ## 2. Mano de obra → depende de la localidad
 
 - **Lima / local**: tarifa por persona de S/100 o S/200 por "amanecida".
