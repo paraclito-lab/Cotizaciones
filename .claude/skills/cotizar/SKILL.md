@@ -35,10 +35,17 @@ separado (regla de coherencia, `criterios-actuales.md` punto 8):
 Los tipos, sus títulos, sus palabras clave y el patrón de redacción de la fila están en
 **`servicios.json`** — leerlo, no asumirlos de memoria ni copiarlos acá.
 
-Hoy son cuatro: `carretillas`, `balanzas`, `vitrinas`, `generales`. Lo que no encaja en los
-tres primeros es `generales`. **No se inventan tipos ni títulos nuevos**; si aparece un
-trabajo que claramente forma una familia propia y se repite, se anota en `casuistica.md` y se
-evalúa agregarlo con datos, no por corazonada.
+Hoy son cuatro: `carretillas`, `balanzas`, `vitrinas`, `generales`.
+
+**Lo que no encaja en los tres primeros es `generales`. Siempre, sin consultar y sin
+excepciones.** No se crea un tipo nuevo en medio de una cotización — ya se falló en esto una
+vez (ver `casuistica.md`). Un servicio `generales` exige además un **`subtipo`** de la lista
+`subtipos_sugeridos` de `servicios.json`; el generador se niega a correr sin él.
+
+Si en la conversación parece que un trabajo merece familia propia, **no se le da**: se cotiza
+como `generales` con su subtipo, y se menciona que el conteo del registro lo va a decidir al
+cierre de mes (umbral: 3 cotizaciones del mismo subtipo). Si no hay subtipo que calce, se usa
+`otros` y se anota el caso en `casuistica.md`.
 
 **El título nunca repite el sustento técnico**: el título dice la familia, la fila dice el
 trabajo. En la fila, abrir con "Suministro e instalación de..." cuando el material lo pone la

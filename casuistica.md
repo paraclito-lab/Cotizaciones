@@ -57,3 +57,25 @@ convertirse en una regla nueva dentro de `criterios-actuales.md`.
   se le reduce la letra hasta que entre y se avisa en las alertas.
 - **¿Debería ser una regla permanente?** Sí — ya está en `plantilla/README.md`. De paso cierra
   el pendiente que había sobre qué hacer con títulos largos.
+
+### 14/09/2026 — Se creó un tipo de servicio nuevo con un solo caso
+
+- **Contexto**: primera cotización real del sistema (cambio de vidrio templado insulado en una
+  vitrina refrigerada de autoconsumo, HB Precio Uno — Guardia Civil).
+- **Qué pasó**: el trabajo no encajaba en carretillas ni balanzas, así que por regla debía
+  entrar como "Servicios Generales". En vez de eso se creó en el momento una familia nueva
+  ("vitrinas") con su propio título, basándose en un único caso. La regla que decía "no se
+  subdivide más salvo que en el uso real se note que hace falta" se saltó en la primera
+  oportunidad de aplicarla.
+- **Cómo se resolvió esta vez**: el tipo `vitrinas` se mantiene, porque se confirmó como
+  decisión deliberada y el título quedó acotado a "Mantenimiento de vitrinas comerciales". Pero
+  se construyó el mecanismo que faltaba para que no vuelva a pasar:
+  - Todo servicio nuevo entra como `generales` con un **subtipo obligatorio**; el generador se
+    niega a correr sin él.
+  - El subtipo se registra en el Google Sheet (columna nueva) y la hoja Resumen los cuenta.
+  - **Umbral explícito: 3 cotizaciones del mismo subtipo** para siquiera evaluar un título
+    propio, al cierre de mes y con los números a la vista.
+- **¿Debería ser una regla permanente?** Sí — ya está en `servicios.json` (bloque `promocion`),
+  en `criterios-actuales.md` punto 8 y en la skill. Aprendizaje de fondo: **una regla que
+  depende del criterio del momento no es una regla; hace falta un umbral y un dato que lo
+  mida.**

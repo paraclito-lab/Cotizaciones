@@ -160,13 +160,29 @@ Hoy son cuatro tipos: `carretillas`, `balanzas`, `vitrinas` y `generales`. Cada 
 título fijo, las palabras clave que lo reconocen desde una descripción en lenguaje natural, el
 patrón de redacción de la fila, el personal requerido y el precio mínimo si tiene.
 
-Dos reglas que `plantilla/generar.py` **hace cumplir por código**, no solo por escrito:
+**Cómo nace un tipo nuevo — DECIDIDO (14/09/2026)**: no se crea en el momento de cotizar.
+Todo trabajo que no calce con carretillas, balanzas o vitrinas entra como **`generales`**, con
+un **subtipo obligatorio** (espejos, mamparas, laminado-seguridad, acrílicos, motores,
+estructuras, pintado, eléctrico, otros). El subtipo se registra en el Google Sheet y se cuenta
+solo: **recién con 3 o más cotizaciones del mismo subtipo** se evalúa darle título propio, al
+cierre de mes, junto con el resto de la data — y además debe tener una redacción de fila
+repetible, no ser de un solo cliente, y que el título genérico le reste claridad frente al
+cliente.
+
+Esta regla existe porque ya se falló en ella: al aparecer el primer trabajo de vidrio se creó
+una familia nueva en el momento, con un solo caso, en vez de mandarlo a `generales` y esperar
+evidencia (ver `casuistica.md`). El criterio completo está en `servicios.json`, bloque
+`promocion`.
+
+Tres reglas que `plantilla/generar.py` **hace cumplir por código**, no solo por escrito:
 
 - **El título no se escribe a mano.** Se pide el `tipo` y el título sale de ahí. Si un JSON
   trae un `titulo`, el generador se niega a correr. Así el error de coherencia
   título↔contenido (título de balanza con contenido de carretilla) ya no puede ocurrir.
 - **El título nombra la familia; el sustento técnico dice el trabajo.** Si ambos dicen casi lo
   mismo, el título está mal elegido.
+- **Un servicio `generales` sin subtipo no se genera.** El generador se niega a correr: sin
+  subtipo no hay forma de contarlo después, y sin conteo la promoción vuelve a ser corazonada.
 
 La redacción de la tabla de ítems varía según tipo de servicio, y así se mantiene (no se
 fuerza un único formato de fila):

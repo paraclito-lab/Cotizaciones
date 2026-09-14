@@ -1,60 +1,138 @@
 {
   "_leeme": "Fuente ÚNICA de la relación tipo de servicio -> título del encabezado -> redacción del sustento técnico -> categoría del registro. Antes esto vivía como prosa repetida en criterios-actuales.md, en la skill y en plantilla/README.md, y se desincronizaba. Si algo de esto cambia, se cambia AQUÍ y en ningún otro lado. plantilla/generar.py lo lee.",
-
   "igv": 0.18,
   "precio_recibido": "subtotal",
-
   "tipos": {
     "carretillas": {
       "titulo": "Mantenimiento de carretillas hidráulicas",
       "categoria_registro": "Carretillas",
-      "palabras_clave": ["carretilla", "carretillas", "stocka", "stockas", "transpaleta", "pallet", "parihuela", "hidraulica", "hidráulica"],
+      "palabras_clave": [
+        "carretilla",
+        "carretillas",
+        "stocka",
+        "stockas",
+        "transpaleta",
+        "pallet",
+        "parihuela",
+        "hidraulica",
+        "hidráulica"
+      ],
       "personal": 2,
       "precio_minimo_unidad": 250,
       "patron_filas": "Fila 1 = mantenimiento, cantidad = N° de carretillas. Una fila aparte por cada repuesto suministrado, con su precio de catalogo.md.",
       "sustento_base": "Reparación y mantenimiento de {n} carretillas hidráulicas (cambio de pasadores, orings, retenes de elevación, pines de expansión, retenes de bomba, anillos de jebe, aceite hidráulico)",
-      "acepta_fotos": false
+      "acepta_fotos": false,
+      "subtipo_obligatorio": false
     },
-
     "balanzas": {
       "titulo": "Mantenimiento de balanzas",
       "categoria_registro": "Balanzas",
-      "palabras_clave": ["balanza", "balanzas", "plataforma", "celda de carga", "celdas", "calibracion", "calibración", "mettler", "sumatoria"],
+      "palabras_clave": [
+        "balanza",
+        "balanzas",
+        "plataforma",
+        "celda de carga",
+        "celdas",
+        "calibracion",
+        "calibración",
+        "mettler",
+        "sumatoria"
+      ],
       "personal": 3,
       "precio_minimo_unidad": null,
       "patron_filas": "Una fila con la redacción técnica completa del servicio. Repuestos mayores (celdas, caja sumatoria, cable) pueden ir en la misma fila o separados.",
       "sustento_base": "Mantenimiento de balanza plataforma: calibración, nivelación, alineamiento de plataforma, empotrado de cadena y brazo de acero inoxidable C-304.",
-      "acepta_fotos": true
+      "acepta_fotos": true,
+      "subtipo_obligatorio": false
     },
-
     "vitrinas": {
-      "titulo": "Mantenimiento de vitrinas comerciales e industriales",
+      "titulo": "Mantenimiento de vitrinas comerciales",
       "categoria_registro": "Servicios Generales",
-      "palabras_clave": ["vitrina", "vitrinas", "templado", "insulado", "contraplacado", "curvo", "refrigerada", "exhibicion", "exhibición", "autoconsumo", "mural"],
+      "palabras_clave": [
+        "vitrina",
+        "vitrinas",
+        "templado",
+        "insulado",
+        "contraplacado",
+        "curvo",
+        "refrigerada",
+        "exhibicion",
+        "exhibición",
+        "autoconsumo",
+        "mural"
+      ],
       "personal": null,
       "precio_minimo_unidad": null,
       "patron_filas": "Una fila: qué se suministra e instala + dimensiones + si se reutiliza el marco. Hasta 3 fotos opcionales.",
       "sustento_base": "Suministro e instalación de {descripcion}, de dimensiones aproximadas {medidas}, utilizando el marco existente.",
-      "acepta_fotos": true
+      "acepta_fotos": true,
+      "subtipo_obligatorio": false
     },
-
     "generales": {
       "titulo": "Servicios generales",
       "categoria_registro": "Servicios Generales",
-      "palabras_clave": ["espejo", "espejos", "mampara", "mamparas", "laminado", "seguridad", "acrilico", "acrílico", "vitral", "motor", "polea", "estructura", "pintado", "electrostatico", "electrostático", "electrico", "eléctrico", "electromecanico", "electromecánico", "luces", "emergencia", "soldadura"],
+      "palabras_clave": [
+        "espejo",
+        "espejos",
+        "mampara",
+        "mamparas",
+        "laminado",
+        "seguridad",
+        "acrilico",
+        "acrílico",
+        "vitral",
+        "motor",
+        "polea",
+        "estructura",
+        "pintado",
+        "electrostatico",
+        "electrostático",
+        "electrico",
+        "eléctrico",
+        "electromecanico",
+        "electromecánico",
+        "luces",
+        "emergencia",
+        "soldadura"
+      ],
       "personal": null,
       "precio_minimo_unidad": null,
       "patron_filas": "Una fila: descripción del trabajo + hasta 3 fotos opcionales + precio final. Es el cajón para todo lo que no tiene título propio.",
       "sustento_base": "SERVICIO: {descripcion}",
-      "acepta_fotos": true
+      "acepta_fotos": true,
+      "subtipo_obligatorio": true
     }
   },
-
   "reglas": [
     "El título nombra la FAMILIA; el sustento técnico dice el TRABAJO. Si ambos dicen casi lo mismo, el título está mal elegido.",
     "El título nunca se elige por separado del contenido: el tipo de servicio determina los dos a la vez.",
     "No se inventan títulos nuevos. Lo que no encaja en carretillas, balanzas o vitrinas es 'generales'.",
     "Abrir la fila con 'Suministro e instalación de...' cuando el material lo pone la empresa.",
-    "El precio que se indica es siempre el subtotal, sin IGV."
+    "El precio que se indica es siempre el subtotal, sin IGV.",
+    "Un servicio nuevo SIEMPRE entra como 'generales' con su subtipo. Se promueve a tipo propio solo con datos al cierre de mes (ver 'promocion')."
+  ],
+  "promocion": {
+    "_leeme": "Cómo nace un tipo de servicio nuevo. Existe porque ya se falló en esto: al aparecer el primer trabajo de vidrio se creó una familia nueva en el momento, en vez de mandarlo a 'generales' y esperar evidencia (ver casuistica.md, 14/09/2026).",
+    "por_defecto": "Todo trabajo que no calce con las palabras clave de carretillas, balanzas o vitrinas entra como 'generales'. Sin excepciones y sin consultar: no se crea un tipo nuevo en el momento de cotizar.",
+    "subtipo": "Cada cotización de 'generales' lleva un 'subtipo' obligatorio, tomado de 'subtipos_sugeridos' (si no existe ninguno que calce, se usa 'otros' y se anota el caso en casuistica.md). Es lo que permite contarlos después: sin subtipo no hay evidencia, y sin evidencia la promoción vuelve a ser una corazonada.",
+    "umbral": "Un subtipo se evalúa para tipo propio recién con 3 o más cotizaciones en el período, revisadas al cierre de mes junto con el resto de la data.",
+    "ademas_debe_cumplir": [
+      "Tener una redacción de fila propia y repetible, no una descripción distinta cada vez.",
+      "Que el título de 'SERVICIOS GENERALES' le reste claridad frente al cliente.",
+      "Que no sea un caso de un solo cliente."
+    ],
+    "quien_decide": "Se propone con los números al cierre de mes y se confirma antes de agregarlo a servicios.json. Nunca se agrega en medio de una cotización."
+  },
+  "subtipos_sugeridos": [
+    "espejos",
+    "mamparas",
+    "laminado-seguridad",
+    "acrilicos",
+    "vitrales",
+    "motores",
+    "estructuras",
+    "pintado",
+    "electrico",
+    "otros"
   ]
 }

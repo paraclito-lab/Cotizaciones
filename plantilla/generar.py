@@ -34,7 +34,14 @@ def tipo_de(cot):
         raise SystemExit(
             f"Falta 'tipo' o no es válido: {t!r}.\n"
             "Tipos válidos: " + ", ".join(SERVICIOS["tipos"]))
-    return SERVICIOS["tipos"][t]
+    servicio = SERVICIOS["tipos"][t]
+    if servicio.get("subtipo_obligatorio") and not cot.get("subtipo"):
+        raise SystemExit(
+            "Falta 'subtipo'. Todo servicio nuevo entra como 'generales' con una etiqueta\n"
+            "corta y estable (espejos, mamparas, laminado-seguridad, acrilicos, motores...).\n"
+            "Es lo que permite contar después si merece tipo propio — ver 'promocion' en\n"
+            "servicios.json. No se crea un tipo nuevo en medio de una cotización.")
+    return servicio
 
 
 def esc(t):
@@ -238,7 +245,8 @@ def main():
     print("\nFila para el registro:")
     print(" | ".join([
         cot["numero"], cot["fecha"], cot["cliente"], cot.get("local", ""),
-        servicio["categoria_registro"], cot.get("resumen", cot["items"][0]["descripcion"])[:60],
+        servicio["categoria_registro"], cot.get("subtipo", ""),
+        cot.get("resumen", cot["items"][0]["descripcion"])[:60],
         str(unidades), money(sub), money(igv), money(total),
     ]))
     if alertas:
