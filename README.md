@@ -15,6 +15,7 @@ de costos reales se lleva en un Google Sheet aparte y se llena a mano.
 |---|---|
 | `criterios-actuales.md` | Las reglas de negocio decididas (mano de obra por localidad, márgenes, checklist, numeración, flujo de aprobación, cómo se interactúa por Telegram). Es el documento que más se actualiza. |
 | `catalogo.md` | **Única** fuente de precios de repuestos. Si un precio no está aquí, no es oficial. |
+| `servicios.json` | **Única** fuente de los tipos de servicio: qué título lleva cada uno, cómo se redacta su fila, en qué categoría del registro cae y qué palabras lo reconocen. Lo lee el generador. |
 | `casuistica.md` | Bitácora de casos nuevos o dudas que no encajan en las reglas actuales. Se agrega, no se borra. |
 | `auditoria-2026-09-14.md` | Revisión completa de todo lo construido: vacíos, contradicciones, cuellos de botella y defectos detectados, con el orden sugerido para resolverlos. Leer antes de programar nada. |
 | `flujo-completo.md` | El diagrama (mermaid) de punta a punta del proceso, desde la solicitud hasta el registro del costo real. |

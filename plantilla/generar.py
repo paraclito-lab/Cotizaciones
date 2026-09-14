@@ -13,8 +13,28 @@ import base64, io, json, os, re, sys, glob
 RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 HEADER = os.path.join(RAIZ, "plantilla", "headers", "base.jpg")
 TPL = os.path.join(RAIZ, "plantilla", "cotizacion.html")
-IGV = 0.18
+SERVICIOS = json.load(open(os.path.join(RAIZ, "servicios.json"), encoding="utf-8"))
+IGV = SERVICIOS["igv"]
 MAX_FOTOS = 3
+
+
+def tipo_de(cot):
+    """El tipo de servicio determina el título. No se puede escribir un título a mano.
+
+    Esto cierra por construcción el error de coherencia título/contenido: antes el título y
+    la tabla eran dos campos independientes y se podía mandar un título de balanza con
+    contenido de carretilla (ver casuistica.md, 14/09/2026).
+    """
+    if "titulo" in cot:
+        raise SystemExit(
+            "El JSON trae 'titulo'. El título no se escribe: sale del 'tipo'.\n"
+            "Tipos válidos: " + ", ".join(SERVICIOS["tipos"]))
+    t = cot.get("tipo")
+    if t not in SERVICIOS["tipos"]:
+        raise SystemExit(
+            f"Falta 'tipo' o no es válido: {t!r}.\n"
+            "Tipos válidos: " + ", ".join(SERVICIOS["tipos"]))
+    return SERVICIOS["tipos"][t]
 
 
 def esc(t):
@@ -43,6 +63,7 @@ def foto_uri(ruta, lado=180):
 
 
 def construir_html(cot):
+    servicio = tipo_de(cot)
     filas, subtotal = [], 0.0
     for i, it in enumerate(cot["items"], start=1):
         cant = it.get("cant", 1)
@@ -73,7 +94,7 @@ def construir_html(cot):
     for k, v in {
         "HEADER_SRC": data_uri(HEADER),
         "NUMERO": esc(cot["numero"]),
-        "TITULO": esc(cot["titulo"]).upper(),
+        "TITULO": esc(servicio["titulo"]).upper(),
         "CLIENTE": esc(cot["cliente"]).upper(),
         "LOCAL": esc(cot.get("local", "")).upper(),
         "ATENCION": esc(cot.get("atencion", "")).upper(),
@@ -186,6 +207,7 @@ def main():
         print(__doc__)
         sys.exit(1)
     cot = json.load(open(sys.argv[1], encoding="utf-8"))
+    servicio = tipo_de(cot)
     salida = sys.argv[2] if len(sys.argv) > 2 else "."
     os.makedirs(salida, exist_ok=True)
 
@@ -207,9 +229,18 @@ def main():
         alertas.append(f"el título es largo: se redujo la letra a {achicado}px para que entrara")
 
     print(f"Sub Total  S/ {money(sub)}")
-    print(f"IGV 18%    S/ {money(igv)}")
+    print(f"IGV {IGV:.0%}    S/ {money(igv)}")
     print(f"Total      S/ {money(total)}")
     print(f"\nVista previa: {png}\nEntregable:   {pdf}")
+
+    # Fila lista para pegar en el registro de costos (Momento 1)
+    unidades = sum(it.get("cant", 1) for it in cot["items"])
+    print("\nFila para el registro:")
+    print(" | ".join([
+        cot["numero"], cot["fecha"], cot["cliente"], cot.get("local", ""),
+        servicio["categoria_registro"], cot.get("resumen", cot["items"][0]["descripcion"])[:60],
+        str(unidades), money(sub), money(igv), money(total),
+    ]))
     if alertas:
         print("\nREVISAR ANTES DE ENVIAR:")
         for a in alertas:

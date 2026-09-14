@@ -149,24 +149,24 @@ verde, tabla con Sub Total resaltado en amarillo. Reemplaza al formato simple si
 en la cotización N° 107-2026, Porongoche) que queda descontinuado. La implementación técnica
 de este formato (cómo se genera el PDF/PNG real) está en `plantilla/README.md`.
 
-**Títulos del encabezado — DECIDIDO (14/09/2026)**. El título no describe el trabajo puntual:
-nombra la **familia de servicio**. Son estos, y no se inventan otros:
+**Títulos del encabezado y tipos de servicio — DECIDIDO (14/09/2026)**
 
-| Título del encabezado | Cuándo |
-|---|---|
-| MANTENIMIENTO DE CARRETILLAS HIDRÁULICAS | Carretillas |
-| MANTENIMIENTO DE BALANZAS | Balanzas |
-| MANTENIMIENTO DE VITRINAS COMERCIALES E INDUSTRIALES | Trabajos sobre vitrinas: vidrio templado, insulado, curvo, refrigeradas, de exhibición, de autoconsumo |
-| SERVICIOS GENERALES | Todo lo que no esté en las filas de arriba: espejos, vidrios de mamparas, laminado de seguridad, acrílicos, motores, estructuras, pintado, eléctrico, y cualquier servicio nuevo |
+La relación **tipo de servicio → título del encabezado → redacción del sustento técnico →
+categoría del registro** vive en un solo archivo: **`servicios.json`**. No se repite acá ni en
+la skill ni en `plantilla/README.md`, porque ya pasó que el mismo dato escrito en tres lugares
+se desincronizara (ver `auditoria-2026-09-14.md`, hallazgo B3).
 
-**El título no debe repetir el sustento técnico.** Son dos niveles distintos: el título dice la
-familia ("mantenimiento de vitrinas"), la fila dice el trabajo concreto ("suministro e
-instalación de vidrio templado insulado contraplacado, 0.72 × 1.70 m, utilizando el marco
-existente"). Si el título y la fila dicen casi lo mismo, el título está mal elegido.
+Hoy son cuatro tipos: `carretillas`, `balanzas`, `vitrinas` y `generales`. Cada uno trae su
+título fijo, las palabras clave que lo reconocen desde una descripción en lenguaje natural, el
+patrón de redacción de la fila, el personal requerido y el precio mínimo si tiene.
 
-Nota de redacción: en la fila conviene abrir con **"Suministro e instalación de..."** cuando el
-material lo pone la empresa — es el término del rubro y el que ya se usa en las cotizaciones
-reales (ver `ejemplos-reales/` y `analisis/tarapoto-excel.md`).
+Dos reglas que `plantilla/generar.py` **hace cumplir por código**, no solo por escrito:
+
+- **El título no se escribe a mano.** Se pide el `tipo` y el título sale de ahí. Si un JSON
+  trae un `titulo`, el generador se niega a correr. Así el error de coherencia
+  título↔contenido (título de balanza con contenido de carretilla) ya no puede ocurrir.
+- **El título nombra la familia; el sustento técnico dice el trabajo.** Si ambos dicen casi lo
+  mismo, el título está mal elegido.
 
 La redacción de la tabla de ítems varía según tipo de servicio, y así se mantiene (no se
 fuerza un único formato de fila):

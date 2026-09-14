@@ -32,22 +32,17 @@ van, porque es el documento que recibe el cliente; en los archivos del repo, no)
 Solo existen tres. **El tipo elige el título Y el contenido a la vez** — nunca se llenan por
 separado (regla de coherencia, `criterios-actuales.md` punto 8):
 
-| Título del encabezado | Cuándo | Patrón de la tabla |
-|---|---|---|
-| MANTENIMIENTO DE CARRETILLAS HIDRÁULICAS | Carretillas | Fila 1 = mantenimiento (cant. = N° de carretillas) + una fila por repuesto suministrado |
-| MANTENIMIENTO DE BALANZAS | Balanzas | Redacción técnica: calibración, nivelación, alineamiento, celdas de carga, caja sumatoria |
-| MANTENIMIENTO DE VITRINAS COMERCIALES E INDUSTRIALES | Vitrinas: vidrio templado, insulado, curvo, refrigeradas, de exhibición, de autoconsumo | Una fila: descripción + hasta 3 fotos (opcionales) + precio |
-| SERVICIOS GENERALES | Todo lo demás: espejos, vidrios de mamparas, laminado de seguridad, acrílicos, motores, estructuras, pintado, eléctrico | Una fila: descripción + hasta 3 fotos (opcionales) + precio |
+Los tipos, sus títulos, sus palabras clave y el patrón de redacción de la fila están en
+**`servicios.json`** — leerlo, no asumirlos de memoria ni copiarlos acá.
 
-**Estos cuatro títulos son los que hay. No se inventan otros** ni se escribe el trabajo
-concreto como título.
+Hoy son cuatro: `carretillas`, `balanzas`, `vitrinas`, `generales`. Lo que no encaja en los
+tres primeros es `generales`. **No se inventan tipos ni títulos nuevos**; si aparece un
+trabajo que claramente forma una familia propia y se repite, se anota en `casuistica.md` y se
+evalúa agregarlo con datos, no por corazonada.
 
-**El título nunca repite el sustento técnico.** El título dice la familia; la fila dice el
-trabajo. Si ambos dicen casi lo mismo, el título está mal elegido. En la fila, abrir con
-"Suministro e instalación de..." cuando el material lo pone la empresa.
-
-Para el registro de costos, los cuatro caen en las 3 categorías existentes (Carretillas /
-Balanzas / Servicios Generales); vitrinas va por ahora en **Servicios Generales**.
+**El título nunca repite el sustento técnico**: el título dice la familia, la fila dice el
+trabajo. En la fila, abrir con "Suministro e instalación de..." cuando el material lo pone la
+empresa.
 
 ## Paso 2 — Confirmar antes de generar
 
@@ -81,7 +76,7 @@ Formato del JSON:
 ```json
 {
   "numero": "COT-2026-001",
-  "titulo": "Mantenimiento de carretillas hidráulicas",
+  "tipo": "carretillas",
   "cliente": "Hipermercados Tottus S.A",
   "local": "San Miguel",
   "atencion": "Carlos Ramos",
@@ -96,10 +91,14 @@ Formato del JSON:
 
 - `fotos`: lista de rutas de imagen dentro de un ítem (máximo 3, opcional, solo Servicios
   Generales). Se achican y encuadran solas; **no se rechaza una foto por borrosa u oscura**.
-- El subtotal, el IGV (18%) y el total los calcula el script. No escribirlos a mano.
+- `tipo` es obligatorio y **reemplaza al título**: el generador se niega a correr si el JSON
+  trae un `titulo` escrito a mano.
+- `resumen` (opcional): la descripción corta que va al registro de costos.
+- El subtotal, el IGV y el total los calcula el script. No escribirlos a mano.
 - La fecha va en texto largo en español ("15 de septiembre de 2026").
 
-El script imprime los totales, la ruta del PNG y del PDF, y una lista de **alertas** (ítems en
+El script imprime los totales, las rutas del PNG y del PDF, **la fila ya armada para pegar en
+el registro de costos**, y una lista de **alertas** (ítems en
 S/0, N° con formato incorrecto, más de 3 fotos). Si hay alertas, resolverlas antes de mostrar
 nada.
 

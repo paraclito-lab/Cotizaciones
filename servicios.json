@@ -1,0 +1,60 @@
+{
+  "_leeme": "Fuente ÚNICA de la relación tipo de servicio -> título del encabezado -> redacción del sustento técnico -> categoría del registro. Antes esto vivía como prosa repetida en criterios-actuales.md, en la skill y en plantilla/README.md, y se desincronizaba. Si algo de esto cambia, se cambia AQUÍ y en ningún otro lado. plantilla/generar.py lo lee.",
+
+  "igv": 0.18,
+  "precio_recibido": "subtotal",
+
+  "tipos": {
+    "carretillas": {
+      "titulo": "Mantenimiento de carretillas hidráulicas",
+      "categoria_registro": "Carretillas",
+      "palabras_clave": ["carretilla", "carretillas", "stocka", "stockas", "transpaleta", "pallet", "parihuela", "hidraulica", "hidráulica"],
+      "personal": 2,
+      "precio_minimo_unidad": 250,
+      "patron_filas": "Fila 1 = mantenimiento, cantidad = N° de carretillas. Una fila aparte por cada repuesto suministrado, con su precio de catalogo.md.",
+      "sustento_base": "Reparación y mantenimiento de {n} carretillas hidráulicas (cambio de pasadores, orings, retenes de elevación, pines de expansión, retenes de bomba, anillos de jebe, aceite hidráulico)",
+      "acepta_fotos": false
+    },
+
+    "balanzas": {
+      "titulo": "Mantenimiento de balanzas",
+      "categoria_registro": "Balanzas",
+      "palabras_clave": ["balanza", "balanzas", "plataforma", "celda de carga", "celdas", "calibracion", "calibración", "mettler", "sumatoria"],
+      "personal": 3,
+      "precio_minimo_unidad": null,
+      "patron_filas": "Una fila con la redacción técnica completa del servicio. Repuestos mayores (celdas, caja sumatoria, cable) pueden ir en la misma fila o separados.",
+      "sustento_base": "Mantenimiento de balanza plataforma: calibración, nivelación, alineamiento de plataforma, empotrado de cadena y brazo de acero inoxidable C-304.",
+      "acepta_fotos": true
+    },
+
+    "vitrinas": {
+      "titulo": "Mantenimiento de vitrinas comerciales e industriales",
+      "categoria_registro": "Servicios Generales",
+      "palabras_clave": ["vitrina", "vitrinas", "templado", "insulado", "contraplacado", "curvo", "refrigerada", "exhibicion", "exhibición", "autoconsumo", "mural"],
+      "personal": null,
+      "precio_minimo_unidad": null,
+      "patron_filas": "Una fila: qué se suministra e instala + dimensiones + si se reutiliza el marco. Hasta 3 fotos opcionales.",
+      "sustento_base": "Suministro e instalación de {descripcion}, de dimensiones aproximadas {medidas}, utilizando el marco existente.",
+      "acepta_fotos": true
+    },
+
+    "generales": {
+      "titulo": "Servicios generales",
+      "categoria_registro": "Servicios Generales",
+      "palabras_clave": ["espejo", "espejos", "mampara", "mamparas", "laminado", "seguridad", "acrilico", "acrílico", "vitral", "motor", "polea", "estructura", "pintado", "electrostatico", "electrostático", "electrico", "eléctrico", "electromecanico", "electromecánico", "luces", "emergencia", "soldadura"],
+      "personal": null,
+      "precio_minimo_unidad": null,
+      "patron_filas": "Una fila: descripción del trabajo + hasta 3 fotos opcionales + precio final. Es el cajón para todo lo que no tiene título propio.",
+      "sustento_base": "SERVICIO: {descripcion}",
+      "acepta_fotos": true
+    }
+  },
+
+  "reglas": [
+    "El título nombra la FAMILIA; el sustento técnico dice el TRABAJO. Si ambos dicen casi lo mismo, el título está mal elegido.",
+    "El título nunca se elige por separado del contenido: el tipo de servicio determina los dos a la vez.",
+    "No se inventan títulos nuevos. Lo que no encaja en carretillas, balanzas o vitrinas es 'generales'.",
+    "Abrir la fila con 'Suministro e instalación de...' cuando el material lo pone la empresa.",
+    "El precio que se indica es siempre el subtotal, sin IGV."
+  ]
+}
