@@ -63,6 +63,11 @@ necesario (personas, amanecidas, costo real) — al cierre del mes se analiza es
 ahí se define la fórmula, o se confirma que el precio de referencia estaba bien. Se revisa y se
 mejora mes a mes.
 
+**El precio se entrega siempre SIN IGV — DECIDIDO (14/09/2026)**: cuando se indica un precio
+para una cotización, es el **subtotal**. El IGV del 18% y el total los calcula el sistema
+encima de ese número. No hay que aclararlo caso por caso: si se dice "2330", el subtotal es
+S/2,330 y el total S/2,749.40.
+
 **Precio mínimo — DECIDIDO (14/09/2026)**: el mantenimiento de carretillas hidráulicas tiene
 un **piso de S/250 por unidad**, sin importar lo que dé la fórmula de mano de obra (personas ×
 tarifa × 2 ÷ cantidad). Si la fórmula da menos de S/250 (por ejemplo, muchas unidades entre
@@ -143,6 +148,25 @@ HB Precio) — encabezado con logo, franjas turquesa/naranja, N° de cotización
 verde, tabla con Sub Total resaltado en amarillo. Reemplaza al formato simple sin color (visto
 en la cotización N° 107-2026, Porongoche) que queda descontinuado. La implementación técnica
 de este formato (cómo se genera el PDF/PNG real) está en `plantilla/README.md`.
+
+**Títulos del encabezado — DECIDIDO (14/09/2026)**. El título no describe el trabajo puntual:
+nombra la **familia de servicio**. Son estos, y no se inventan otros:
+
+| Título del encabezado | Cuándo |
+|---|---|
+| MANTENIMIENTO DE CARRETILLAS HIDRÁULICAS | Carretillas |
+| MANTENIMIENTO DE BALANZAS | Balanzas |
+| MANTENIMIENTO DE VITRINAS COMERCIALES E INDUSTRIALES | Trabajos sobre vitrinas: vidrio templado, insulado, curvo, refrigeradas, de exhibición, de autoconsumo |
+| SERVICIOS GENERALES | Todo lo que no esté en las filas de arriba: espejos, vidrios de mamparas, laminado de seguridad, acrílicos, motores, estructuras, pintado, eléctrico, y cualquier servicio nuevo |
+
+**El título no debe repetir el sustento técnico.** Son dos niveles distintos: el título dice la
+familia ("mantenimiento de vitrinas"), la fila dice el trabajo concreto ("suministro e
+instalación de vidrio templado insulado contraplacado, 0.72 × 1.70 m, utilizando el marco
+existente"). Si el título y la fila dicen casi lo mismo, el título está mal elegido.
+
+Nota de redacción: en la fila conviene abrir con **"Suministro e instalación de..."** cuando el
+material lo pone la empresa — es el término del rubro y el que ya se usa en las cotizaciones
+reales (ver `ejemplos-reales/` y `analisis/tarapoto-excel.md`).
 
 La redacción de la tabla de ítems varía según tipo de servicio, y así se mantiene (no se
 fuerza un único formato de fila):

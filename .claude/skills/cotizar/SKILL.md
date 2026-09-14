@@ -32,14 +32,22 @@ van, porque es el documento que recibe el cliente; en los archivos del repo, no)
 Solo existen tres. **El tipo elige el título Y el contenido a la vez** — nunca se llenan por
 separado (regla de coherencia, `criterios-actuales.md` punto 8):
 
-| Tipo | Título del encabezado | Patrón de la tabla |
+| Título del encabezado | Cuándo | Patrón de la tabla |
 |---|---|---|
-| **Carretillas** | MANTENIMIENTO DE CARRETILLAS HIDRÁULICAS | Fila 1 = mantenimiento (cant. = N° de carretillas) + una fila por repuesto suministrado |
-| **Balanzas** | MANTENIMIENTO DE BALANZAS | Redacción técnica: calibración, nivelación, alineamiento, celdas de carga, caja sumatoria |
-| **Servicios Generales** | El trabajo concreto en mayúsculas (ej. CAMBIO DE MOTOR DE EXTRACCIÓN, PINTADO ELECTROSTÁTICO) | Una sola fila: descripción + hasta 3 fotos (opcionales) + precio final |
+| MANTENIMIENTO DE CARRETILLAS HIDRÁULICAS | Carretillas | Fila 1 = mantenimiento (cant. = N° de carretillas) + una fila por repuesto suministrado |
+| MANTENIMIENTO DE BALANZAS | Balanzas | Redacción técnica: calibración, nivelación, alineamiento, celdas de carga, caja sumatoria |
+| MANTENIMIENTO DE VITRINAS COMERCIALES E INDUSTRIALES | Vitrinas: vidrio templado, insulado, curvo, refrigeradas, de exhibición, de autoconsumo | Una fila: descripción + hasta 3 fotos (opcionales) + precio |
+| SERVICIOS GENERALES | Todo lo demás: espejos, vidrios de mamparas, laminado de seguridad, acrílicos, motores, estructuras, pintado, eléctrico | Una fila: descripción + hasta 3 fotos (opcionales) + precio |
 
-Si el trabajo no encaja en Carretillas ni Balanzas, es **Servicios Generales**. No se crean
-categorías nuevas.
+**Estos cuatro títulos son los que hay. No se inventan otros** ni se escribe el trabajo
+concreto como título.
+
+**El título nunca repite el sustento técnico.** El título dice la familia; la fila dice el
+trabajo. Si ambos dicen casi lo mismo, el título está mal elegido. En la fila, abrir con
+"Suministro e instalación de..." cuando el material lo pone la empresa.
+
+Para el registro de costos, los cuatro caen en las 3 categorías existentes (Carretillas /
+Balanzas / Servicios Generales); vitrinas va por ahora en **Servicios Generales**.
 
 ## Paso 2 — Confirmar antes de generar
 
@@ -49,7 +57,10 @@ Hay dinero de por medio: nunca generar sin devolver un resumen de lo entendido y
 > (S/40 c/u) y 4 direccionales (S/80 c/u). Mantenimiento a S/650 por unidad. ¿Correcto?"
 
 Preguntar en lenguaje natural solo lo que realmente falte (cliente, local, atención, cantidad,
-precio de mano de obra). No pedir todo de golpe como un formulario.
+precio). No pedir todo de golpe como un formulario.
+
+**El precio que se indica es siempre el subtotal, SIN IGV.** No preguntarlo cada vez: el IGV
+del 18% y el total se calculan encima.
 
 ## Paso 3 — Numeración
 
