@@ -45,6 +45,18 @@ El JSON lleva el ancho y largo del rollo, la sangría de corte, y la lista de pi
    escala cuánto del ancho se aprovecha y cuánto se bota. Es lo que se imprime y se lleva a
    campo.
 
+### El acomodo se verifica solo, en cada corrida
+
+Que las piezas no se monten unas sobre otras es una promesa del algoritmo, no un hecho. Por
+eso el script le asigna a cada pieza su posición real (x, y) dentro de su rollo y comprueba,
+pieza contra pieza, que **ninguna se solape con otra y ninguna se salga del rollo**. Si alguna
+vez se cambia la forma de acomodar, el error aparece acá y no en el taller con la lámina ya
+cortada.
+
+La verificación se probó rompiéndola a propósito — metiendo una pieza de más en una banda
+llena y poniendo una banda más larga que el rollo — y detectó ambos casos. Un verificador que
+siempre dice que todo está bien no sirve de nada.
+
 ### Una banda no se puede partir entre dos rollos
 
 El primer cálculo sumaba los metros de todas las bandas y dividía entre 25. Está mal: si a un

@@ -148,6 +148,15 @@ def informe(r):
           f"(desperdicio {1 - r['aprovechamiento']:.1%})")
     sobra = r["rollos"] * r["largo_rollo"] - r["largo"]
     print(f"Sobrante sin usar:         {sobra:.2f} m lineales")
+
+    colocadas, errores = verificar(r)
+    if errores:
+        print(f"\n✗ ACOMODO INVÁLIDO — {len(errores)} problema(s):")
+        for e in errores[:10]:
+            print("    " + e)
+    else:
+        print(f"\n✓ Verificado: {colocadas} piezas colocadas, ninguna se monta sobre otra "
+              f"y ninguna se sale del rollo.")
     mapa(r)
 
     # Dónde se va el desperdicio: cuánto rollo consume cada zona y cuánto de eso se bota
@@ -166,6 +175,60 @@ def informe(r):
     for nombre, z in sorted(zonas.items(), key=lambda kv: -(kv[1]["rollo"] - kv[1]["vidrio"])):
         print(f"  {nombre:<24} {z['n']:>6} {z['vidrio']:>8.2f}m² {z['rollo']:>8.2f}m² "
               f"{z['vidrio'] / z['rollo']:>6.0%}")
+
+
+def ubicar(r):
+    """Le da a cada pieza su posición real (x, y) dentro de su rollo.
+
+    x = distancia desde el borde del rollo, a lo ancho.
+    y = distancia desde el inicio del rollo, a lo largo.
+    Las bandas se apilan a lo largo; dentro de una banda las piezas van una al lado de otra.
+    """
+    ubicadas = []
+    for n, rollo in enumerate(r["lista_rollos"], start=1):
+        y = 0.0
+        for b in rollo["bandas"]:
+            x = 0.0
+            for p in b["piezas"]:
+                ubicadas.append({"rollo": n, "zona": p["zona"], "x": x, "y": y,
+                                 "ancho": p["across"], "largo": p["along"]})
+                x += p["across"]
+            y += b["alto"]
+    return ubicadas
+
+
+def verificar(r):
+    """Comprueba que ninguna pieza se monte sobre otra ni se salga del rollo.
+
+    El acomodo por bandas no debería producir solapamientos, pero eso es una promesa del
+    algoritmo. Esto lo mide sobre las coordenadas reales: si alguna vez se cambia la forma
+    de acomodar, el error se ve acá y no en el taller con la lámina ya cortada.
+    """
+    u = ubicar(r)
+    tol = 1e-9
+    errores = []
+
+    for p in u:
+        if p["x"] < -tol or p["x"] + p["ancho"] > r["ancho_rollo"] + tol:
+            errores.append(f"{p['zona']} se sale del ancho del rollo {p['rollo']}")
+        if p["y"] < -tol or p["y"] + p["largo"] > r["largo_rollo"] + tol:
+            errores.append(f"{p['zona']} se sale del largo del rollo {p['rollo']}")
+
+    for i, a in enumerate(u):
+        for b in u[i + 1:]:
+            if a["rollo"] != b["rollo"]:
+                continue
+            solapa_x = min(a["x"] + a["ancho"], b["x"] + b["ancho"]) - max(a["x"], b["x"])
+            solapa_y = min(a["y"] + a["largo"], b["y"] + b["largo"]) - max(a["y"], b["y"])
+            if solapa_x > tol and solapa_y > tol:
+                errores.append(f"{a['zona']} se monta sobre {b['zona']} en el rollo "
+                               f"{a['rollo']} ({solapa_x:.3f} x {solapa_y:.3f} m)")
+
+    colocadas = len(u)
+    esperadas = len(r["piezas"]) - len(r["imposibles"])
+    if colocadas != esperadas:
+        errores.append(f"se colocaron {colocadas} piezas pero eran {esperadas}")
+    return colocadas, errores
 
 
 def mapa(r, cols=30):
