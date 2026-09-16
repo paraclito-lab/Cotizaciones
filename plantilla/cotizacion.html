@@ -64,6 +64,20 @@
   .photo-row { display: flex; gap: 6px; margin-top: 6px; }
   .photo-row img { width: 90px; height: 90px; object-fit: cover; border: 1px solid #ccc; border-radius: 3px; }
 
+  /* Fila separadora: divide visualmente un grupo de ítems dentro de la misma tabla
+     (ej. piezas que necesitan un rollo de ancho distinto). No es un ítem cotizado. */
+  tbody tr.separador td {
+    background: #eef6f2;
+    color: #17795f;
+    font-weight: 700;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    padding: 5px 8px;
+    border-top: 2px solid #1f9e6e;
+    border-bottom: 2px solid #1f9e6e;
+  }
+
   @page { margin: 0; }
 </style>
 </head>

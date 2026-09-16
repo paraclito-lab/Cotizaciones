@@ -71,8 +71,17 @@ def foto_uri(ruta, lado=180):
 
 def construir_html(cot):
     servicio = tipo_de(cot)
-    filas, subtotal = [], 0.0
-    for i, it in enumerate(cot["items"], start=1):
+    filas, subtotal, n = [], 0.0, 0
+    for it in cot["items"]:
+        if it.get("separador"):
+            # Fila que solo divide visualmente el bloque siguiente (ej. piezas que
+            # necesitan un rollo de ancho distinto). No numera, no suma, no lleva precio.
+            filas.append(
+                f'        <tr class="separador"><td colspan="5">{esc(it["texto"])}</td></tr>'
+            )
+            continue
+        n += 1
+        i = n
         cant = it.get("cant", 1)
         pu = float(it["precio_unit"])
         imp = cant * pu
@@ -127,34 +136,6 @@ MARGEN_MM = 8
 PX_POR_MM = 96 / 25.4
 A4_ANCHO_MM, A4_ALTO_MM = 297, 210          # apaisado
 ESCALA_MIN, ESCALA_MAX = 0.55, 1.30
-ANCHO_MIN, ANCHO_MAX = 700, 1500        # rango en el que se busca el ancho de la hoja
-
-
-def ajustar_ancho(pg, ratio_objetivo):
-    """Busca el ancho de hoja cuya proporción calce con la de la página.
-
-    El alto de la cotización depende de cuánto texto tenga, así que con un ancho fijo la
-    hoja casi nunca tiene la misma proporción que el A4 y queda una franja vacía a un lado.
-    Ensanchar la hoja acorta las filas y sube la proporción; angostarla la baja. Con unas
-    pocas pasadas de búsqueda binaria queda centrada y llenando la página.
-    """
-    lo, hi = ANCHO_MIN, ANCHO_MAX
-    mejor, mejor_dif = None, None
-    for _ in range(9):
-        medio = (lo + hi) / 2
-        pg.eval_on_selector(".sheet", "(el, w) => el.style.width = w + 'px'", medio)
-        pg.wait_for_timeout(40)
-        caja = pg.locator(".sheet").bounding_box()
-        ratio = caja["width"] / caja["height"]
-        dif = abs(ratio - ratio_objetivo)
-        if mejor_dif is None or dif < mejor_dif:
-            mejor, mejor_dif = medio, dif
-        if ratio < ratio_objetivo:
-            lo = medio          # muy angosta: queda alta, hay que ensancharla
-        else:
-            hi = medio
-    pg.eval_on_selector(".sheet", "(el, w) => el.style.width = w + 'px'", mejor)
-    pg.wait_for_timeout(60)
 
 
 def encajar_titulo(pg):
@@ -187,24 +168,27 @@ def render(html, base_salida):
         pg.goto("file://" + ruta_html)
         pg.wait_for_timeout(400)
 
-        disp_w = (A4_ANCHO_MM - 2 * MARGEN_MM) * PX_POR_MM
-        disp_h = (A4_ALTO_MM - 2 * MARGEN_MM) * PX_POR_MM
-
-        # Primero se ajusta el ancho de la hoja a la proporción de la página, para que no
-        # quede una franja vacía al costado ni abajo. Se hace ANTES del PNG, para que la
-        # vista previa y el PDF sean exactamente el mismo documento.
-        ajustar_ancho(pg, disp_w / disp_h)
         achicado = encajar_titulo(pg)
         pg.locator(".sheet").screenshot(path=base_salida + ".png")
 
+        # El ancho de la hoja queda fijo (900px, el diseño base); la escala se calcula para
+        # que quepa entera en la página, y el sobrante de espacio —horizontal o vertical,
+        # según cuál lado tenga holgura— se reparte MITAD Y MITAD como margen, para que la
+        # cotización quede centrada en la hoja en vez de pegada arriba/a la izquierda.
+        disp_w = (A4_ANCHO_MM - 2 * MARGEN_MM) * PX_POR_MM
+        disp_h = (A4_ALTO_MM - 2 * MARGEN_MM) * PX_POR_MM
         caja = pg.locator(".sheet").bounding_box()
         escala = min(disp_w / caja["width"], disp_h / caja["height"], ESCALA_MAX)
         escala = max(escala, ESCALA_MIN)     # más abajo sería ilegible: mejor una 2da página
 
-        m = f"{MARGEN_MM}mm"
+        sobra_w_mm = max(0, disp_w - caja["width"] * escala) / PX_POR_MM
+        sobra_h_mm = max(0, disp_h - caja["height"] * escala) / PX_POR_MM
+        m_x = f"{MARGEN_MM + sobra_w_mm / 2:.2f}mm"
+        m_y = f"{MARGEN_MM + sobra_h_mm / 2:.2f}mm"
+
         pg.pdf(path=base_salida + ".pdf", format="A4", landscape=True, print_background=True,
                scale=round(escala, 3),
-               margin={"top": m, "bottom": m, "left": m, "right": m})
+               margin={"top": m_y, "bottom": m_y, "left": m_x, "right": m_x})
         nav.close()
     return base_salida + ".png", base_salida + ".pdf", achicado
 
@@ -222,7 +206,7 @@ def main():
 
     # Validación automática (criterios-actuales.md punto 9, paso 2)
     alertas = []
-    for i, it in enumerate(cot["items"], start=1):
+    for i, it in enumerate((x for x in cot["items"] if not x.get("separador")), start=1):
         if float(it["precio_unit"]) <= 0:
             alertas.append(f"ítem {i} tiene precio 0")
         if len(it.get("fotos", [])) > MAX_FOTOS:
@@ -241,12 +225,13 @@ def main():
     print(f"\nVista previa: {png}\nEntregable:   {pdf}")
 
     # Fila lista para pegar en el registro de costos (Momento 1)
-    unidades = sum(it.get("cant", 1) for it in cot["items"])
+    unidades = sum(it.get("cant", 1) for it in cot["items"] if not it.get("separador"))
+    primer_item = next(x for x in cot["items"] if not x.get("separador"))
     print("\nFila para el registro:")
     print(" | ".join([
         cot["numero"], cot["fecha"], cot["cliente"], cot.get("local", ""),
         servicio["categoria_registro"], cot.get("subtipo", ""),
-        cot.get("resumen", cot["items"][0]["descripcion"])[:60],
+        cot.get("resumen", primer_item["descripcion"])[:60],
         str(unidades), money(sub), money(igv), money(total),
     ]))
     if alertas:

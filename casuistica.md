@@ -155,3 +155,25 @@ convertirse en una regla nueva dentro de `criterios-actuales.md`.
   divide en dos cotizaciones por una razón técnica (el material), el cálculo de precio
   tiene que poder recombinarlas** — el cliente ve dos documentos, pero el costo real
   (mano de obra, logística) no se duplica, se reparte una sola vez entre las dos.
+
+### 16/09/2026 — El PDF no quedaba centrado y una cotización dividida en dos archivos molestaba
+
+- **Contexto**: cotización de Tottus Atocongo dividida en dos PDF (rollo estándar / rollo
+  especial), y revisión visual de ambos.
+- **Qué pasó**: dos problemas.
+  1. El PDF corto (4 filas) quedaba con el contenido pegado arriba y medio folio en blanco
+     abajo — el mecanismo que forzaba el ancho de la hoja a calzar la proporción del A4
+     topaba un ancho mínimo con pocas filas y no lograba llenar la altura.
+  2. Repartir un mismo pedido en dos archivos separados, aunque técnicamente correcto (dos
+     materiales distintos), resultó incómodo de manejar: se pidió un solo archivo.
+- **Cómo se resolvió esta vez**: se cambió el mecanismo de ajuste — ya no se fuerza el
+  ancho de la hoja, se calcula la escala que hace caber el contenido en la página y el
+  sobrante (horizontal o vertical, el que sobre) se reparte mitad y mitad como margen, así
+  la cotización queda centrada sin importar cuántas filas tenga. Y se agregó un ítem de
+  tipo **separador**: una fila que divide visualmente un bloque dentro de la misma tabla,
+  sin numerar ni sumar, para casos como "estas piezas necesitan otro material" sin partir
+  el documento en dos.
+- **¿Debería ser una regla permanente?** Sí — ambas quedaron en `plantilla/README.md`.
+  Aprendizaje de fondo: **dos documentos correctos por separado pueden ser peor solución
+  que uno solo bien estructurado** — la división técnica (rollo estándar vs especial) no
+  tenía por qué convertirse en una división del entregable.

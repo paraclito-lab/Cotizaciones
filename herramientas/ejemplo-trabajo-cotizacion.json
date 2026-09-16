@@ -1,0 +1,97 @@
+{
+ "numero": "COT-2026-DEMO",
+ "tipo": "generales",
+ "subtipo": "laminado-seguridad",
+ "cliente": "Hipermercados Tottus S.A",
+ "local": "Atocongo",
+ "atencion": "Jose Vega",
+ "fecha": "16 de septiembre de 2026",
+ "resumen": "Cambio de laminado de seguridad certificado en espejos y vidrio templado",
+ "items": [
+  {
+   "cant": 33,
+   "descripcion": "Suministro e instalación de laminado de seguridad certificado — Altillos: 33 ventanas de 0.97m x 0.96m c/u.",
+   "precio_unit": 0
+  },
+  {
+   "cant": 1,
+   "descripcion": "Suministro e instalación de laminado de seguridad certificado — Gestión Humana: 1 ventana de 1.60m x 1.00m.",
+   "precio_unit": 0
+  },
+  {
+   "cant": 4,
+   "descripcion": "Suministro e instalación de laminado de seguridad certificado — Baño hombres: 4 espejos — 1.73x1.07m, 1.60x1.07m, 1.64x1.07m, 1.70x1.07m.",
+   "precio_unit": 0
+  },
+  {
+   "cant": 1,
+   "descripcion": "Suministro e instalación de laminado de seguridad certificado — Baños mujeres: 1 espejo de 1.00m x 1.74m.",
+   "precio_unit": 0
+  },
+  {
+   "cant": 12,
+   "descripcion": "Suministro e instalación de laminado de seguridad certificado — Comedor empleados: 12 ventanas de 0.95m x 0.95m c/u.",
+   "precio_unit": 0
+  },
+  {
+   "cant": 1,
+   "descripcion": "Suministro e instalación de laminado de seguridad certificado — Baño gerencia hombres: 1 espejo de 0.75m x 1.07m.",
+   "precio_unit": 0
+  },
+  {
+   "cant": 1,
+   "descripcion": "Suministro e instalación de laminado de seguridad certificado — Baño gerencia mujeres: 1 espejo de 0.75m x 1.07m.",
+   "precio_unit": 0
+  },
+  {
+   "cant": 2,
+   "descripcion": "Suministro e instalación de laminado de seguridad certificado — Ingreso 211: 2 espejos de 0.30m x 1.22m c/u.",
+   "precio_unit": 0
+  },
+  {
+   "cant": 1,
+   "descripcion": "Suministro e instalación de laminado de seguridad certificado — Oficina Bravo 2: 1 ventana de 1.98m x 1.00m.",
+   "precio_unit": 0
+  },
+  {
+   "cant": 1,
+   "descripcion": "Suministro e instalación de laminado de seguridad certificado — Oficina Bravo 3: 1 ventana de 2.12m x 1.00m.",
+   "precio_unit": 0
+  },
+  {
+   "cant": 1,
+   "descripcion": "Suministro e instalación de laminado de seguridad certificado — Espejo Non Food: 1 espejo de 0.40m x 1.90m.",
+   "precio_unit": 0
+  },
+  {
+   "cant": 1,
+   "descripcion": "Suministro e instalación de laminado de seguridad certificado — Tesorería: 1 ventana de 1.52m x 0.95m.",
+   "precio_unit": 0
+  },
+  {
+   "separador": true,
+   "texto": "Piezas con lado menor mayor a 1.50 m — requieren rollo especial (mismo precio unitario)"
+  },
+  {
+   "cant": 1,
+   "descripcion": "Suministro e instalación de laminado de seguridad certificado — Baño hombres: espejo de 1.54m x 1.73m.",
+   "precio_unit": 0
+  },
+  {
+   "cant": 1,
+   "descripcion": "Suministro e instalación de laminado de seguridad certificado — Baños mujeres: espejo de 1.74m x 1.74m.",
+   "precio_unit": 0
+  },
+  {
+   "cant": 1,
+   "descripcion": "Suministro e instalación de laminado de seguridad certificado — Baños mujeres: espejo de 1.60m x 1.74m.",
+   "precio_unit": 0
+  },
+  {
+   "cant": 1,
+   "descripcion": "Suministro e instalación de laminado de seguridad certificado — Baños mujeres: espejo de 1.60m x 1.74m.",
+   "precio_unit": 0
+  }
+ ],
+ "nota": "DEMO — precios pendientes (mañana). 63 piezas, 71.94 m² en total. Las 4 piezas marcadas requieren un rollo especial de 1.83 m porque su lado menor supera 1.50 m — no entran en el rollo estándar. Confirmar medida del espejo 1.74x1.74m antes de comprar el rollo. Incluye emisión de certificado por espejos y vidrio templado."
+}

@@ -86,6 +86,13 @@ El JSON lleva `numero`, `titulo`, `cliente`, `local`, `atencion`, `fecha`, la li
 
    Por debajo de 0.55 de escala ya sería ilegible, así que en ese caso pasa a una segunda
    página en vez de seguir achicando.
+
+   **La cotización queda centrada en la hoja**, no pegada a una esquina. El sobrante de
+   espacio (a los costados si la tabla es larga y angosta, arriba/abajo si es corta) se
+   reparte mitad y mitad como margen. Antes se intentaba forzar el ancho de la hoja para
+   que su proporción calzara exacto con la del A4, pero con pocas filas eso topaba un
+   ancho mínimo y dejaba media hoja en blanco abajo — se reemplazó por este centrado
+   directo, más simple y sin ese caso raro.
 5. Imprime alertas de la validación automática (`criterios-actuales.md` punto 9, paso 2):
    ítems en S/0, N° que no cumple `COT-AAAA-NNN`, más de 3 fotos.
 
@@ -104,6 +111,21 @@ la descripción + hasta 3 fotos + precio. Probado con las 3 fotos reales del PDF
   original de la foto del celular), borde gris 1px, esquinas levemente redondeadas.
 - La foto es **opcional** — si no llega ninguna, la fila queda solo con texto.
 - Si llegan más de 3 fotos: sin resolver todavía (ver `casuistica.md`).
+
+## Fila separadora dentro de la tabla
+
+Para dividir un mismo pedido en dos bloques sin partirlo en dos archivos (ej. piezas que
+necesitan un rollo de ancho distinto, mismo precio unitario, pero hay que dejarlo claro),
+un ítem puede ser un separador en vez de una fila normal:
+
+```json
+{"separador": true, "texto": "Piezas con lado menor mayor a 1.50 m — requieren rollo especial"}
+```
+
+Sale como una fila que ocupa las 5 columnas, con fondo verde claro y el texto en
+mayúsculas — no se numera, no cuenta para el subtotal, no lleva precio. Los ítems de
+antes y después sí se numeran de corrido (ver `herramientas/ejemplo-trabajo.json`, que
+tiene la estructura real de Atocongo con 16 ítems y un separador en la fila 13).
 
 ## Pendiente
 
