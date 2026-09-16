@@ -177,3 +177,26 @@ convertirse en una regla nueva dentro de `criterios-actuales.md`.
   Aprendizaje de fondo: **dos documentos correctos por separado pueden ser peor solución
   que uno solo bien estructurado** — la división técnica (rollo estándar vs especial) no
   tenía por qué convertirse en una división del entregable.
+
+### 16/09/2026 — El texto de las piezas angostas se superponía en el dibujo de corte
+
+- **Contexto**: primera versión de `herramientas/dibujar_rollos.py` (imágenes de corte por
+  rollo, pedidas para llevar a campo en vez del mapa de texto), corrida sobre el caso real
+  de Atocongo.
+- **Qué pasó**: dos intentos fallidos antes del bueno.
+  1. Con texto siempre horizontal sin envolver, el nombre de zonas angostas (Ingreso 211,
+     0.30 m; Baño gerencia hombres, 0.75 m) se salía de su pieza y quedaba escrito encima de
+     la vecina — ilegible.
+  2. El primer arreglo (rotar si no entra) fue demasiado estricto: exigía que el texto
+     cupiera en una sola línea sin envolver, así que pieza normales como "Comedor
+     empleados" (0.95 m, texto largo) tampoco pasaban la prueba y **se quedaban sin
+     ninguna etiqueta** — peor que el problema original.
+- **Cómo se resolvió esta vez**: el texto primero se envuelve en varias líneas (como en
+  cualquier documento), y solo si ni envuelto entra se rota 90°; si tampoco entra rotado,
+  se deja solo la medida. Se verificó visualmente que las piezas normales (Comedor,
+  Altillos) muestran su nombre completo en dos líneas, y las angostas (Ingreso 211) salen
+  rotadas sin invadir a la vecina.
+- **¿Debería ser una regla permanente?** Sí — documentado en `herramientas/README.md`.
+  Aprendizaje de fondo: **un arreglo que evita un error visible no sirve si crea uno peor
+  (texto faltante) en el camino** — hay que probar el caso común, no solo el caso que
+  originó el arreglo.

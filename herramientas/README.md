@@ -66,6 +66,36 @@ grande a la más chica, y ese orden **es** el orden físico de corte. La razón:
 corte grande al inicio, el rollo todavía está entero y alcanza para rehacerlo; si esa misma
 pieza se deja para el final y falla, hay que comprar un rollo completo por una sola pieza.
 
+## `dibujar_rollos.py` — una imagen por rollo, para llevar a campo
+
+Es la versión visual del mapa de texto: dibuja cada rollo a escala, con cada pieza en su
+posición real, su zona, medida y el orden de corte (las bandas se numeran igual que en el
+mapa — la más grande primero).
+
+```bash
+python3 herramientas/dibujar_rollos.py trabajo.json carpeta_salida/
+```
+
+Genera una imagen **por rollo físico** (no por grupo — si un grupo necesita 3 rollos, salen
+3 imágenes). Cada una muestra:
+
+- Las piezas a escala real, coloreadas solo para diferenciarlas de su vecina (el color no
+  significa nada).
+- El **orden de corte** numerado arriba de cada banda.
+- Las bandas **sin holgura** (menos de 5 cm libres, ver `laminado.py`) marcadas en rojo con
+  ⚠, igual que en el mapa de texto.
+- El sobrante del rollo, recortado a una franja corta (no se dibuja completo si son varios
+  metros vacíos — dejaría la imagen carguísima de espacio en blanco) con el resto indicado
+  en texto: `+9.9 m más, no dibujado`.
+
+### El texto se envuelve o se rota — nunca se deja superpuesto
+
+Con piezas angostas (ej. Ingreso 211, 0.30 m) el nombre de la zona no entra en una línea
+horizontal y se salía sobre la pieza vecina. Antes de escribir, se prueba: (1) el texto
+envuelto en varias líneas, normal; (2) si tampoco entra, rotado 90° (las piezas angostas
+suelen ser altas en su banda); (3) si ni así entra, se muestra solo la medida. Nunca se deja
+un texto que invada la pieza de al lado.
+
 ### El acomodo se verifica solo, en cada corrida
 
 Que las piezas no se monten unas sobre otras es una promesa del algoritmo, no un hecho. Por
