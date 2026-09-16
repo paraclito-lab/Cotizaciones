@@ -139,6 +139,60 @@ Ni al 10% ni al 15% se pasa de 3 rollos. Ese colchón existe solo porque el terc
 medio vacío; en un trabajo donde los rollos queden justos, una merma del 10% sí puede costar un
 rollo entero.
 
+## `precio.py` — del costo al precio unitario por zona
+
+Responde lo que `laminado.py` no resuelve: **cuánto se cobra**. Toma los costos reales, les
+aplica el margen y reparte el total entre las zonas.
+
+```bash
+python3 herramientas/precio.py trabajo.json
+```
+
+### Por qué NO se divide el total entre los m²
+
+El costo **no es proporcional al área**. Un espejo de 0.30 × 1.22 m toma casi el mismo tiempo
+que uno de 0.97 × 0.96 —llegar, limpiar el vidrio, posicionar, aplicar, sacar burbujas,
+recortar al ras— y lo único que cambia es el material, que es la parte chica del costo.
+
+Repartiendo un mismo total de S/12,000 de las dos formas:
+
+| Pieza | m² | Solo por m² | Fijo + m² | Diferencia |
+|---|---|---|---|---|
+| Altillo | 0.93 | S/224 | S/227 | +1% |
+| **Espejo Ingreso 211** | 0.37 | **S/88** | **S/152** | **+73%** |
+| **Espejo mujeres grande** | 3.03 | **S/729** | **S/505** | **−31%** |
+
+Dividir entre m² **cobra de menos las piezas chicas** (pierdes plata) y **de más las grandes**
+(te sacan de carrera). Por eso el modelo es `fijo por pieza + tarifa por m²`.
+
+### Cómo reparte el costo
+
+- **Material**: según el rollo que consume cada zona de verdad, incluyendo su desperdicio —
+  no según su área. Sale del acomodo por bandas de `laminado.py`.
+- **Instalación y retiro**: `fijo por pieza × piezas + tarifa por m² × área`.
+- **Logística y certificado**: son fijos del trabajo; se reparten según cuánto pesa cada zona
+  en el costo directo.
+- **Margen**: se aplica sobre el costo total, y el precio unitario se **redondea hacia arriba**
+  al múltiplo que se indique (S/10 por defecto), para que en la cotización aparezcan números
+  comerciales y no resultados de división.
+
+El informe muestra el **margen real después del redondeo** y avisa si se movió más de 5 puntos
+respecto del margen pedido.
+
+### Lo que NO se muestra al cliente
+
+- **La tarifa por m²**. Si en la cotización aparece "S/241/m²", el cliente la usa para
+  negociar y para compararte contra el vendedor de lámina. El valor está en la instalación
+  certificada, no en revender film.
+- **El desperdicio**. Va dentro del precio. Si se muestra como partida, el cliente pide que se
+  absorba.
+
+### Piezas que no entran: cotización aparte
+
+Si alguna pieza no entra en el ancho del rollo, `precio.py` **se niega a calcular** y las
+lista. Van en una cotización separada, con su propio rollo más ancho. Dos razones: usan otro
+material, y si el cliente rechaza esas piezas no se cae el trabajo completo.
+
 ## Cómo entra esto en el precio
 
 El cálculo de rollos da el **costo de material**. El precio al cliente sale de:

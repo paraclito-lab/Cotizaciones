@@ -32,6 +32,7 @@ def expandir(grupos, sangria):
         for _ in range(g.get("cant", 1)):
             piezas.append({
                 "zona": g["zona"],
+                "ref": g.get("ref", ""),
                 "w": round(g["ancho"] + 2 * sangria, 4),
                 "h": round(g["alto"] + 2 * sangria, 4),
                 "w_real": g["ancho"], "h_real": g["alto"],
@@ -217,7 +218,8 @@ def ubicar(r):
         for b in rollo["bandas"]:
             x = 0.0
             for p in b["piezas"]:
-                ubicadas.append({"rollo": n, "zona": p["zona"], "x": x, "y": y,
+                ubicadas.append({"rollo": n, "zona": p["zona"], "ref": p.get("ref", ""),
+                                 "x": x, "y": y,
                                  "ancho": p["across"], "largo": p["along"]})
                 x += p["across"]
             y += b["alto"]
@@ -276,7 +278,8 @@ def mapa(r, cols=30):
         grupos = {}   # dict conserva el orden de inserción = orden de corte
         for b in rollo["bandas"]:
             firma = (round(b["alto"], 2),
-                     tuple((p["zona"], round(p["across"], 2)) for p in b["piezas"]))
+                     tuple(((p["zona"] + (f" · {p['ref']}" if p.get("ref") else "")),
+                            round(p["across"], 2)) for p in b["piezas"]))
             grupos[firma] = grupos.get(firma, 0) + 1
 
         # se listan en el orden en que se cortan, no por cantidad
