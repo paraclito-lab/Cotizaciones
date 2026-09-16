@@ -107,3 +107,29 @@ convertirse en una regla nueva dentro de `criterios-actuales.md`.
   Aprendizaje de fondo: **antes de fijar la unidad de cobro de un servicio, hay que entender
   cómo se compra el material.** La unidad que le sirve al cliente (por zona) no es la misma
   que determina el costo (por rollo).
+
+### 16/09/2026 — El cálculo de lámina no consideraba el error humano al cortar
+
+- **Contexto**: revisión del cálculo de rollos para Tottus Atocongo, después de ver el mapa de
+  corte rollo por rollo.
+- **Qué pasó**: el cálculo asumía corte perfecto. Tres problemas distintos, todos por la misma
+  causa — 59 piezas se cortan a pulso con cutter, no con una máquina:
+  1. No había factor de merma: ninguna pieza arruinada, ningún recorte rehecho.
+  2. El acomodo presentaba como acierto una banda que deja **2 cm libres** entre dos piezas
+     (Bravo 3 + Non Food). En el papel encaja; en la práctica, un desvío de esa magnitud
+     arruina las dos piezas a la vez.
+  3. El orden de corte no consideraba el riesgo. Si la pieza más grande se corta al final y
+     sale mal, hay que comprar un rollo entero para rehacer una sola pieza.
+- **Cómo se resolvió esta vez**: se agregaron las tres cosas a `herramientas/laminado.py` —
+  merma configurable (10% por defecto, con el informe mostrando el largo con y sin merma),
+  aviso ⚠ para toda banda con menos de 5 cm de holgura, y orden de corte de la pieza más
+  grande a la más chica dentro de cada rollo. Escenarios corridos sobre Atocongo: **ni al 10%
+  ni al 15% de merma se pasa de 3 rollos**; el punto de quiebre está en **18.8%**, porque el
+  tercer rollo queda medio vacío y da 11.87 m de colchón.
+- **Lo que NO se hizo, a propósito**: se descartó bajar la sangría de 2 cm a 1 cm para meter
+  dos espejos de gerencia en una misma banda. Con cutter a mano, menos margen es menos
+  tolerancia al error — se ahorran centímetros a cambio de arriesgar piezas enteras. Quedó
+  escrito en `herramientas/README.md` para que no se reintente.
+- **¿Debería ser una regla permanente?** Sí. Aprendizaje de fondo: **un cálculo de materiales
+  que asume ejecución perfecta subestima siempre.** Y cuando el optimizador encuentra un encaje
+  muy justo, eso no es una virtud del plan: es un riesgo que hay que señalar.

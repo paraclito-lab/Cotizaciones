@@ -1,26 +1,122 @@
 {
-  "ancho_rollo": 1.50,
-  "largo_rollo": 25.0,
-  "sangria": 0.02,
-  "piezas": [
-    {"zona": "Altillos",              "cant": 33, "ancho": 0.97, "alto": 0.96},
-    {"zona": "Gestión Humana",        "cant": 1,  "ancho": 1.60, "alto": 1.00},
-    {"zona": "Baño hombres 1",        "cant": 1,  "ancho": 1.73, "alto": 1.07},
-    {"zona": "Baño hombres 2",        "cant": 1,  "ancho": 1.54, "alto": 1.73},
-    {"zona": "Baño hombres 3",        "cant": 1,  "ancho": 1.60, "alto": 1.07},
-    {"zona": "Baño hombres 4",        "cant": 1,  "ancho": 1.64, "alto": 1.07},
-    {"zona": "Baño hombres 5",        "cant": 1,  "ancho": 1.70, "alto": 1.07},
-    {"zona": "Baño mujeres 1",        "cant": 1,  "ancho": 1.74, "alto": 1.74},
-    {"zona": "Baño mujeres 2",        "cant": 1,  "ancho": 1.60, "alto": 1.74},
-    {"zona": "Baño mujeres 3",        "cant": 1,  "ancho": 1.60, "alto": 1.74},
-    {"zona": "Baño mujeres 4",        "cant": 1,  "ancho": 1.00, "alto": 1.74},
-    {"zona": "Comedor empleados",     "cant": 12, "ancho": 0.95, "alto": 0.95},
-    {"zona": "Baño gerencia hombres", "cant": 1,  "ancho": 0.75, "alto": 1.07},
-    {"zona": "Baño gerencia mujeres", "cant": 1,  "ancho": 0.75, "alto": 1.07},
-    {"zona": "Ingreso 211",           "cant": 2,  "ancho": 0.30, "alto": 1.22},
-    {"zona": "Oficina Bravo 2",       "cant": 1,  "ancho": 1.98, "alto": 1.00},
-    {"zona": "Oficina Bravo 3",       "cant": 1,  "ancho": 2.12, "alto": 1.00},
-    {"zona": "Espejo Non Food",       "cant": 1,  "ancho": 0.40, "alto": 1.90},
-    {"zona": "Tesorería",             "cant": 1,  "ancho": 1.52, "alto": 0.95}
-  ]
+ "ancho_rollo": 1.5,
+ "largo_rollo": 25.0,
+ "sangria": 0.02,
+ "merma": 0.1,
+ "piezas": [
+  {
+   "zona": "Altillos",
+   "cant": 33,
+   "ancho": 0.97,
+   "alto": 0.96
+  },
+  {
+   "zona": "Gestión Humana",
+   "cant": 1,
+   "ancho": 1.6,
+   "alto": 1.0
+  },
+  {
+   "zona": "Baño hombres 1",
+   "cant": 1,
+   "ancho": 1.73,
+   "alto": 1.07
+  },
+  {
+   "zona": "Baño hombres 2",
+   "cant": 1,
+   "ancho": 1.54,
+   "alto": 1.73
+  },
+  {
+   "zona": "Baño hombres 3",
+   "cant": 1,
+   "ancho": 1.6,
+   "alto": 1.07
+  },
+  {
+   "zona": "Baño hombres 4",
+   "cant": 1,
+   "ancho": 1.64,
+   "alto": 1.07
+  },
+  {
+   "zona": "Baño hombres 5",
+   "cant": 1,
+   "ancho": 1.7,
+   "alto": 1.07
+  },
+  {
+   "zona": "Baño mujeres 1",
+   "cant": 1,
+   "ancho": 1.74,
+   "alto": 1.74
+  },
+  {
+   "zona": "Baño mujeres 2",
+   "cant": 1,
+   "ancho": 1.6,
+   "alto": 1.74
+  },
+  {
+   "zona": "Baño mujeres 3",
+   "cant": 1,
+   "ancho": 1.6,
+   "alto": 1.74
+  },
+  {
+   "zona": "Baño mujeres 4",
+   "cant": 1,
+   "ancho": 1.0,
+   "alto": 1.74
+  },
+  {
+   "zona": "Comedor empleados",
+   "cant": 12,
+   "ancho": 0.95,
+   "alto": 0.95
+  },
+  {
+   "zona": "Baño gerencia hombres",
+   "cant": 1,
+   "ancho": 0.75,
+   "alto": 1.07
+  },
+  {
+   "zona": "Baño gerencia mujeres",
+   "cant": 1,
+   "ancho": 0.75,
+   "alto": 1.07
+  },
+  {
+   "zona": "Ingreso 211",
+   "cant": 2,
+   "ancho": 0.3,
+   "alto": 1.22
+  },
+  {
+   "zona": "Oficina Bravo 2",
+   "cant": 1,
+   "ancho": 1.98,
+   "alto": 1.0
+  },
+  {
+   "zona": "Oficina Bravo 3",
+   "cant": 1,
+   "ancho": 2.12,
+   "alto": 1.0
+  },
+  {
+   "zona": "Espejo Non Food",
+   "cant": 1,
+   "ancho": 0.4,
+   "alto": 1.9
+  },
+  {
+   "zona": "Tesorería",
+   "cant": 1,
+   "ancho": 1.52,
+   "alto": 0.95
+  }
+ ]
 }

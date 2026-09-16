@@ -3,7 +3,9 @@
 Calcula cuántos rollos de lámina se necesitan para un conjunto de piezas.
 
 La lámina NO se compra por metro cuadrado: viene en rollos de ancho fijo (1.50 m por
-defecto) y largo fijo (25 m). Por eso el desperdicio no depende del área total sino de
+defecto) y largo fijo (25 m). El cálculo considera además el error humano al cortar: una
+merma configurable, un aviso para las bandas sin holgura, y un orden de corte que arranca
+por las piezas grandes mientras el rollo está entero. Por eso el desperdicio no depende del área total sino de
 cómo encajan las piezas a lo ancho del rollo. Dos trabajos con los mismos m² pueden
 necesitar distinta cantidad de rollos.
 
@@ -19,6 +21,8 @@ import json, sys
 ANCHO_ROLLO = 1.50
 LARGO_ROLLO = 25.0
 SANGRIA = 0.02          # margen de corte que se agrega a cada lado de cada pieza
+MERMA = 0.10            # proporción de material que se pierde por cortes arruinados
+HOLGURA_MINIMA = 0.05   # menos de esto libre a lo ancho es una banda riesgosa con cutter
 
 
 def expandir(grupos, sangria):
@@ -99,10 +103,17 @@ def asignar_rollos(bandas, largo_rollo):
                 break
         else:
             rollos.append({"bandas": [b], "libre": largo_rollo - b["alto"]})
+
+    # Orden de corte dentro de cada rollo: primero las piezas más grandes, mientras el
+    # rollo está entero. Si se arruina un corte grande al inicio, queda material para
+    # rehacerlo; si se deja para el final y falla, hay que comprar un rollo por una pieza.
+    for r in rollos:
+        r["bandas"].sort(key=lambda b: -max(p["across"] * p["along"] for p in b["piezas"]))
     return rollos
 
 
-def calcular(grupos, ancho_rollo=ANCHO_ROLLO, largo_rollo=LARGO_ROLLO, sangria=SANGRIA):
+def calcular(grupos, ancho_rollo=ANCHO_ROLLO, largo_rollo=LARGO_ROLLO, sangria=SANGRIA,
+             merma=MERMA):
     piezas = expandir(grupos, sangria)
     mejor = None
     for criterio in ("angosta", "corta", "ancha"):
@@ -117,9 +128,22 @@ def calcular(grupos, ancho_rollo=ANCHO_ROLLO, largo_rollo=LARGO_ROLLO, sangria=S
     area_vidrio = sum(p["w_real"] * p["h_real"] for p in piezas
                       if p not in mejor["imposibles"])
     lista_rollos = asignar_rollos(mejor["bandas"], largo_rollo)
-    rollos = len(lista_rollos)
+
+    # La merma es material que se pierde por cortes arruinados y hay que rehacer. No es la
+    # sangría: la sangría son 2 cm que sí se pegan y se recortan al ras. Esto es la pieza
+    # que se echó a perder y se corta de nuevo.
+    import math
+    largo_con_merma = mejor["largo"] * (1 + merma)
+    rollos = max(len(lista_rollos), math.ceil(largo_con_merma / largo_rollo))
+
+    # ¿Cuánta merma aguanta el plan antes de necesitar un rollo más?
+    capacidad = len(lista_rollos) * largo_rollo
+    merma_limite = (capacidad / mejor["largo"]) - 1 if mejor["largo"] else 0
+
     area_comprada = rollos * ancho_rollo * largo_rollo
     return {**mejor, "piezas": piezas, "rollos": rollos, "lista_rollos": lista_rollos,
+            "merma": merma, "largo_con_merma": largo_con_merma,
+            "merma_limite": merma_limite, "holgura_minima": HOLGURA_MINIMA,
             "area_vidrio": area_vidrio, "area_comprada": area_comprada,
             "aprovechamiento": area_vidrio / area_comprada if area_comprada else 0,
             "ancho_rollo": ancho_rollo, "largo_rollo": largo_rollo, "sangria": sangria}
@@ -141,13 +165,16 @@ def informe(r):
     print(f"Piezas que sí entran:      {n}")
     print(f"Área de vidrio a cubrir:   {r['area_vidrio']:.2f} m²")
     print(f"Bandas de corte:           {len(r['bandas'])}")
-    print(f"Largo de rollo consumido:  {r['largo']:.2f} m")
+    print(f"Largo de rollo consumido:  {r['largo']:.2f} m   (corte perfecto, sin errores)")
+    print(f"  + merma por recortes:    {r['merma']:.0%}  ->  {r['largo_con_merma']:.2f} m")
     print(f"ROLLOS A COMPRAR:          {r['rollos']}")
     print(f"Área comprada:             {r['area_comprada']:.2f} m²")
     print(f"Aprovechamiento:           {r['aprovechamiento']:.1%}  "
           f"(desperdicio {1 - r['aprovechamiento']:.1%})")
-    sobra = r["rollos"] * r["largo_rollo"] - r["largo"]
-    print(f"Sobrante sin usar:         {sobra:.2f} m lineales")
+    sobra = r["rollos"] * r["largo_rollo"] - r["largo_con_merma"]
+    print(f"Margen que queda:          {sobra:.2f} m lineales")
+    print(f"Merma que aguanta el plan: hasta {r['merma_limite']:.0%} "
+          f"(más que eso obliga a comprar un rollo más)")
 
     colocadas, errores = verificar(r)
     if errores:
@@ -234,7 +261,11 @@ def verificar(r):
 def mapa(r, cols=30):
     """Dibuja cómo queda cargado cada rollo. Cada línea es una banda de corte."""
     print(f"\nMAPA DE CADA ROLLO   (ancho = {r['ancho_rollo']} m = {cols} caracteres)")
-    print(f"   █ = lámina pegada al vidrio    ░ = recorte que se bota\n")
+    print(f"   █ = lámina pegada al vidrio    ░ = recorte que se bota")
+    print(f"   ⚠ = menos de {r['holgura_minima'] * 100:.0f} cm libres a lo ancho: a pulso "
+          f"con cutter no hay margen de error")
+    print(f"   El orden de las bandas ES el orden de corte: primero las piezas grandes,")
+    print(f"   mientras el rollo está entero y alcanza para rehacer una que salga mal.\n")
 
     for i, rollo in enumerate(r["lista_rollos"], start=1):
         usado = r["largo_rollo"] - rollo["libre"]
@@ -242,13 +273,14 @@ def mapa(r, cols=30):
               f"({rollo['libre']:.2f} m sobran)")
 
         # bandas idénticas se agrupan para que la lista sea legible en campo
-        grupos = {}
+        grupos = {}   # dict conserva el orden de inserción = orden de corte
         for b in rollo["bandas"]:
             firma = (round(b["alto"], 2),
                      tuple((p["zona"], round(p["across"], 2)) for p in b["piezas"]))
             grupos[firma] = grupos.get(firma, 0) + 1
 
-        for (alto, piezas), veces in sorted(grupos.items(), key=lambda kv: -kv[1]):
+        # se listan en el orden en que se cortan, no por cantidad
+        for (alto, piezas), veces in grupos.items():
             barra, usado_ancho = "", 0.0
             for j, (zona, across) in enumerate(piezas):
                 n = max(1, round(across / r["ancho_rollo"] * cols))
@@ -257,9 +289,23 @@ def mapa(r, cols=30):
             libre = r["ancho_rollo"] - usado_ancho
             barra += "░" * max(0, cols - len(barra.replace("|", "")))
             etiqueta = " + ".join(z for z, _ in piezas)
+            riesgo = " ⚠" if libre < r["holgura_minima"] - 1e-9 else ""
             print(f"    x{veces:<3} {alto:>5.2f} m  {barra}  {etiqueta}"
-                  f"  (libre {libre:.2f} m)")
+                  f"  (libre {libre:.2f} m){riesgo}")
         print()
+
+    riesgosas = []
+    for b in r["bandas"]:
+        libre = r["ancho_rollo"] - sum(p["across"] for p in b["piezas"])
+        if libre < r["holgura_minima"] - 1e-9 and len(b["piezas"]) > 1:
+            riesgosas.append((libre, " + ".join(p["zona"] for p in b["piezas"])))
+    if riesgosas:
+        print(f"  ⚠ BANDAS SIN HOLGURA — revisar antes de cortar")
+        for libre, etiqueta in sorted(riesgosas):
+            print(f"      {etiqueta}: solo {libre * 100:.0f} cm libres entre piezas.")
+        print(f"      Encajan en el papel, pero a pulso con cutter un desvío de esa "
+              f"magnitud\n      arruina las dos piezas. Conviene cortarlas en bandas "
+              f"separadas.\n")
 
 
 if __name__ == "__main__":
@@ -269,4 +315,5 @@ if __name__ == "__main__":
     informe(calcular(datos["piezas"],
                      datos.get("ancho_rollo", ANCHO_ROLLO),
                      datos.get("largo_rollo", LARGO_ROLLO),
-                     datos.get("sangria", SANGRIA)))
+                     datos.get("sangria", SANGRIA),
+                     datos.get("merma", MERMA)))

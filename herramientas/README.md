@@ -26,6 +26,7 @@ El JSON lleva el ancho y largo del rollo, la sangría de corte, y la lista de pi
   "ancho_rollo": 1.50,
   "largo_rollo": 25.0,
   "sangria": 0.02,
+  "merma": 0.10,
   "piezas": [
     {"zona": "Altillos", "cant": 33, "ancho": 0.97, "alto": 0.96}
   ]
@@ -44,6 +45,26 @@ El JSON lleva el ancho y largo del rollo, la sangría de corte, y la lista de pi
 5. **Mapa de cada rollo** — cómo queda cargado rollo por rollo, con una barra que muestra a
    escala cuánto del ancho se aprovecha y cuánto se bota. Es lo que se imprime y se lleva a
    campo.
+
+### El error humano sí está considerado
+
+Cortar 59 piezas a pulso con cutter no sale perfecto. El script lo toma en cuenta de tres
+maneras, todas separadas de la sangría:
+
+**1. Merma configurable.** `"merma": 0.10` en el JSON suma 10% al largo consumido antes de
+redondear a rollos. El informe muestra las dos cifras — largo con corte perfecto y largo con
+merma — para ver cuánto pesa el supuesto y poder discutirlo.
+
+**2. Aviso de bandas sin holgura.** Toda banda que deje menos de 5 cm libres a lo ancho sale
+marcada con ⚠ en el mapa, y se repite al final con su explicación. Encajar dos piezas dejando
+2 cm no es un acierto del acomodo: es una trampa. A pulso, un desvío de esa magnitud arruina
+las **dos** piezas. En el caso de Atocongo la banda de Bravo 3 + Non Food (0.02 m libres) sale
+marcada.
+
+**3. Orden de corte por riesgo.** Dentro de cada rollo, las bandas se ordenan de la pieza más
+grande a la más chica, y ese orden **es** el orden físico de corte. La razón: si se arruina un
+corte grande al inicio, el rollo todavía está entero y alcanza para rehacerlo; si esa misma
+pieza se deja para el final y falla, hay que comprar un rollo completo por una sola pieza.
 
 ### El acomodo se verifica solo, en cada corrida
 
@@ -78,8 +99,13 @@ y se queda con la que menos rollo consume. Cada pieza puede ir girada 90° si es
 
 - **¿La lámina se puede girar?** El script asume que sí. Si el material tiene dirección (por
   el patrón o el tipo de adhesivo), hay que desactivar el giro y el desperdicio sube.
-- **La sangría** por defecto es 2 cm por lado. Si en campo se corta con más o menos margen,
-  cambiar el valor.
+- **La sangría** por defecto es 2 cm por lado, y son a propósito: se pega sobrado y se recorta
+  al ras contra el marco. **No bajarla para hacer entrar una pieza más.** Con cutter a mano,
+  menos margen es menos tolerancia al error: se ahorran centímetros a cambio de arriesgar
+  piezas enteras, y una pieza arruinada cuesta muchísimo más que el recorte que se ahorró.
+- **La merma** por defecto es 10%. Es otra cosa distinta de la sangría: la sangría sí se pega
+  al vidrio, la merma es la pieza que se echó a perder y hay que cortar de nuevo. El informe
+  muestra el largo con y sin merma, para que se vea cuánto pesa el supuesto.
 
 ### El ancho del rollo cambia todo — conviene preguntarle al proveedor qué anchos maneja
 
@@ -96,6 +122,22 @@ Mismo trabajo de Atocongo, variando solo el ancho:
 Lo importante no es el porcentaje sino **los m² comprados**, que es lo que se paga. Y como el
 precio por rollo cambia según el ancho, la decisión final necesita el precio de cada
 presentación — dato que todavía no está en `catalogo.md`.
+
+### Cuánta merma aguanta un plan antes de costar un rollo más
+
+El informe lo calcula solo. En Atocongo el plan consume 63.13 m y tres rollos dan 75 m, así
+que **aguanta 11.87 m de recortes arruinados: hasta 18.8% de merma**. Escenarios corridos:
+
+| Merma | Largo necesario | Rollos |
+|---|---|---|
+| 0% | 63.13 m | 3 |
+| 10% | 69.44 m | 3 |
+| 15% | 72.60 m | 3 |
+| **19%** | **75.12 m** | **4** |
+
+Ni al 10% ni al 15% se pasa de 3 rollos. Ese colchón existe solo porque el tercer rollo va
+medio vacío; en un trabajo donde los rollos queden justos, una merma del 10% sí puede costar un
+rollo entero.
 
 ## Cómo entra esto en el precio
 
