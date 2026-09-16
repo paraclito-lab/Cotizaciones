@@ -1,125 +1,149 @@
 {
- "ancho_rollo": 1.5,
- "largo_rollo": 25.0,
- "sangria": 0.02,
- "merma": 0.1,
  "margen": 0.7,
  "redondeo_unitario": 10,
- "piezas": [
+ "costos": {
+  "mo_fijo_pieza": null,
+  "mo_por_m2": null,
+  "logistica": null,
+  "certificado": null
+ },
+ "grupos": [
   {
-   "zona": "Altillos",
-   "ref": "33 ventanas",
-   "cant": 33,
-   "ancho": 0.97,
-   "alto": 0.96
+   "nombre": "estándar",
+   "ancho_rollo": 1.52,
+   "largo_rollo": 25.0,
+   "sangria": 0.02,
+   "merma": 0.1,
+   "precio_rollo": null,
+   "carga": "completo",
+   "piezas": [
+    {
+     "zona": "Altillos",
+     "cant": 33,
+     "ancho": 0.97,
+     "alto": 0.96
+    },
+    {
+     "zona": "Gestión Humana",
+     "cant": 1,
+     "ancho": 1.6,
+     "alto": 1.0
+    },
+    {
+     "zona": "Baño hombres",
+     "cant": 1,
+     "ancho": 1.73,
+     "alto": 1.07
+    },
+    {
+     "zona": "Baño hombres",
+     "cant": 1,
+     "ancho": 1.6,
+     "alto": 1.07
+    },
+    {
+     "zona": "Baño hombres",
+     "cant": 1,
+     "ancho": 1.64,
+     "alto": 1.07
+    },
+    {
+     "zona": "Baño hombres",
+     "cant": 1,
+     "ancho": 1.7,
+     "alto": 1.07
+    },
+    {
+     "zona": "Baños mujeres",
+     "cant": 1,
+     "ancho": 1.0,
+     "alto": 1.74
+    },
+    {
+     "zona": "Comedor empleados",
+     "cant": 12,
+     "ancho": 0.95,
+     "alto": 0.95
+    },
+    {
+     "zona": "Baño gerencia hombres",
+     "cant": 1,
+     "ancho": 0.75,
+     "alto": 1.07
+    },
+    {
+     "zona": "Baño gerencia mujeres",
+     "cant": 1,
+     "ancho": 0.75,
+     "alto": 1.07
+    },
+    {
+     "zona": "Ingreso 211",
+     "cant": 2,
+     "ancho": 0.3,
+     "alto": 1.22
+    },
+    {
+     "zona": "Oficina Bravo 2",
+     "cant": 1,
+     "ancho": 1.98,
+     "alto": 1.0
+    },
+    {
+     "zona": "Oficina Bravo 3",
+     "cant": 1,
+     "ancho": 2.12,
+     "alto": 1.0
+    },
+    {
+     "zona": "Espejo Non Food",
+     "cant": 1,
+     "ancho": 0.4,
+     "alto": 1.9
+    },
+    {
+     "zona": "Tesorería",
+     "cant": 1,
+     "ancho": 1.52,
+     "alto": 0.95
+    }
+   ]
   },
   {
-   "zona": "Gestión Humana",
-   "ref": "ventana",
-   "cant": 1,
-   "ancho": 1.6,
-   "alto": 1.0
-  },
-  {
-   "zona": "Baño hombres",
-   "ref": "espejo 1.73x1.07",
-   "cant": 1,
-   "ancho": 1.73,
-   "alto": 1.07
-  },
-  {
-   "zona": "Baño hombres",
-   "ref": "espejo 1.60x1.07",
-   "cant": 1,
-   "ancho": 1.6,
-   "alto": 1.07
-  },
-  {
-   "zona": "Baño hombres",
-   "ref": "espejo 1.64x1.07",
-   "cant": 1,
-   "ancho": 1.64,
-   "alto": 1.07
-  },
-  {
-   "zona": "Baño hombres",
-   "ref": "espejo 1.70x1.07",
-   "cant": 1,
-   "ancho": 1.7,
-   "alto": 1.07
-  },
-  {
-   "zona": "Baños mujeres",
-   "ref": "espejo 1.00x1.74",
-   "cant": 1,
-   "ancho": 1.0,
-   "alto": 1.74
-  },
-  {
-   "zona": "Comedor empleados",
-   "ref": "12 ventanas",
-   "cant": 12,
-   "ancho": 0.95,
-   "alto": 0.95
-  },
-  {
-   "zona": "Baño gerencia hombres",
-   "ref": "espejo",
-   "cant": 1,
-   "ancho": 0.75,
-   "alto": 1.07
-  },
-  {
-   "zona": "Baño gerencia mujeres",
-   "ref": "espejo",
-   "cant": 1,
-   "ancho": 0.75,
-   "alto": 1.07
-  },
-  {
-   "zona": "Ingreso 211",
-   "ref": "2 espejos",
-   "cant": 2,
-   "ancho": 0.3,
-   "alto": 1.22
-  },
-  {
-   "zona": "Oficina Bravo 2",
-   "ref": "ventana",
-   "cant": 1,
-   "ancho": 1.98,
-   "alto": 1.0
-  },
-  {
-   "zona": "Oficina Bravo 3",
-   "ref": "ventana",
-   "cant": 1,
-   "ancho": 2.12,
-   "alto": 1.0
-  },
-  {
-   "zona": "Espejo Non Food",
-   "ref": "espejo",
-   "cant": 1,
-   "ancho": 0.4,
-   "alto": 1.9
-  },
-  {
-   "zona": "Tesorería",
-   "ref": "ventana",
-   "cant": 1,
-   "ancho": 1.52,
-   "alto": 0.95
+   "nombre": "especial",
+   "ancho_rollo": 1.83,
+   "largo_rollo": 25.0,
+   "sangria": 0.02,
+   "merma": 0.1,
+   "precio_rollo": null,
+   "carga": "proporcional",
+   "piezas": [
+    {
+     "zona": "Baño hombres",
+     "cant": 1,
+     "ancho": 1.54,
+     "alto": 1.73
+    },
+    {
+     "zona": "Baños mujeres",
+     "cant": 1,
+     "ancho": 1.74,
+     "alto": 1.74
+    },
+    {
+     "zona": "Baños mujeres",
+     "cant": 1,
+     "ancho": 1.6,
+     "alto": 1.74
+    },
+    {
+     "zona": "Baños mujeres",
+     "cant": 1,
+     "ancho": 1.6,
+     "alto": 1.74
+    }
+   ]
   }
  ],
- "costos": {
-  "precio_rollo": 900,
-  "mo_fijo_pieza": 20,
-  "mo_por_m2": 25,
-  "retiro_fijo_pieza": 12,
-  "retiro_por_m2": 18,
-  "logistica": 400,
-  "certificado": 350
- },
- "_leeme": "EJEMPLO. Los costos son INVENTADOS, solo sirven para ver el mecanismo. Antes de usarlo para cotizar de verdad hay que poner: precio real del rollo, tarifa real de instalación y de retiro, y logística."
+ "_leeme": "Ejemplo real (Tottus Atocongo) SIN costos todavía — así se ve el trabajo mientras se espera el precio del rollo, la tarifa de mano de obra y los fijos. Sirve para validar que el cálculo de rollos y el reparto por zona ya están listos."
 }

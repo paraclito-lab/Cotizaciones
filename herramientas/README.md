@@ -139,6 +139,13 @@ Ni al 10% ni al 15% se pasa de 3 rollos. Ese colchón existe solo porque el terc
 medio vacío; en un trabajo donde los rollos queden justos, una merma del 10% sí puede costar un
 rollo entero.
 
+## `flujo-calculo.md` — el mapa completo, para validar antes de cotizar
+
+Diagrama y checklist de punta a punta: de las medidas del cliente al precio final,
+pasando por `laminado.py` y `precio.py`. Incluye qué datos faltan (precio del rollo,
+tarifas) y qué decisiones siguen abiertas (política de carga del rollo especial). Leer
+esto antes de meter costos reales a un trabajo nuevo.
+
 ## `precio.py` — del costo al precio unitario por zona
 
 Responde lo que `laminado.py` no resuelve: **cuánto se cobra**. Toma los costos reales, les
@@ -147,6 +154,25 @@ aplica el margen y reparte el total entre las zonas.
 ```bash
 python3 herramientas/precio.py trabajo.json
 ```
+
+### Un trabajo puede necesitar más de un ancho de rollo
+
+Cuando algunas piezas no entran en el rollo estándar (ver `laminado.py`), el JSON de
+`precio.py` no es una sola lista de piezas: es una lista de **`grupos`**, uno por ancho
+de rollo. `precio.py` calcula el acomodo de cada grupo por separado y junta las zonas de
+todos en una sola tabla de precios. Ver `herramientas/ejemplo-trabajo.json` y
+`herramientas/flujo-calculo.md`.
+
+Cada grupo puede tener su propia **política de carga**:
+
+- `"completo"` — se factura el o los rollos enteros a las piezas de ese grupo, aunque
+  sobre material. El sobrante queda como inventario para otro trabajo.
+- `"proporcional"` — solo se factura lo que de verdad se consume (con su merma); el
+  resto no se cobra a este cliente.
+
+Si `precio.py` corre con `costos` en `null`, no calcula precios pero sí valida que la
+estructura (rollos, zonas, m²) está lista — así se puede confirmar el cálculo un día
+antes de tener los números finales.
 
 ### Por qué NO se divide el total entre los m²
 

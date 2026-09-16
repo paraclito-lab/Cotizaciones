@@ -22,7 +22,7 @@ de costos reales se lleva en un Google Sheet aparte y se llena a mano.
 | `analisis/` | Por qué se tomó cada decisión: qué tenían de malo los Excel originales y qué reveló la hoja de trabajo real de la balanza de Tarapoto. |
 | `ejemplos-reales/` | Cotizaciones reales ya entregadas a clientes, estructuradas, usadas como referencia de formato y precios. |
 | `branding/` | Logo y fondo decorativo de la marca. |
-| `herramientas/` | Cálculos de apoyo. Hoy: `laminado.py`, que determina cuántos rollos de lámina se necesitan para un conjunto de piezas (no es una división por m²: depende de cómo encajan en el ancho del rollo). |
+| `herramientas/` | Cálculos de apoyo: `laminado.py` (rollos de lámina necesarios, no es división por m²), `precio.py` (costo real → precio unitario por zona), `flujo-calculo.md` (mapa completo del cálculo, para validar antes de cotizar). |
 | `plantilla/` | Cómo se arma el PDF/PNG de cada cotización: una sola imagen real de encabezado (`headers/base.jpg`) + N° y título superpuestos como texto, la plantilla HTML y el generador `generar.py`. |
 | `.claude/skills/cotizar/` | La skill que hace todo el proceso: se describe el trabajo en lenguaje natural y devuelve la vista previa y el PDF. |
 

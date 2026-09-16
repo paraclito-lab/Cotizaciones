@@ -1,5 +1,5 @@
 {
- "ancho_rollo": 1.5,
+ "ancho_rollo": 1.52,
  "largo_rollo": 25.0,
  "sangria": 0.02,
  "merma": 0.1,
@@ -17,55 +17,31 @@
    "alto": 1.0
   },
   {
-   "zona": "Baño hombres 1",
+   "zona": "Baño hombres",
    "cant": 1,
    "ancho": 1.73,
    "alto": 1.07
   },
   {
-   "zona": "Baño hombres 2",
-   "cant": 1,
-   "ancho": 1.54,
-   "alto": 1.73
-  },
-  {
-   "zona": "Baño hombres 3",
+   "zona": "Baño hombres",
    "cant": 1,
    "ancho": 1.6,
    "alto": 1.07
   },
   {
-   "zona": "Baño hombres 4",
+   "zona": "Baño hombres",
    "cant": 1,
    "ancho": 1.64,
    "alto": 1.07
   },
   {
-   "zona": "Baño hombres 5",
+   "zona": "Baño hombres",
    "cant": 1,
    "ancho": 1.7,
    "alto": 1.07
   },
   {
-   "zona": "Baño mujeres 1",
-   "cant": 1,
-   "ancho": 1.74,
-   "alto": 1.74
-  },
-  {
-   "zona": "Baño mujeres 2",
-   "cant": 1,
-   "ancho": 1.6,
-   "alto": 1.74
-  },
-  {
-   "zona": "Baño mujeres 3",
-   "cant": 1,
-   "ancho": 1.6,
-   "alto": 1.74
-  },
-  {
-   "zona": "Baño mujeres 4",
+   "zona": "Baños mujeres",
    "cant": 1,
    "ancho": 1.0,
    "alto": 1.74

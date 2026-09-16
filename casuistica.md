@@ -133,3 +133,25 @@ convertirse en una regla nueva dentro de `criterios-actuales.md`.
 - **¿Debería ser una regla permanente?** Sí. Aprendizaje de fondo: **un cálculo de materiales
   que asume ejecución perfecta subestima siempre.** Y cuando el optimizador encuentra un encaje
   muy justo, eso no es una virtud del plan: es un riesgo que hay que señalar.
+
+### 16/09/2026 — El rollo especial (4 piezas) necesitaba su propio cálculo de precio
+
+- **Contexto**: cotización de Tottus Atocongo. Se decidió separar las 4 piezas que no
+  entran en el rollo estándar (1.52 m) en una cotización aparte, con su propio rollo de
+  1.83 m — ver auditoría del cálculo de laminado.
+- **Qué pasó**: `precio.py` solo sabía costear un ancho de rollo por trabajo. Con dos
+  anchos, dos filas de la cotización (Baño hombres, Baños mujeres) tenían piezas
+  repartidas entre los dos grupos y no había forma de calcular el costo conjunto.
+- **Cómo se resolvió esta vez**: `precio.py` pasa a recibir una lista de `grupos` (uno por
+  ancho de rollo), calcula cada uno por separado con `laminado.py` y junta las zonas de
+  todos en una sola tabla de precios. Se agregó además una **política de carga** por
+  grupo (`completo` o `proporcional`) para decidir si un rollo poco aprovechado (el
+  especial quedó en 29%) se factura entero o solo lo que se consume.
+- **Vacío detectado de paso**: no había forma de validar que el cálculo estuviera listo
+  *antes* de tener los costos reales. Se agregó un modo donde `precio.py` corre con
+  `costos` en `null`, no calcula precios pero sí confirma que la estructura (rollos,
+  zonas, m²) está completa — documentado en `herramientas/flujo-calculo.md`.
+- **¿Debería ser una regla permanente?** Sí. Aprendizaje de fondo: **cuando un trabajo se
+  divide en dos cotizaciones por una razón técnica (el material), el cálculo de precio
+  tiene que poder recombinarlas** — el cliente ve dos documentos, pero el costo real
+  (mano de obra, logística) no se duplica, se reparte una sola vez entre las dos.
