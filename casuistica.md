@@ -79,3 +79,31 @@ convertirse en una regla nueva dentro de `criterios-actuales.md`.
   en `criterios-actuales.md` punto 8 y en la skill. Aprendizaje de fondo: **una regla que
   depende del criterio del momento no es una regla; hace falta un umbral y un dato que lo
   mida.**
+
+### 16/09/2026 — El laminado no se cobra por unidad ni por m²: se cobra por rollo
+
+- **Contexto**: solicitud de Tottus Atocongo — cambio de laminado de seguridad + certificado,
+  en 12 zonas, 63 piezas entre ventanas y espejos, con medidas enviadas por el cliente.
+- **Qué pasó**: al armar la cotización con el sistema aparecieron tres imprecisiones. (1) El
+  generador cobra por "unidad", pero un espejo de 0.30 m y una ventana de 2.12 m contaban
+  igual. (2) Se agruparon en una sola fila piezas de tamaños distintos con un único precio
+  unitario. (3) Al corregir a m², tampoco era correcto: **la lámina se compra en rollos de
+  ancho fijo (1.50 m × 25 m)**, así que el costo no depende del área sino de cómo encajan las
+  piezas en el ancho del rollo.
+- **Cómo se resolvió esta vez**: se construyó `herramientas/laminado.py`, que acomoda las
+  piezas por bandas y devuelve rollos a comprar, aprovechamiento, desperdicio por zona y plan
+  de corte. Resultado en este trabajo: **3 rollos, 53.9% de aprovechamiento — 46% del material
+  se desperdicia**, y la causa es estructural (los 33 altillos de 0.97 m solo permiten una
+  pieza por ancho de rollo). Se verificó que no es culpa del algoritmo: 18 combinaciones de
+  acomodo dan el mismo resultado.
+- **Dos hallazgos que exigen decisión antes de cotizar**:
+  1. **4 espejos no entran en un rollo de 1.50 m en ninguna orientación** (1.54×1.73,
+     1.74×1.74, y dos de 1.60×1.74). Necesitan empalme o un rollo más ancho. Hay que
+     confirmarlo con el cliente: un empalme se ve.
+  2. **El ancho del rollo cambia el costo**. Con 2.03 m el mismo trabajo usa 2 rollos en vez
+     de 3 y entran todas las piezas. Falta saber qué anchos maneja el proveedor y a qué
+     precio.
+- **¿Debería ser una regla permanente?** Sí. Queda documentado en `herramientas/README.md`.
+  Aprendizaje de fondo: **antes de fijar la unidad de cobro de un servicio, hay que entender
+  cómo se compra el material.** La unidad que le sirve al cliente (por zona) no es la misma
+  que determina el costo (por rollo).

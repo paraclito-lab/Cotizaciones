@@ -1,0 +1,90 @@
+# Herramientas de cálculo
+
+Scripts de apoyo para cotizar. No generan documentos: calculan el dato que después se usa
+para poner un precio.
+
+## `laminado.py` — cuántos rollos de lámina se necesitan
+
+**El problema que resuelve**: la lámina de seguridad no se compra por metro cuadrado. Viene
+en **rollos de ancho fijo** (1.50 m es el más común) y largo fijo (25 m). Entonces el costo no
+sale de dividir el área total: sale de **cómo encajan las piezas en el ancho del rollo**.
+
+Dos trabajos con los mismos m² pueden necesitar distinta cantidad de rollos. Ejemplo real
+(Tottus Atocongo, 63 piezas): 60.68 m² de vidrio consumieron 3 rollos = 112.50 m² de lámina.
+**El 46% se fue a la basura**, y no por mal corte — por la geometría de las piezas.
+
+### Cómo se usa
+
+```bash
+python3 herramientas/laminado.py piezas.json
+```
+
+El JSON lleva el ancho y largo del rollo, la sangría de corte, y la lista de piezas por zona:
+
+```json
+{
+  "ancho_rollo": 1.50,
+  "largo_rollo": 25.0,
+  "sangria": 0.02,
+  "piezas": [
+    {"zona": "Altillos", "cant": 33, "ancho": 0.97, "alto": 0.96}
+  ]
+}
+```
+
+### Qué devuelve
+
+1. **Piezas que no entran en el ancho del rollo** — necesitan empalme o un rollo más ancho.
+   Es lo primero que hay que revisar: un espejo de 1.74 × 1.74 m **no entra** en un rollo de
+   1.50 m en ninguna de sus dos orientaciones.
+2. **Rollos a comprar** y metros lineales consumidos.
+3. **Aprovechamiento** — qué porcentaje de la lámina comprada termina pegada al vidrio.
+4. **Desperdicio por zona** — dónde se está yendo el material. Casi siempre hay una o dos
+   zonas que se comen el desperdicio.
+5. **Plan de corte** — las bandas, agrupadas, para que en campo se corte siguiendo la lista.
+
+### Cómo acomoda las piezas
+
+Corte por bandas, que es lo que se hace en la práctica con un rollo: se corta de lado a lado.
+Las piezas se acomodan una al lado de otra a lo ancho, y cada banda consume, a lo largo del
+rollo, lo que mide la pieza más alta de esa banda.
+
+El script prueba **18 combinaciones** de criterio de giro, orden de acomodo y regla de encaje,
+y se queda con la que menos rollo consume. Cada pieza puede ir girada 90° si eso ayuda.
+
+### Antes de confiar en el resultado, revisar
+
+- **¿La lámina se puede girar?** El script asume que sí. Si el material tiene dirección (por
+  el patrón o el tipo de adhesivo), hay que desactivar el giro y el desperdicio sube.
+- **La sangría** por defecto es 2 cm por lado. Si en campo se corta con más o menos margen,
+  cambiar el valor.
+
+### El ancho del rollo cambia todo — conviene preguntarle al proveedor qué anchos maneja
+
+Mismo trabajo de Atocongo, variando solo el ancho:
+
+| Ancho del rollo | Piezas que no entran | Rollos | m² comprados | Aprovechamiento |
+|---|---|---|---|---|
+| 1.22 m | 4 | 3 | 91.5 m² | 66% |
+| **1.52 m** (el actual) | **4** | **3** | **114.0 m²** | **53%** |
+| 1.83 m | 0 | 3 | 137.2 m² | 52% |
+| 2.03 m | 0 | 2 | 101.5 m² | 71% |
+| 2.44 m | 0 | 2 | 122.0 m² | 59% |
+
+Lo importante no es el porcentaje sino **los m² comprados**, que es lo que se paga. Y como el
+precio por rollo cambia según el ancho, la decisión final necesita el precio de cada
+presentación — dato que todavía no está en `catalogo.md`.
+
+## Cómo entra esto en el precio
+
+El cálculo de rollos da el **costo de material**. El precio al cliente sale de:
+
+```
+costo material (rollos × precio del rollo)
++ mano de obra (personas × amanecidas, ver criterios-actuales.md punto 2)
++ logística
+= costo total  →  + margen  →  precio
+```
+
+La cotización al cliente se sigue presentando **por zona** (es como el cliente lo pidió y como
+lo entiende), pero el número sale de los rollos, no de los m².
