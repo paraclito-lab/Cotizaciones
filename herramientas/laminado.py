@@ -83,6 +83,25 @@ def empacar(piezas, ancho_rollo, criterio, orden="along", ajuste="mejor"):
     return bandas, imposibles
 
 
+def asignar_rollos(bandas, largo_rollo):
+    """Reparte las bandas en rollos. Una banda NO se puede partir entre dos rollos.
+
+    Sumar los metros y dividir entre el largo del rollo subestima: si quedan 0.8 m de
+    sobrante y la siguiente banda mide 1.0 m, esa banda arranca un rollo nuevo y esos
+    0.8 m se pierden. Se acomodan de mayor a menor para desperdiciar menos punta.
+    """
+    rollos = []
+    for b in sorted(bandas, key=lambda b: -b["alto"]):
+        for r in rollos:
+            if r["libre"] >= b["alto"] - 1e-9:
+                r["bandas"].append(b)
+                r["libre"] -= b["alto"]
+                break
+        else:
+            rollos.append({"bandas": [b], "libre": largo_rollo - b["alto"]})
+    return rollos
+
+
 def calcular(grupos, ancho_rollo=ANCHO_ROLLO, largo_rollo=LARGO_ROLLO, sangria=SANGRIA):
     piezas = expandir(grupos, sangria)
     mejor = None
@@ -97,10 +116,10 @@ def calcular(grupos, ancho_rollo=ANCHO_ROLLO, largo_rollo=LARGO_ROLLO, sangria=S
 
     area_vidrio = sum(p["w_real"] * p["h_real"] for p in piezas
                       if p not in mejor["imposibles"])
-    import math
-    rollos = math.ceil(mejor["largo"] / largo_rollo) if mejor["largo"] else 0
+    lista_rollos = asignar_rollos(mejor["bandas"], largo_rollo)
+    rollos = len(lista_rollos)
     area_comprada = rollos * ancho_rollo * largo_rollo
-    return {**mejor, "piezas": piezas, "rollos": rollos,
+    return {**mejor, "piezas": piezas, "rollos": rollos, "lista_rollos": lista_rollos,
             "area_vidrio": area_vidrio, "area_comprada": area_comprada,
             "aprovechamiento": area_vidrio / area_comprada if area_comprada else 0,
             "ancho_rollo": ancho_rollo, "largo_rollo": largo_rollo, "sangria": sangria}
@@ -128,7 +147,8 @@ def informe(r):
     print(f"Aprovechamiento:           {r['aprovechamiento']:.1%}  "
           f"(desperdicio {1 - r['aprovechamiento']:.1%})")
     sobra = r["rollos"] * r["largo_rollo"] - r["largo"]
-    print(f"Sobrante del último rollo: {sobra:.2f} m lineales")
+    print(f"Sobrante sin usar:         {sobra:.2f} m lineales")
+    mapa(r)
 
     # Dónde se va el desperdicio: cuánto rollo consume cada zona y cuánto de eso se bota
     print("\nDESPERDICIO POR ZONA (qué está costando el material)")
@@ -147,18 +167,36 @@ def informe(r):
         print(f"  {nombre:<24} {z['n']:>6} {z['vidrio']:>8.2f}m² {z['rollo']:>8.2f}m² "
               f"{z['vidrio'] / z['rollo']:>6.0%}")
 
-    # Plan de corte: bandas iguales se agrupan para que la lista sea manejable en campo
-    print("\nPLAN DE CORTE (cada banda es un corte de lado a lado del rollo)")
-    resumen = {}
-    for b in r["bandas"]:
-        firma = tuple(sorted(f"{p['zona']} ({p['across']:.2f}m)" for p in b["piezas"]))
-        clave = (round(b["alto"], 2), firma)
-        resumen[clave] = resumen.get(clave, 0) + 1
-    for (alto, firma), veces in sorted(resumen.items(), key=lambda kv: -kv[1]):
-        sobra = r["ancho_rollo"] - sum(float(x.rsplit("(", 1)[1].rstrip("m)"))
-                                       for x in firma)
-        print(f"  x{veces:<3} banda de {alto:.2f} m  ->  " + " + ".join(firma) +
-              f"   [sobra {sobra:.2f} m de ancho]")
+
+def mapa(r, cols=30):
+    """Dibuja cómo queda cargado cada rollo. Cada línea es una banda de corte."""
+    print(f"\nMAPA DE CADA ROLLO   (ancho = {r['ancho_rollo']} m = {cols} caracteres)")
+    print(f"   █ = lámina pegada al vidrio    ░ = recorte que se bota\n")
+
+    for i, rollo in enumerate(r["lista_rollos"], start=1):
+        usado = r["largo_rollo"] - rollo["libre"]
+        print(f"  ROLLO {i}  —  {usado:.2f} m usados de {r['largo_rollo']:.0f} m "
+              f"({rollo['libre']:.2f} m sobran)")
+
+        # bandas idénticas se agrupan para que la lista sea legible en campo
+        grupos = {}
+        for b in rollo["bandas"]:
+            firma = (round(b["alto"], 2),
+                     tuple((p["zona"], round(p["across"], 2)) for p in b["piezas"]))
+            grupos[firma] = grupos.get(firma, 0) + 1
+
+        for (alto, piezas), veces in sorted(grupos.items(), key=lambda kv: -kv[1]):
+            barra, usado_ancho = "", 0.0
+            for j, (zona, across) in enumerate(piezas):
+                n = max(1, round(across / r["ancho_rollo"] * cols))
+                barra += ("|" if j else "") + "█" * n
+                usado_ancho += across
+            libre = r["ancho_rollo"] - usado_ancho
+            barra += "░" * max(0, cols - len(barra.replace("|", "")))
+            etiqueta = " + ".join(z for z, _ in piezas)
+            print(f"    x{veces:<3} {alto:>5.2f} m  {barra}  {etiqueta}"
+                  f"  (libre {libre:.2f} m)")
+        print()
 
 
 if __name__ == "__main__":

@@ -41,7 +41,17 @@ El JSON lleva el ancho y largo del rollo, la sangría de corte, y la lista de pi
 3. **Aprovechamiento** — qué porcentaje de la lámina comprada termina pegada al vidrio.
 4. **Desperdicio por zona** — dónde se está yendo el material. Casi siempre hay una o dos
    zonas que se comen el desperdicio.
-5. **Plan de corte** — las bandas, agrupadas, para que en campo se corte siguiendo la lista.
+5. **Mapa de cada rollo** — cómo queda cargado rollo por rollo, con una barra que muestra a
+   escala cuánto del ancho se aprovecha y cuánto se bota. Es lo que se imprime y se lleva a
+   campo.
+
+### Una banda no se puede partir entre dos rollos
+
+El primer cálculo sumaba los metros de todas las bandas y dividía entre 25. Está mal: si a un
+rollo le quedan 0.80 m y la siguiente banda mide 1.00 m, esa banda arranca un rollo nuevo y
+esos 0.80 m se pierden. El script reparte las bandas en rollos de mayor a menor, sin partir
+ninguna. En el caso de Atocongo el resultado no cambió (3 rollos en ambos métodos), pero en un
+trabajo con bandas largas sí puede cambiar.
 
 ### Cómo acomoda las piezas
 
