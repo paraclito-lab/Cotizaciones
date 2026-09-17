@@ -130,11 +130,16 @@ def chromium():
     return c[0] if c else None
 
 
-# El PDF va en A4 HORIZONTAL, igual que las cotizaciones reales ya entregadas
-# (el PDF de referencia de Moyobamba mide 841.8 x 595.2 pts = A4 apaisado).
+# El PDF no es para imprimir en papel físico, es un archivo para pantalla — no tiene que
+# calzar en un tamaño de hoja exacto. La página se arma del tamaño real del contenido más un
+# margen fijo, y la orientación sale sola de la forma del contenido (más ancho que alto ->
+# apaisada; más alto que ancho -> vertical). Antes se forzaba siempre A4 apaisado de 297x210mm
+# fijo: cuando una cotización con muchas filas crecía en alto más que en ancho, el contenido se
+# ajustaba por la altura y sobraba muchísimo margen vacío a los costados (ver casuistica.md).
+# LADO_MAYOR_MM es solo una referencia de tamaño "más o menos A4", no un marco que llenar.
 MARGEN_MM = 8
 PX_POR_MM = 96 / 25.4
-A4_ANCHO_MM, A4_ALTO_MM = 297, 210          # apaisado
+LADO_MAYOR_MM = 297
 ESCALA_MIN, ESCALA_MAX = 0.55, 1.30
 
 
@@ -172,23 +177,23 @@ def render(html, base_salida):
         pg.locator(".sheet").screenshot(path=base_salida + ".png")
 
         # El ancho de la hoja queda fijo (900px, el diseño base); la escala se calcula para
-        # que quepa entera en la página, y el sobrante de espacio —horizontal o vertical,
-        # según cuál lado tenga holgura— se reparte MITAD Y MITAD como margen, para que la
-        # cotización quede centrada en la hoja en vez de pegada arriba/a la izquierda.
-        disp_w = (A4_ANCHO_MM - 2 * MARGEN_MM) * PX_POR_MM
-        disp_h = (A4_ALTO_MM - 2 * MARGEN_MM) * PX_POR_MM
+        # que su lado más largo (ancho o alto, según cuál domine) llegue a "más o menos A4".
+        # La página del PDF se dimensiona EXACTO al contenido ya escalado + el margen fijo, así
+        # que no queda holgura que repartir: el margen es el mismo en los 4 lados por
+        # construcción, no por centrado después.
         caja = pg.locator(".sheet").bounding_box()
-        escala = min(disp_w / caja["width"], disp_h / caja["height"], ESCALA_MAX)
+        lado_mayor_px = max(caja["width"], caja["height"])
+        escala = (LADO_MAYOR_MM - 2 * MARGEN_MM) * PX_POR_MM / lado_mayor_px
+        escala = min(escala, ESCALA_MAX)
         escala = max(escala, ESCALA_MIN)     # más abajo sería ilegible: mejor una 2da página
 
-        sobra_w_mm = max(0, disp_w - caja["width"] * escala) / PX_POR_MM
-        sobra_h_mm = max(0, disp_h - caja["height"] * escala) / PX_POR_MM
-        m_x = f"{MARGEN_MM + sobra_w_mm / 2:.2f}mm"
-        m_y = f"{MARGEN_MM + sobra_h_mm / 2:.2f}mm"
+        ancho_mm = caja["width"] * escala / PX_POR_MM + 2 * MARGEN_MM
+        alto_mm = caja["height"] * escala / PX_POR_MM + 2 * MARGEN_MM
+        margen = f"{MARGEN_MM}mm"
 
-        pg.pdf(path=base_salida + ".pdf", format="A4", landscape=True, print_background=True,
-               scale=round(escala, 3),
-               margin={"top": m_y, "bottom": m_y, "left": m_x, "right": m_x})
+        pg.pdf(path=base_salida + ".pdf", width=f"{ancho_mm:.2f}mm", height=f"{alto_mm:.2f}mm",
+               print_background=True, scale=round(escala, 3),
+               margin={"top": margen, "bottom": margen, "left": margen, "right": margen})
         nav.close()
     return base_salida + ".png", base_salida + ".pdf", achicado
 
