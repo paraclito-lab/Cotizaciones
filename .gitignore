@@ -1,0 +1,12 @@
+# El registro de costos es dato operativo que cambia todo el tiempo: no va a control de
+# versiones (criterios-actuales.md punto 6). Si se pierde el archivo, se reconstruye con
+# herramientas/armar_registro.py — el script sí está versionado, justamente por eso.
+*.xlsx
+*.ods
+
+# Salidas descartables del generador: el HTML intermedio, el PNG de vista previa a 2x y el PDF
+# que se le envía al cliente. Lo que se conserva es el JPG comprimido de cotizaciones-emitidas/,
+# ese sí está versionado a propósito.
+COT-*.html
+COT-*.png
+COT-*.pdf

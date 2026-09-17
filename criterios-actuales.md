@@ -240,7 +240,7 @@ libre con IA) y se eligió la más simple e intuitiva:
 
 - **Carga del técnico → conversación libre, sin formato fijo.** El técnico escribe como si le
   hablara a una persona (ej: "hice mantenimiento a 5 carretillas en Tottus San Miguel, cambié
-  10 ruedas de carga, atendió Carlos Ramos"). El bot, con un modelo de lenguaje detrás,
+  10 ruedas de carga, atendió el contacto del local"). El bot, con un modelo de lenguaje detrás,
   entiende el mensaje, arma los campos y **pregunta de vuelta en lenguaje natural** si falta
   algo (ubicación, dato del checklist, etc.) — igual que una conversación normal. Siempre
   confirma lo que entendió antes de generar el PNG ("Entendí: 5 carretillas, Tottus San

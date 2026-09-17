@@ -3,9 +3,11 @@
 Genera la vista previa (PNG) y el entregable (PDF) de una cotización.
 
 Uso:
-    python3 plantilla/generar.py cotizacion.json [carpeta_de_salida]
+    python3 plantilla/generar.py cotizacion.json [carpeta_de_salida] [--archivar]
 
 El JSON describe la cotización; el subtotal, IGV y total se calculan solos.
+`--archivar` guarda la copia comprimida en cotizaciones-emitidas/ — solo para la cotización
+ya aprobada, porque reemplaza la copia anterior de ese N°.
 Ver plantilla/README.md para el formato y las reglas de negocio.
 """
 import base64, io, json, os, re, sys, glob
@@ -15,7 +17,13 @@ HEADER = os.path.join(RAIZ, "plantilla", "headers", "base.jpg")
 TPL = os.path.join(RAIZ, "plantilla", "cotizacion.html")
 SERVICIOS = json.load(open(os.path.join(RAIZ, "servicios.json"), encoding="utf-8"))
 IGV = SERVICIOS["igv"]
+VALIDEZ_DIAS = SERVICIOS["validez_dias"]
 MAX_FOTOS = 3
+
+# El archivo de lo emitido se guarda como imagen comprimida, no como PDF: el PDF pesa el doble
+# y el repositorio se llenaría. La imagen a tamaño 1x con JPEG queda legible y ~3x más liviana.
+ARCHIVO = os.path.join(RAIZ, "cotizaciones-emitidas")
+ARCHIVO_CALIDAD = 85
 
 
 def tipo_de(cot):
@@ -35,12 +43,25 @@ def tipo_de(cot):
             f"Falta 'tipo' o no es válido: {t!r}.\n"
             "Tipos válidos: " + ", ".join(SERVICIOS["tipos"]))
     servicio = SERVICIOS["tipos"][t]
-    if servicio.get("subtipo_obligatorio") and not cot.get("subtipo"):
-        raise SystemExit(
-            "Falta 'subtipo'. Todo servicio nuevo entra como 'generales' con una etiqueta\n"
-            "corta y estable (espejos, mamparas, laminado-seguridad, acrilicos, motores...).\n"
-            "Es lo que permite contar después si merece tipo propio — ver 'promocion' en\n"
-            "servicios.json. No se crea un tipo nuevo en medio de una cotización.")
+    if servicio.get("subtipo_obligatorio"):
+        sub = cot.get("subtipo")
+        validos = SERVICIOS["subtipos_sugeridos"]
+        if not sub:
+            raise SystemExit(
+                "Falta 'subtipo'. Todo servicio nuevo entra como 'generales' con una etiqueta\n"
+                "corta y estable (espejos, mamparas, laminado-seguridad, acrilicos, motores...).\n"
+                "Es lo que permite contar después si merece tipo propio — ver 'promocion' en\n"
+                "servicios.json. No se crea un tipo nuevo en medio de una cotización.")
+        # Un subtipo mal escrito pasaba en silencio y creaba una categoría fantasma de una
+        # sola cotización — justo lo que el umbral de promoción (3 del mismo subtipo) existe
+        # para evitar. Si no se puede contar, la regla no sirve.
+        if sub not in validos:
+            raise SystemExit(
+                f"El subtipo {sub!r} no está en 'subtipos_sugeridos' de servicios.json.\n"
+                f"Válidos: {', '.join(validos)}.\n"
+                "Si de verdad no calza ninguno, se usa 'otros' y se anota el caso en\n"
+                "casuistica.md. No se inventa un subtipo nuevo al vuelo: rompe el conteo\n"
+                "del que depende la promoción a tipo propio.")
     return servicio
 
 
@@ -83,6 +104,11 @@ def construir_html(cot):
         n += 1
         i = n
         cant = it.get("cant", 1)
+        if "precio_unit" not in it:
+            raise SystemExit(
+                f"El ítem {n} no trae 'precio_unit': "
+                f"{it.get('descripcion', '(sin descripción)')[:70]}\n"
+                "Si el precio no está en catalogo.md no se inventa — se pregunta.")
         pu = float(it["precio_unit"])
         imp = cant * pu
         subtotal += imp
@@ -116,6 +142,7 @@ def construir_html(cot):
         "ATENCION": esc(cot.get("atencion", "")).upper(),
         "FECHA": esc(cot["fecha"]),
         "FILAS": "\n".join(filas),
+        "VALIDEZ": str(VALIDEZ_DIAS),
         "SUBTOTAL": money(subtotal),
         "IGV": money(igv),
         "TOTAL": money(total),
@@ -198,36 +225,81 @@ def render(html, base_salida):
     return base_salida + ".png", base_salida + ".pdf", achicado
 
 
+def archivar(png, numero):
+    """Guarda copia de lo emitido como imagen comprimida, no como PDF.
+
+    El PDF de una cotización pesa ~334 KB y el PNG de vista previa ~675 KB (viene a 2x para
+    que se vea nítido en pantalla). Bajado a 1x y en JPEG queda en ~220 KB: legible, y el
+    repositorio no crece a saltos. Se guarda por N° de cotización, así que regenerar el mismo
+    número reemplaza su copia — el archivo conserva la última versión de cada cotización.
+    """
+    from PIL import Image
+    os.makedirs(ARCHIVO, exist_ok=True)
+    im = Image.open(png).convert("RGB")
+    w, h = im.size
+    im = im.resize((w // 2, h // 2), Image.LANCZOS)
+    destino = os.path.join(ARCHIVO, numero + ".jpg")
+    im.save(destino, "JPEG", quality=ARCHIVO_CALIDAD, optimize=True)
+    return destino
+
+
 def main():
     if len(sys.argv) < 2:
         print(__doc__)
         sys.exit(1)
-    cot = json.load(open(sys.argv[1], encoding="utf-8"))
+    args = [a for a in sys.argv[1:] if not a.startswith("--")]
+    cot = json.load(open(args[0], encoding="utf-8"))
     servicio = tipo_de(cot)
-    salida = sys.argv[2] if len(sys.argv) > 2 else "."
+    salida = args[1] if len(args) > 1 else "."
     os.makedirs(salida, exist_ok=True)
 
     html, sub, igv, total = construir_html(cot)
 
-    # Validación automática (criterios-actuales.md punto 9, paso 2)
-    alertas = []
+    # Validación automática (criterios-actuales.md punto 9, paso 2).
+    # Estas tres son bloqueantes, no advertencias: una cotización de S/0, con cantidad cero o
+    # con subtotal negativo no es una cotización con un detalle menor, es un documento
+    # inválido. Antes salían generadas — la de S/0 ni siquiera levantaba alerta, y la de
+    # precio negativo levantaba la alerta equivocada ("tiene precio 0").
+    alertas, errores = [], []
     for i, it in enumerate((x for x in cot["items"] if not x.get("separador")), start=1):
-        if float(it["precio_unit"]) <= 0:
-            alertas.append(f"ítem {i} tiene precio 0")
+        cant = it.get("cant", 1)
+        pu = float(it["precio_unit"])
+        if cant < 1:
+            errores.append(f"ítem {i} tiene cantidad {cant}: no se cotiza algo que no se entrega")
+        if pu < 0:
+            errores.append(f"ítem {i} tiene precio negativo (S/ {money(pu)})")
+        elif pu == 0:
+            errores.append(f"ítem {i} tiene precio 0")
         if len(it.get("fotos", [])) > MAX_FOTOS:
             alertas.append(f"ítem {i} trae más de {MAX_FOTOS} fotos; se usaron las primeras {MAX_FOTOS}")
+    if sub <= 0:
+        errores.append(f"el subtotal es S/ {money(sub)}: no se emite una cotización sin monto")
     if not re.fullmatch(r"COT-\d{4}-\d{3}", cot["numero"]):
         alertas.append(f"el N° '{cot['numero']}' no sigue el formato COT-AAAA-NNN")
+
+    if errores:
+        raise SystemExit("NO SE GENERA — hay que corregir esto primero:\n" +
+                         "\n".join("  - " + e for e in errores))
 
     base = os.path.join(salida, cot["numero"])
     png, pdf, achicado = render(html, base)
     if achicado:
         alertas.append(f"el título es largo: se redujo la letra a {achicado}px para que entrara")
 
+    # El archivado NO es automático: se archiva la cotización aprobada, con --archivar. Sin
+    # esto, cualquier prueba o regeneración de ejemplo pisaba la copia de la cotización real
+    # ya enviada (pasó al implementarlo: el ejemplo con placeholder sobrescribió la real).
+    archivo = archivar(png, cot["numero"]) if "--archivar" in sys.argv else None
+
     print(f"Sub Total  S/ {money(sub)}")
     print(f"IGV {IGV:.0%}    S/ {money(igv)}")
     print(f"Total      S/ {money(total)}")
+    print(f"Validez    {VALIDEZ_DIAS} días")
     print(f"\nVista previa: {png}\nEntregable:   {pdf}")
+    if archivo:
+        print(f"Archivado:    {archivo} ({os.path.getsize(archivo)//1024} KB)")
+    else:
+        print("Archivado:    no (usar --archivar cuando la cotización esté aprobada)")
 
     # Fila lista para pegar en el registro de costos (Momento 1)
     unidades = sum(it.get("cant", 1) for it in cot["items"] if not it.get("separador"))

@@ -59,6 +59,7 @@
   tfoot tr.subtotal td { background: #fff59d; }   /* Sub Total resaltado, como el formato real */
   tfoot tr.total td { background: #f0f0f0; font-size: 13px; }
   .footer-note { margin-top: 14px; font-size: 10.5px; color: #666; font-style: italic; }
+  .validez { margin-top: 12px; font-size: 11px; color: #333; }
 
   /* Fila con foto (Servicios Generales) — 1 a 3 fotos, opcional */
   .photo-row { display: flex; gap: 6px; margin-top: 6px; }
@@ -113,6 +114,8 @@
         <tr class="total"><td colspan="4">Total</td><td class="money">S/ {{TOTAL}}</td></tr>
       </tfoot>
     </table>
+
+    <div class="validez"><b>Validez de la oferta:</b> {{VALIDEZ}} d&iacute;as calendario desde la fecha de emisi&oacute;n.</div>
 {{NOTA}}
   </div>
 </div>

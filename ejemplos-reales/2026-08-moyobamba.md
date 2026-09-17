@@ -6,7 +6,7 @@ resaltado en amarillo).
 
 - **Cliente**: HB Precio
 - **Local**: Moyobamba
-- **Atención**: Jose Vega
+- **Atención**: (nombre de contacto — no se registra en el repo)
 - **Fecha**: 28 de agosto de 2026
 - **Título del documento**: COTIZACIÓN DE SERVICIOS — Mantenimiento de carretillas hidraúlicas
 

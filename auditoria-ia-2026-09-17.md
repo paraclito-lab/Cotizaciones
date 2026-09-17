@@ -250,6 +250,31 @@ desarrollar dentro de sesiones de 4 días.
 | 4 | Una sesión nueva por tarea: cotizar en sesión limpia, desarrollar en otra. No reanudar una sesión de 400K para una pregunta chica | ~US$55 de los US$195 medidos fueron arranques en frío de contexto irrelevante. En operación, 3-4x por cotización |
 | 5 | Archivar cada PDF emitido en el repo (`cotizaciones-emitidas/COT-AAAA-NNN.pdf`) y no en `/tmp` | Hoy no existe copia de lo cotizado. Sin costo |
 
+### ✅ Resuelto el mismo 17/09/2026
+
+Los cinco puntos de impacto alto se implementaron y se verificaron el mismo día:
+
+1. ✅ Nombres de contacto fuera de los 4 archivos del repo (quedó placeholder), y la
+   contradicción de la skill corregida. **Pendiente de decisión**: qué hacer con el historial de
+   git, que conserva el dato.
+2. ✅ `cant >= 1`, `precio_unit > 0` con mensaje correcto para negativos, y `subtotal > 0`. Las
+   tres son **bloqueantes**, no advertencias: `generar.py` se niega a producir el documento. Los
+   cuatro casos borde se volvieron a probar y los cuatro bloquean.
+3. ✅ `subtipo` validado contra `subtipos_sugeridos`; un typo ahora corta con la lista de válidos.
+4. ✅ `KeyError` reemplazado por un mensaje que nombra el ítem sin precio.
+5. ✅ Archivado en `cotizaciones-emitidas/` como **imagen comprimida** (227 KB) y no PDF (334 KB),
+   con `--archivar` explícito. COT-2026-001 ya archivada.
+
+También en el mismo día, fuera de la lista original: validez de la oferta de **15 días** en el
+PDF (dato en `servicios.json`, no hardcodeado), `.gitignore` (no existía), y el registro
+reconstruido con `herramientas/armar_registro.py` — incluyendo la columna de vueltas de
+corrección, que era el dato que faltaba para el único KPI de calidad.
+
+**Defecto encontrado al implementar, ya corregido**: el archivado era automático, y correr el JSON
+de ejemplo (con placeholder) **sobrescribió la copia de la cotización real ya enviada**. Por eso
+`--archivar` es explícito. Es el mismo patrón que ya está documentado en `casuistica.md`: un
+arreglo que crea un problema peor en el camino.
+
 ### Impacto medio
 
 | # | Acción | Ahorro / efecto |

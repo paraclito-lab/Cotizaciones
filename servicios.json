@@ -2,6 +2,7 @@
   "_leeme": "Fuente ÚNICA de la relación tipo de servicio -> título del encabezado -> redacción del sustento técnico -> categoría del registro. Antes esto vivía como prosa repetida en criterios-actuales.md, en la skill y en plantilla/README.md, y se desincronizaba. Si algo de esto cambia, se cambia AQUÍ y en ningún otro lado. plantilla/generar.py lo lee.",
   "igv": 0.18,
   "precio_recibido": "subtotal",
+  "validez_dias": 15,
   "tipos": {
     "carretillas": {
       "titulo": "Mantenimiento de carretillas hidráulicas",

@@ -20,6 +20,12 @@ un rol interno. Las reglas se enuncian como hechos del negocio, nunca atribuidas
 Esto incluye los nombres de contacto del cliente dentro del repositorio (en la cotización sí
 van, porque es el documento que recibe el cliente; en los archivos del repo, no).
 
+**Única excepción, explícita:** `cotizaciones-emitidas/` guarda la imagen de cada cotización ya
+enviada, y esa imagen lleva el nombre del cliente porque es copia fiel de lo que el cliente
+recibió. Es la excepción que confirma la regla: ahí va porque es el documento del cliente, no
+un archivo de trabajo. En todo lo demás —ejemplos, JSON de prueba, documentación— va un
+placeholder. Si esta excepción no estuviera escrita, el archivo rompería la regla en silencio.
+
 ## Antes de generar: leer siempre
 
 1. `criterios-actuales.md` — las reglas vigentes. **Puede haber cambiado desde la última vez.**
@@ -55,7 +61,7 @@ empresa.
 
 Hay dinero de por medio: nunca generar sin devolver un resumen de lo entendido y esperar el OK.
 
-> "Entendí: 5 carretillas en Tottus San Miguel, atención Carlos Ramos, 10 ruedas de carga
+> "Entendí: 5 carretillas en Tottus San Miguel, con su contacto de atención, 10 ruedas de carga
 > (S/40 c/u) y 4 direccionales (S/80 c/u). Mantenimiento a S/650 por unidad. ¿Correcto?"
 
 Preguntar en lenguaje natural solo lo que realmente falte (cliente, local, atención, cantidad,
@@ -86,7 +92,7 @@ Formato del JSON:
   "tipo": "carretillas",
   "cliente": "Hipermercados Tottus S.A",
   "local": "San Miguel",
-  "atencion": "Carlos Ramos",
+  "atencion": "NOMBRE DE CONTACTO",
   "fecha": "15 de septiembre de 2026",
   "items": [
     {"cant": 5, "descripcion": "Reparación y mantenimiento de 05 carretillas hidráulicas (cambio de pasadores, orings, retenes de elevación, pines de expansión, retenes de bomba, anillos de jebe, aceite hidráulico)", "precio_unit": 650.00},
@@ -114,7 +120,9 @@ nada.
 Mostrar el **PNG** (no el PDF: se ve al instante, sin abrir nada) y esperar. Tres respuestas
 posibles:
 
-- **Aprobado** → entregar el PDF y pasar al paso 6.
+- **Aprobado** → volver a correr el generador con `--archivar` (guarda la copia comprimida en
+  `cotizaciones-emitidas/`, ~227 KB por cotización), entregar el PDF y pasar al paso 6. Sin ese
+  paso no queda copia de lo que se envió.
 - **Corregir** → aplicar el cambio, regenerar, volver a mostrar. Sin límite de vueltas.
 - **Rechazado** → no se genera PDF.
 
@@ -125,7 +133,10 @@ cliente lo hace una persona desde Gmail. La cotización queda en estado "lista p
 
 Al aprobar, entregar los datos listos para pegar en el Google Sheet, en este orden:
 
-`N° Cotización | Fecha cotización | Cliente | Local | Tipo de servicio | Descripción breve | Cant. unidades | Subtotal | IGV | Total`
+`N° Cotización | Fecha cotización | Cliente | Local | Tipo de servicio | Subtipo | Descripción breve | Cant. unidades | Subtotal | IGV | Total`
+
+El registro se reconstruye con `herramientas/armar_registro.py` si se pierde el archivo (ya
+pasó una vez). El archivo `.xlsx` no se versiona — es dato operativo; el script sí.
 
 Recordar que **personas y amanecidas se llenan después**, cuando el trabajo termine — son los
 datos con los que se va a deducir la fórmula de precio al cierre del mes de prueba.
