@@ -11,10 +11,10 @@
   {
    "nombre": "estándar",
    "ancho_rollo": 1.52,
-   "largo_rollo": 25.0,
+   "largo_rollo": 30.0,
    "sangria": 0.02,
    "merma": 0.1,
-   "precio_rollo": null,
+   "precio_rollo": 300,
    "carga": "completo",
    "piezas": [
     {
@@ -112,10 +112,10 @@
   {
    "nombre": "especial",
    "ancho_rollo": 1.83,
-   "largo_rollo": 25.0,
+   "largo_rollo": 30.0,
    "sangria": 0.02,
    "merma": 0.1,
-   "precio_rollo": null,
+   "precio_rollo": 900,
    "carga": "proporcional",
    "piezas": [
     {
