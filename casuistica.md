@@ -200,3 +200,20 @@ convertirse en una regla nueva dentro de `criterios-actuales.md`.
   Aprendizaje de fondo: **un arreglo que evita un error visible no sirve si crea uno peor
   (texto faltante) en el camino** — hay que probar el caso común, no solo el caso que
   originó el arreglo.
+
+### 17/09/2026 — Las piezas se dibujaban pegadas, sin espacio para el cutter
+
+- **Contexto**: revisión de las imágenes de corte con los rollos ya confirmados en 30 m.
+- **Qué pasó**: el acomodo por bandas coloca las piezas una al lado de otra sin ningún
+  hueco entre ellas — correcto para calcular cuánto material se necesita, pero en la
+  práctica hace falta espacio para pasar el cutter entre dos piezas sin tocar la vecina.
+- **Cómo se resolvió esta vez**: se agregó `espacio_corte` (1 cm por defecto) como
+  parámetro real del cálculo — no solo del dibujo. Se resta en `empacar()` (a lo ancho,
+  entre piezas de una misma banda) y en `asignar_rollos()` (a lo largo, entre bandas de un
+  mismo rollo), y `ubicar()`/`verificar()` quedaron consistentes con esas posiciones. En el
+  dibujo, como 1 cm da menos de 2 px a la escala del plano, se fuerza un mínimo de 5 px
+  para que el corte se vea, dejando la medida real solo en el texto.
+- **¿Debería ser una regla permanente?** Sí — documentado en `herramientas/README.md`.
+  Aprendizaje de fondo: **una separación real entre piezas no es un detalle del dibujo, es
+  parte del cálculo de material** — tratarla solo como estética habría subestimado el
+  rollo en trabajos más ajustados que el de Atocongo.

@@ -46,6 +46,25 @@ El JSON lleva el ancho y largo del rollo, la sangría de corte, y la lista de pi
    escala cuánto del ancho se aprovecha y cuánto se bota. Es lo que se imprime y se lleva a
    campo.
 
+### Las piezas nunca van pegadas — hay espacio real de corte
+
+Además de la sangría (el margen que se pega y se recorta al ras de cada pieza), existe
+`espacio_corte` (**1 cm por defecto**): la separación real que debe quedar entre una pieza
+y la de al lado, y entre una banda y la siguiente. No es lo mismo — la sangría es parte de
+la pieza, el espacio de corte es el hueco que hace falta para pasar el cutter sin tocar la
+pieza vecina.
+
+Este espacio **consume material de verdad**: se resta al acomodar (una pieza necesita su
+ancho más el espacio antes de ella para entrar en una banda) y al asignar bandas a rollos.
+Con 59 + 4 piezas en el caso de Atocongo, agregar 1 cm entre cada corte subió el largo
+consumido de 63.13 a 63.68 m — no cambia cuántos rollos hacen falta, pero si el trabajo
+fuera más ajustado sí podría.
+
+En el dibujo (`dibujar_rollos.py`) ese centímetro real es casi invisible a la escala del
+plano (menos de 2 px), así que se dibuja con un **mínimo de 5 px** para que el corte se
+vea — la medida real (la que importa para comprar) sigue siendo la del texto, no la del
+dibujo.
+
 ### El error humano sí está considerado
 
 Cortar 59 piezas a pulso con cutter no sale perfecto. El script lo toma en cuenta de tres

@@ -25,6 +25,9 @@ F_TITULO = ImageFont.truetype(f"{FUENTE_DIR}/DejaVuSans-Bold.ttf", 20)
 
 PX_POR_M = 130          # escala del dibujo
 MARGEN = 60              # px alrededor del rollo, para reglas y título
+GAP_PX_MIN = 5           # separación mínima DIBUJADA entre piezas — el espacio real (ej.
+                         # 1 cm) da menos de 2 px a esta escala y no se vería. Se agranda
+                         # solo para que el corte sea visible; la medida real va en el texto.
 VERDE = (31, 158, 110)
 VERDE_OSC = (23, 121, 95)
 GRIS_SOBRA = (225, 225, 225)
@@ -96,7 +99,8 @@ def color_pieza(indice):
     return paleta[indice % len(paleta)]
 
 
-def dibujar_rollo(nombre_grupo, ancho_rollo, largo_rollo, rollo_idx, rollo, holgura_min):
+def dibujar_rollo(nombre_grupo, ancho_rollo, largo_rollo, rollo_idx, rollo, holgura_min,
+                   espacio_corte):
     """Una imagen: lo usado a escala real + una franja de 'sobra' recortada.
 
     Dibujar el sobrante completo (puede ser 15-20 m en un rollo poco aprovechado) deja una
@@ -119,7 +123,8 @@ def dibujar_rollo(nombre_grupo, ancho_rollo, largo_rollo, rollo_idx, rollo, holg
     d.text((MARGEN, 15), f"Rollo {rollo_idx} — grupo '{nombre_grupo}'  "
            f"({ancho_rollo:.2f} m x {largo_rollo:.0f} m)", font=F_TITULO, fill=(30, 30, 30))
     d.text((MARGEN, 42), f"Usado: {largo_usado:.2f} m   Sobra: {rollo['libre']:.2f} m   "
-           f"— el orden de las bandas ES el orden de corte", font=F_TXT_CHICA, fill=(90, 90, 90))
+           f"— espacio entre cortes: {espacio_corte * 100:.0f} cm — el orden de las bandas "
+           f"ES el orden de corte", font=F_TXT_CHICA, fill=(90, 90, 90))
 
     # contorno de lo dibujado (usado + franja corta de sobra a escala real)
     d.rectangle([ox, oy, ox + ancho_dibujo, oy + alto_dibujo], outline=(60, 60, 60), width=2)
@@ -134,14 +139,19 @@ def dibujar_rollo(nombre_grupo, ancho_rollo, largo_rollo, rollo_idx, rollo, holg
         d.line([ox + ancho_dibujo - 6, oy, ox + ancho_dibujo + 6, oy + alto_dibujo],
                fill=(60, 60, 60), width=2)
 
-    x_cursor = 0.0
+    # El cursor se lleva en píxeles (no en metros): así el espacio entre cortes se puede
+    # forzar a un mínimo visible (GAP_PX_MIN) sin desalinear el resto del dibujo.
+    gap_px = max(round(espacio_corte * PX_POR_M), GAP_PX_MIN)
+    xc = 0
     for orden, b in enumerate(rollo["bandas"], start=1):
-        bx0 = ox + int(x_cursor * PX_POR_M)
-        bx1 = ox + int((x_cursor + b["alto"]) * PX_POR_M)
-        y_cursor = 0.0
+        if orden > 1:
+            xc += gap_px          # corte entre esta banda y la anterior
+        bx0, bx1 = ox + xc, ox + xc + round(b["alto"] * PX_POR_M)
+        yc = 0
         for i, p in enumerate(b["piezas"]):
-            py0 = oy + int(y_cursor * PX_POR_M)
-            py1 = oy + int((y_cursor + p["across"]) * PX_POR_M)
+            if i > 0:
+                yc += gap_px       # corte entre esta pieza y la anterior
+            py0, py1 = oy + yc, oy + yc + round(p["across"] * PX_POR_M)
             d.rectangle([bx0, py0, bx1, py1], fill=color_pieza(orden + i),
                         outline=(120, 120, 120), width=1)
 
@@ -149,12 +159,12 @@ def dibujar_rollo(nombre_grupo, ancho_rollo, largo_rollo, rollo_idx, rollo, holg
                 [f"{p['w_real']:.2f}x{p['h_real']:.2f}m"]
             cx, cy = (bx0 + bx1) / 2, (py0 + py1) / 2
             escribir_en_pieza(im, cx, cy, bx1 - bx0 - 4, py1 - py0 - 4, partes)
-            y_cursor += p["across"]
+            yc += round(p["across"] * PX_POR_M)
 
         # holgura sin usar dentro de la banda
-        libre = ancho_rollo - y_cursor
+        libre = ancho_rollo - yc / PX_POR_M
         if libre > 0.001:
-            py0 = oy + int(y_cursor * PX_POR_M)
+            py0 = oy + yc
             d.rectangle([bx0, py0, bx1, oy + alto_dibujo], fill=GRIS_SOBRA,
                         outline=(150, 150, 150))
         arriesgada = libre < holgura_min - 1e-9 and len(b["piezas"]) > 1
@@ -168,7 +178,7 @@ def dibujar_rollo(nombre_grupo, ancho_rollo, largo_rollo, rollo_idx, rollo, holg
             d.text(((bx0 + bx1) / 2, oy + alto_dibujo + 14), "⚠ sin holgura",
                    font=F_TXT_CHICA, fill=ROJO, anchor="mm")
 
-        x_cursor += b["alto"]
+        xc += round(b["alto"] * PX_POR_M)
 
     # regla de ancho a la izquierda
     d.text((10, oy + alto_dibujo / 2), f"{ancho_rollo:.2f} m", font=F_TXT_CHICA,
@@ -181,7 +191,7 @@ def dibujar_grupo(nombre, r, carpeta):
     rutas = []
     for i, rollo in enumerate(r["lista_rollos"], start=1):
         im = dibujar_rollo(nombre, r["ancho_rollo"], r["largo_rollo"], i, rollo,
-                           r["holgura_minima"])
+                           r["holgura_minima"], r["espacio_corte"])
         ruta = os.path.join(carpeta, f"rollo_{nombre}_{i}.png")
         im.save(ruta)
         rutas.append(ruta)

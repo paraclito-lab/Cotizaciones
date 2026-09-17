@@ -23,6 +23,7 @@ LARGO_ROLLO = 25.0
 SANGRIA = 0.02          # margen de corte que se agrega a cada lado de cada pieza
 MERMA = 0.10            # proporción de material que se pierde por cortes arruinados
 HOLGURA_MINIMA = 0.05   # menos de esto libre a lo ancho es una banda riesgosa con cutter
+ESPACIO_CORTE = 0.01    # separación real entre una pieza y la siguiente, en los dos ejes
 
 
 def expandir(grupos, sangria):
@@ -53,12 +54,15 @@ def orientar(p, ancho_rollo, criterio):
     return max(validas, key=lambda o: o[0])
 
 
-def empacar(piezas, ancho_rollo, criterio, orden="along", ajuste="mejor"):
+def empacar(piezas, ancho_rollo, criterio, espacio_corte, orden="along", ajuste="mejor"):
     """Acomoda por bandas. Devuelve (bandas, no-encajables).
 
     criterio: cómo se gira cada pieza (ver orientar).
     orden:    con qué se ordenan antes de acomodar.
     ajuste:   "primera" = primera banda donde entra; "mejor" = la que deja menos hueco.
+    espacio_corte: separación real que debe quedar entre esta pieza y la de al lado — no
+    es la sangría (esa ya va pegada a cada pieza), es el espacio libre entre dos piezas ya
+    con su sangría puesta, para poder pasar el cutter sin tocar la pieza vecina.
     """
     orientadas, imposibles = [], []
     for p in piezas:
@@ -75,32 +79,37 @@ def empacar(piezas, ancho_rollo, criterio, orden="along", ajuste="mejor"):
 
     bandas = []
     for p in orientadas:
-        candidatas = [b for b in bandas if b["libre"] >= p["across"] - 1e-9]
+        necesita = p["across"] + espacio_corte   # + el espacio antes de esta pieza
+        candidatas = [b for b in bandas if b["libre"] >= necesita - 1e-9]
         if candidatas:
-            b = (min(candidatas, key=lambda b: b["libre"] - p["across"])
+            b = (min(candidatas, key=lambda b: b["libre"] - necesita)
                  if ajuste == "mejor" else candidatas[0])
             b["piezas"].append(p)
-            b["libre"] -= p["across"]
+            b["libre"] -= necesita
             b["alto"] = max(b["alto"], p["along"])
         else:
+            # la primera pieza de la banda no necesita espacio antes (va al borde)
             bandas.append({"piezas": [p], "libre": ancho_rollo - p["across"],
                            "alto": p["along"]})
     return bandas, imposibles
 
 
-def asignar_rollos(bandas, largo_rollo):
+def asignar_rollos(bandas, largo_rollo, espacio_corte):
     """Reparte las bandas en rollos. Una banda NO se puede partir entre dos rollos.
 
     Sumar los metros y dividir entre el largo del rollo subestima: si quedan 0.8 m de
     sobrante y la siguiente banda mide 1.0 m, esa banda arranca un rollo nuevo y esos
-    0.8 m se pierden. Se acomodan de mayor a menor para desperdiciar menos punta.
+    0.8 m se pierden. Se acomodan de mayor a menor para desperdiciar menos punta. Entre una
+    banda y la siguiente del mismo rollo también va el espacio de corte — son cortes
+    consecutivos a lo largo del rollo, igual que entre piezas a lo ancho.
     """
     rollos = []
     for b in sorted(bandas, key=lambda b: -b["alto"]):
         for r in rollos:
-            if r["libre"] >= b["alto"] - 1e-9:
+            necesita = b["alto"] + espacio_corte
+            if r["libre"] >= necesita - 1e-9:
                 r["bandas"].append(b)
-                r["libre"] -= b["alto"]
+                r["libre"] -= necesita
                 break
         else:
             rollos.append({"bandas": [b], "libre": largo_rollo - b["alto"]})
@@ -114,13 +123,14 @@ def asignar_rollos(bandas, largo_rollo):
 
 
 def calcular(grupos, ancho_rollo=ANCHO_ROLLO, largo_rollo=LARGO_ROLLO, sangria=SANGRIA,
-             merma=MERMA):
+             merma=MERMA, espacio_corte=ESPACIO_CORTE):
     piezas = expandir(grupos, sangria)
     mejor = None
     for criterio in ("angosta", "corta", "ancha"):
         for orden in ("along", "across", "area"):
             for ajuste in ("mejor", "primera"):
-                bandas, imposibles = empacar(piezas, ancho_rollo, criterio, orden, ajuste)
+                bandas, imposibles = empacar(piezas, ancho_rollo, criterio,
+                                             espacio_corte, orden, ajuste)
                 largo = sum(b["alto"] for b in bandas)
                 if mejor is None or largo < mejor["largo"]:
                     mejor = {"criterio": criterio, "orden": orden, "ajuste": ajuste,
@@ -128,23 +138,28 @@ def calcular(grupos, ancho_rollo=ANCHO_ROLLO, largo_rollo=LARGO_ROLLO, sangria=S
 
     area_vidrio = sum(p["w_real"] * p["h_real"] for p in piezas
                       if p not in mejor["imposibles"])
-    lista_rollos = asignar_rollos(mejor["bandas"], largo_rollo)
+    lista_rollos = asignar_rollos(mejor["bandas"], largo_rollo, espacio_corte)
+
+    # El largo real consumido ya incluye el espacio de corte entre bandas — es el que
+    # importa para comprar, no la suma "pegada" de las alturas de banda.
+    largo_real = sum(largo_rollo - ro["libre"] for ro in lista_rollos)
 
     # La merma es material que se pierde por cortes arruinados y hay que rehacer. No es la
-    # sangría: la sangría son 2 cm que sí se pegan y se recortan al ras. Esto es la pieza
-    # que se echó a perder y se corta de nuevo.
+    # sangría (2 cm que sí se pegan y se recortan al ras) ni el espacio de corte (el hueco
+    # entre piezas). Esto es la pieza que se echó a perder y se corta de nuevo.
     import math
-    largo_con_merma = mejor["largo"] * (1 + merma)
+    largo_con_merma = largo_real * (1 + merma)
     rollos = max(len(lista_rollos), math.ceil(largo_con_merma / largo_rollo))
 
     # ¿Cuánta merma aguanta el plan antes de necesitar un rollo más?
     capacidad = len(lista_rollos) * largo_rollo
-    merma_limite = (capacidad / mejor["largo"]) - 1 if mejor["largo"] else 0
+    merma_limite = (capacidad / largo_real) - 1 if largo_real else 0
 
     area_comprada = rollos * ancho_rollo * largo_rollo
     return {**mejor, "piezas": piezas, "rollos": rollos, "lista_rollos": lista_rollos,
-            "merma": merma, "largo_con_merma": largo_con_merma,
+            "largo": largo_real, "merma": merma, "largo_con_merma": largo_con_merma,
             "merma_limite": merma_limite, "holgura_minima": HOLGURA_MINIMA,
+            "espacio_corte": espacio_corte,
             "area_vidrio": area_vidrio, "area_comprada": area_comprada,
             "aprovechamiento": area_vidrio / area_comprada if area_comprada else 0,
             "ancho_rollo": ancho_rollo, "largo_rollo": largo_rollo, "sangria": sangria}
@@ -153,7 +168,9 @@ def calcular(grupos, ancho_rollo=ANCHO_ROLLO, largo_rollo=LARGO_ROLLO, sangria=S
 def informe(r):
     print(f"Rollo: {r['ancho_rollo']} m de ancho x {r['largo_rollo']} m de largo "
           f"({r['ancho_rollo'] * r['largo_rollo']:.1f} m² por rollo)")
-    print(f"Sangría de corte: {r['sangria'] * 100:.0f} cm por lado\n")
+    print(f"Sangría de corte: {r['sangria'] * 100:.0f} cm por lado")
+    print(f"Espacio entre cortes: {r['espacio_corte'] * 100:.0f} cm "
+          f"(entre una pieza y la siguiente, en los dos ejes)\n")
 
     if r["imposibles"]:
         print(f"⚠  {len(r['imposibles'])} PIEZA(S) NO ENTRAN EN EL ANCHO DEL ROLLO")
@@ -166,7 +183,8 @@ def informe(r):
     print(f"Piezas que sí entran:      {n}")
     print(f"Área de vidrio a cubrir:   {r['area_vidrio']:.2f} m²")
     print(f"Bandas de corte:           {len(r['bandas'])}")
-    print(f"Largo de rollo consumido:  {r['largo']:.2f} m   (corte perfecto, sin errores)")
+    print(f"Largo de rollo consumido:  {r['largo']:.2f} m   "
+          f"(corte perfecto, ya con el espacio entre cortes)")
     print(f"  + merma por recortes:    {r['merma']:.0%}  ->  {r['largo_con_merma']:.2f} m")
     print(f"ROLLOS A COMPRAR:          {r['rollos']}")
     print(f"Área comprada:             {r['area_comprada']:.2f} m²")
@@ -211,13 +229,20 @@ def ubicar(r):
     x = distancia desde el borde del rollo, a lo ancho.
     y = distancia desde el inicio del rollo, a lo largo.
     Las bandas se apilan a lo largo; dentro de una banda las piezas van una al lado de otra.
+    Entre una pieza y la siguiente (a lo ancho) y entre una banda y la siguiente (a lo
+    largo) queda el espacio de corte — nunca van pegadas.
     """
+    ec = r["espacio_corte"]
     ubicadas = []
     for n, rollo in enumerate(r["lista_rollos"], start=1):
         y = 0.0
-        for b in rollo["bandas"]:
+        for j, b in enumerate(rollo["bandas"]):
+            if j > 0:
+                y += ec
             x = 0.0
-            for p in b["piezas"]:
+            for i, p in enumerate(b["piezas"]):
+                if i > 0:
+                    x += ec
                 ubicadas.append({"rollo": n, "zona": p["zona"], "ref": p.get("ref", ""),
                                  "x": x, "y": y,
                                  "ancho": p["across"], "largo": p["along"]})
@@ -319,4 +344,5 @@ if __name__ == "__main__":
                      datos.get("ancho_rollo", ANCHO_ROLLO),
                      datos.get("largo_rollo", LARGO_ROLLO),
                      datos.get("sangria", SANGRIA),
-                     datos.get("merma", MERMA)))
+                     datos.get("merma", MERMA),
+                     datos.get("espacio_corte", ESPACIO_CORTE)))
