@@ -55,6 +55,9 @@
   tbody td { border: 1px solid #bbb; padding: 7px 8px; vertical-align: top; }
   tbody td.num { text-align: center; }
   tbody td.money { text-align: right; white-space: nowrap; }
+  /* Ítem con sustento técnico definido pero precio aún no decidido — fila normal, numerada,
+     NO el verde del separador (ese es para dividir grupos, no para marcar precio pendiente). */
+  tbody td.money.pendiente { color: #999; font-style: italic; font-weight: 400; }
   tfoot td { border: 1px solid #bbb; padding: 6px 8px; font-weight: 700; text-align: right; }
   tfoot tr.subtotal td { background: #fff59d; }   /* Sub Total resaltado, como el formato real */
   tfoot tr.total td { background: #f0f0f0; font-size: 13px; }

@@ -104,6 +104,28 @@ def construir_html(cot):
         n += 1
         i = n
         cant = it.get("cant", 1)
+        fotos = it.get("fotos", [])[:MAX_FOTOS]
+        bloque = ""
+        if fotos:
+            imgs = "".join(f'<img src="{foto_uri(f)}">' for f in fotos)
+            bloque = f'\n        <div class="photo-row">{imgs}</div>'
+
+        if it.get("pendiente"):
+            # Ítem con sustento técnico ya definido pero sin precio todavía — distinto de un
+            # precio olvidado (eso sigue bloqueando) y distinto de un separador (esto SÍ es un
+            # ítem numerado, solo que no suma al Sub Total hasta que se le ponga precio.
+            if "precio_unit" in it:
+                raise SystemExit(
+                    f"El ítem {n} trae 'pendiente' y 'precio_unit' a la vez — es ambiguo. "
+                    "Si ya tiene precio, quita 'pendiente'.")
+            filas.append(
+                f'        <tr><td class="num">{i}</td><td class="num">{cant}</td>'
+                f'<td>{esc(it["descripcion"])}{bloque}</td>'
+                f'<td class="money pendiente">Pendiente</td>'
+                f'<td class="money pendiente">Pendiente</td></tr>'
+            )
+            continue
+
         if "precio_unit" not in it:
             raise SystemExit(
                 f"El ítem {n} no trae 'precio_unit': "
@@ -112,12 +134,6 @@ def construir_html(cot):
         pu = float(it["precio_unit"])
         imp = cant * pu
         subtotal += imp
-
-        fotos = it.get("fotos", [])[:MAX_FOTOS]
-        bloque = ""
-        if fotos:
-            imgs = "".join(f'<img src="{foto_uri(f)}">' for f in fotos)
-            bloque = f'\n        <div class="photo-row">{imgs}</div>'
 
         filas.append(
             f'        <tr><td class="num">{i}</td><td class="num">{cant}</td>'
@@ -263,13 +279,16 @@ def main():
     alertas, errores = [], []
     for i, it in enumerate((x for x in cot["items"] if not x.get("separador")), start=1):
         cant = it.get("cant", 1)
-        pu = float(it["precio_unit"])
         if cant < 1:
             errores.append(f"ítem {i} tiene cantidad {cant}: no se cotiza algo que no se entrega")
-        if pu < 0:
-            errores.append(f"ítem {i} tiene precio negativo (S/ {money(pu)})")
-        elif pu == 0:
-            errores.append(f"ítem {i} tiene precio 0")
+        if it.get("pendiente"):
+            alertas.append(f"ítem {i} tiene precio PENDIENTE — confirmar antes de enviar")
+        else:
+            pu = float(it["precio_unit"])
+            if pu < 0:
+                errores.append(f"ítem {i} tiene precio negativo (S/ {money(pu)})")
+            elif pu == 0:
+                errores.append(f"ítem {i} tiene precio 0")
         if len(it.get("fotos", [])) > MAX_FOTOS:
             alertas.append(f"ítem {i} trae más de {MAX_FOTOS} fotos; se usaron las primeras {MAX_FOTOS}")
     if sub <= 0:
