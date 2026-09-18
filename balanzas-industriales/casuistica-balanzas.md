@@ -18,6 +18,28 @@ se referencia en ambos en vez de duplicar el contenido completo.
 
 ## Casos registrados
 
+### 18/09/2026 — Cuánto costó el material de la única cotización aprobada (Ica Panamericana)
+
+- **Contexto**: se preguntó cuánto se invirtió en componentes en la cotización 3032-2026 (HB
+  Precio Uno, Ica Panamericana, S/5,785 subtotal, la única aprobada de las 4 analizadas).
+- **Qué se encontró**: no hay un documento que diga "esta factura es de este trabajo" — se
+  infiere por fecha. La proforma del kit Mavin (celdas + caja, sin indicador) se pidió al
+  proveedor el **mismo día** en que se emitió la cotización al cliente (03/03/2026), y la compra
+  real se cerró 24 días después (factura F001-72, 27/03/2026) — consistente con el tiempo típico
+  entre cotizar y ejecutar. La única otra cotización con el mismo material (8202, Tottus Olivos)
+  es 5 meses posterior a esa factura, así que no calza. Es la lectura más razonable con la
+  evidencia disponible, no una certeza.
+- **El cálculo**: material real (factura) = S/631.80 (kit celdas) + S/175.50 (caja) + S/36.00
+  (cable) = **S/843.30** sin IGV. Sobre el precio de venta de S/5,785.00, el material representó
+  **14.6%**. El 85.4% restante (S/4,941.70) es mano de obra + otros costos + ganancia, sin poder
+  separarse más porque esta cotización nunca registró personas ni amanecidas.
+- **Cómo se resolvió esta vez**: se presenta el número con la inferencia explícita y su nivel de
+  confianza, en vez de darlo por hecho.
+- **¿Debería ser una regla permanente?** Sí, en un sentido: cada factura de compra debería
+  quedar vinculada al N° de cotización del trabajo (una referencia, un campo, lo que sea) desde
+  el momento de la compra — así este tipo de reconstrucción por fecha deja de ser necesaria. Hoy
+  no existe ese vínculo en ningún documento del proveedor ni del registro propio.
+
 ### 18/09/2026 — Comparación de las 4 primeras cotizaciones reales: por qué solo se aprobó una
 
 - **Contexto**: se subieron 4 cotizaciones reales de balanza a `cotizaciones-reales/`
