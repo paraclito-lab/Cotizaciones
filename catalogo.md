@@ -35,24 +35,49 @@ precaución hasta confirmar.
 
 ### Costo de compra por componente (proveedor Gufra Perú)
 
-Del chat con el proveedor, ver el análisis completo en
-`balanzas-industriales/analisis-proveedor-gufra.md` (18/09/2026) — ahí está cada nota técnica de
-compatibilidad y las fuentes. Estos son **costos de compra**, no precio de venta — hay que
-aplicarles margen antes de cotizar. Precios vigentes a abril–junio 2026; el proveedor ya avisó
-un ajuste el 17/04/2026, confirmar antes de usar en una cotización nueva.
+Fuente: 15 documentos reales del proveedor (proformas + 1 factura + 1 guía de remisión) en
+`balanzas-industriales/proveedor-gufra/`, extraídos en
+`balanzas-industriales/analisis-proveedor-gufra.md` (18/09/2026) — ahí está cada nota técnica
+de compatibilidad. Estos son **costos de compra**, no precio de venta — hay que aplicarles
+margen antes de cotizar. Varios precios subieron entre marzo y junio 2026 (el proveedor avisó
+un ajuste el 17/04/2026) — se muestra la fecha de cada uno; usar el más reciente salvo que se
+confirme vigencia.
 
-| Componente | Marca / modelo | Costo de compra | Estado | Fecha |
+**Corrección (18/09/2026): la cifra "S/631.8" SÍ es correcta** — la auditoría anterior la había
+marcado como "no usar" por no cuadrar con una proforma en dólares. Ahora hay una **factura real
+pagada** (F001-72, 27/03/2026) que la confirma: es el precio en soles al tipo de cambio que
+aplicó el proveedor ese día (≈S/3.51 por US$1). Ver el detalle en el análisis completo.
+
+| Componente | Marca / modelo | Costo de compra | Fecha | Fuente |
 |---|---|---|---|---|
-| Kit de celdas (4 unid. + patas + espaciadores) | Mavin NB2, 1T o 2T | S/212.40 (US$180+IGV) | Por validar | 16/04/2026 |
-| Caja sumadora, hasta 4 celdas, inox | Mavin SS4 | S/59.00 (US$50+IGV) | Por validar | 16/04/2026 |
-| Kit de celdas (4 unid.), acero | KELI SQB "original" | US$520 | Por validar — no aclara si incluye patas/espaciadores como el kit Mavin | 03/03/2026 |
-| Indicador de peso, comercial, sin impresión | E-Accura SB51 | S/887.95 (US$215+IGV) | Por validar | 09/04/2026 |
-| Indicador de peso, industrial, plástico ABS | T-Scale BW | US$259.60 (US$220+IGV) | Por validar | 16/04/2026 |
-| Indicador de peso, industrial, acero inoxidable | T-Scale BWS | US$342.20 (US$290+IGV) | Por validar | 16/04/2026 |
-| Base móvil para indicador T-Scale | — | US$39 | Por validar | 23/06/2026 |
+| Kit de celdas (4 unid. + patas + espaciadores), 1T o 2T | Mavin NB2 | **S/631.80** (real, factura pagada) | 27/03/2026 | Factura F001-72 |
+| Caja sumadora, hasta 4 celdas, inox | Mavin SS4 | **S/175.50** (real, factura pagada) | 27/03/2026 | Factura F001-72 |
+| Caja sumadora, hasta 4 celdas, inox | Mavin SS4 | US$50 (repetido en 3 proformas distintas, precio estable) | 03/03 a 17/04/2026 | GP26-10, 102000237, 102000269 |
+| Celda de carga suelta (sin patas), 2T, x4 unid. | Mavin NB2 | US$50 c/u = US$200 por 4 — **más cara que el kit completo con patas** (US$180); comprar el kit sale mejor | 17/04/2026 | 102600269 |
+| Kit de celdas (4 unid.), 1T | KELI SQB-A (acero niquelado) | US$339 → subió a **US$420** | 27/03 → 11/06/2026 | 102000147 → 102600507 |
+| Kit de celdas (4 unid.), 1T o 2T (mismo precio) | KELI SQB-SS (acero inoxidable) | **US$456** | 05/05/2026 | 102000237, 102000238 |
+| Caja sumadora, hasta 4 celdas, inox, rectangular | KELI G08-4-S / G03-4-S | US$85 → subió a **US$95** | 27/03 → 11/06/2026 | 102000147/102000238 → 102600507 |
+| Cable apantallado 6 hilos, 24 AWG | Hurricane | US$2/m (proforma) — **S/6/m real** (factura, 6m = S/36) | 27/03 y 11/06/2026 | F001-72, 102600507 |
+| Pie de apoyo suelto, inox | KELI SQB-SS | US$40/unidad | 11/06/2026 | 102600507 |
+| Indicador, uso comercial, sin impresión | E-Accura SB51 | S/887.95 (US$215+IGV) | 09/04/2026 | chat (sin proforma PDF) |
+| Indicador, uso industrial, carcasa plástico | T-Scale BW | US$259.60 (US$220+IGV) | 16/04/2026 | chat (sin proforma PDF) |
+| Indicador, uso industrial, carcasa acero inox | T-Scale BWS | US$342.20 (US$290+IGV) | 16/04/2026 | chat (sin proforma PDF) |
+| Indicador, uso industrial, acero inox IP67, numérico | Handfree HC200 | **US$255** | 26/05/2026 | 102600426 |
+| Indicador programable, gama alta | Rice Lake 920i Panel Mount | US$3,750+IGV — **descartado, "muy caro, inviable"** | 26/05/2026 | chat |
+| Base móvil para indicador T-Scale | — | US$39 | 23/06/2026 | chat (sin proforma PDF) |
+| Pesa patrón Clase M2, 20kg, **con calibración y certificado INACAL** | — | S/236.00 (S/200+IGV) | 27/03/2026 | 10260090 |
+| Pesa patrón Clase M2, 50kg, solo suministro (sin calibración) | — | S/578.20 (S/490+IGV) | 11/04/2026 | 102000250 |
 
-**No usar** la cifra "S/631.8" que aparece una vez en el chat para un kit Mavin NB2 — no cuadra
-con el resto de precios del mismo kit y no está claro qué incluía (ver el análisis completo).
+### Plataformas completas (con celdas y caja incluidas)
+
+| Plataforma | Capacidad / medida | Incluye | Costo de compra | Fecha |
+|---|---|---|---|---|
+| Yaohua SCS1212-T7E | 300kg, 1.2×1.2m | Celdas KELI SQB-SS inox + caja + indicador LED | US$693 | 21/02/2026 |
+| Yaohua SCS1212-T7 | 300kg, 1.2×1.2m | Celdas KELI SQB-SS inox + caja + indicador LCD | US$693 | 21/02/2026 |
+| KELI SCS1515 | 3T, 1.5×1.5m, profundidad 10cm | Celdas KELI SQB-A + caja KELI inox — **sin indicador** | US$885 | 26/05/2026 |
+
+Un dato real útil para sustento técnico: la plataforma KELI SCS1515 tiene **10cm de
+profundidad** — relevante si la instalación es en foso.
 
 ### Referencia de paquete completo (precio de venta, de cotizaciones reales)
 
