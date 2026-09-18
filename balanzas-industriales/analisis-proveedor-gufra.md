@@ -47,7 +47,8 @@ referencia por nombre de archivo — no se puede leer desde el `.txt` de la conv
 - Kit con cableado 6 hilos × 8m (`102600507 LF MUNAY.pdf`, 11/06/2026)
 
 Si se necesita el precio de alguno de estos, hay que abrir el PDF puntual — no está en este
-análisis.
+análisis. Si se tienen esos PDF guardados, van en `proveedor-gufra/` (carpeta hermana de esta),
+y de ahí se actualiza este análisis y `catalogo.md` con el precio real.
 
 ## Notas técnicas reales, útiles para el sustento técnico de una cotización
 

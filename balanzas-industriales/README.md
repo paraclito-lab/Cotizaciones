@@ -21,9 +21,10 @@ y sacar de ahí lo que hoy no existe (precios de repuestos, piso mínimo, checkl
 
 | Carpeta / archivo | Qué es |
 |---|---|
-| `cotizaciones-reales/` | Cotizaciones de balanza ya cerradas (con precios confirmados, no borradores). Un archivo por cotización, con el mismo criterio que `ejemplos-reales/` en la raíz: sirven de referencia de formato y precio. |
+| `cotizaciones-reales/` | Lo que LF Munay le cotiza AL CLIENTE — cotizaciones de balanza ya cerradas, con precios confirmados. Mismo criterio que `ejemplos-reales/` en la raíz. |
+| `proveedor-gufra/` | Lo que el proveedor le cotiza A LF Munay — proformas y fichas técnicas en PDF (celdas, cajas sumadoras, indicadores, plataformas). Dirección opuesta a `cotizaciones-reales/`, no confundir. |
 | `casuistica-balanzas.md` | Bitácora de casos, dudas y excepciones específicas de balanzas — mismo formato que `casuistica.md` de la raíz, pero enfocada. Los hallazgos con impacto en TODO el sistema (no solo balanzas) siguen yendo al `casuistica.md` general. |
-| `analisis-proveedor-gufra.md` | Extracción del chat con el proveedor Gufra Perú: costo de compra por componente (celdas, cajas sumadoras, indicadores), notas técnicas de compatibilidad, y qué precios quedaron solo en un PDF adjunto sin leer. Los números confirmados ya están en `catalogo.md`; esto es el porqué y el detalle. |
+| `analisis-proveedor-gufra.md` | Extracción del chat con el proveedor Gufra Perú: costo de compra por componente (celdas, cajas sumadoras, indicadores), notas técnicas de compatibilidad, y qué precios quedaron solo en un PDF adjunto sin leer (esos PDF van en `proveedor-gufra/` en cuanto se suban). Los números confirmados ya están en `catalogo.md`; esto es el porqué y el detalle. |
 
 ## Cuándo algo va acá y cuándo va al `casuistica.md` general
 
