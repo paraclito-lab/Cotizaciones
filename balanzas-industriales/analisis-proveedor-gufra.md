@@ -99,6 +99,29 @@ Mavin NB2/NB2-1/SS4, KELI SQB, KELI G08-4-S, Yaohua T7E, guía de conexión de c
 920i (dos variantes), JADEVER JWP, Super SS — quedan como archivo de consulta si hace falta un
 dato de instalación o especificación puntual, no se transcriben acá completos.
 
+## Costeo confirmado: la única cotización aprobada (Ica Panamericana, 3032-2026)
+
+**Confirmado**: la factura F001-72 y la guía T001-79 (ambas 27/03/2026) son el material que se
+compró para este trabajo. Con eso, el costeo real queda así:
+
+| | Monto |
+|---|---|
+| Kit celdas Mavin NB2 (factura) | S/631.80 |
+| Caja sumadora Mavin SS4 (factura) | S/175.50 |
+| Cable 6 hilos, 6m (factura) | S/36.00 |
+| **Material, subtotal sin IGV** | **S/843.30** |
+| Precio de venta (cotización 3032, subtotal) | S/5,785.00 |
+| **Material como % del precio de venta** | **14.6%** |
+
+El 85.4% restante (S/4,941.70) es mano de obra, otros costos y ganancia — no se puede separar
+más porque esta cotización nunca registró personas ni amanecidas en el trabajo real, el mismo
+vacío señalado en `criterios-actuales.md` punto 6 para el resto del sistema.
+
+**Pendiente que queda expuesto por este caso**: ningún documento (proforma, factura, cotización)
+trae escrito a qué trabajo corresponde — la relación se estableció por fecha y se confirmó fuera
+de los documentos. Sería mejor que cada compra de material quedara vinculada al N° de cotización
+desde el momento de comprar, para no depender de reconstruir la relación después.
+
 ## Relación con la cotización pendiente (TT Santa Anita)
 
 Sigue sin resolver: **Santa Anita es un distrito de Lima**, y el comentario "los precios
