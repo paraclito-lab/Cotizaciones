@@ -32,6 +32,10 @@ placeholder. Si esta excepción no estuviera escrita, el archivo rompería la re
 2. `catalogo.md` — la ÚNICA fuente de precios. Si un repuesto no está ahí, no inventar el
    precio: preguntar. Los precios marcados "Por validar" se usan, pero se avisa que no están
    confirmados.
+3. Si el tipo es `balanzas`, además leer `balanzas-industriales/` — tiene su propia bitácora de
+   casuística (`casuistica-balanzas.md`) y las cotizaciones reales cerradas de
+   `cotizaciones-reales/`, que hoy son la única referencia de precio real de este tipo (el
+   catálogo general no tiene repuestos de balanza todavía).
 
 ## Paso 1 — Identificar el tipo de servicio
 

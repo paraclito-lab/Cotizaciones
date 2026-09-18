@@ -22,6 +22,7 @@ de costos reales se lleva en un Google Sheet aparte y se llena a mano.
 | `flujo-completo.md` | El diagrama (mermaid) de punta a punta del proceso, desde la solicitud hasta el registro del costo real. |
 | `analisis/` | Por qué se tomó cada decisión: qué tenían de malo los Excel originales y qué reveló la hoja de trabajo real de la balanza de Tarapoto. |
 | `ejemplos-reales/` | Cotizaciones reales ya entregadas a clientes, estructuradas, usadas como referencia de formato y precios. |
+| `balanzas-industriales/` | Carpeta especializada solo para balanzas: cotizaciones reales cerradas (`cotizaciones-reales/`) y su propia bitácora de casuística (`casuistica-balanzas.md`). Existe porque balanzas es el tipo de servicio con menos data real hoy — ver el README de la carpeta. |
 | `branding/` | Logo y fondo decorativo de la marca. |
 | `herramientas/` | Cálculos de apoyo: `laminado.py` (rollos necesarios), `dibujar_rollos.py` (imagen de corte por rollo, para campo), `precio.py` (costo real → precio unitario), `costo_sesion.py` (qué cuesta operar el sistema, leído del log real), `flujo-calculo.md` (mapa completo, para validar antes de cotizar). |
 | `plantilla/` | Cómo se arma el PDF/PNG de cada cotización: una sola imagen real de encabezado (`headers/base.jpg`) + N° y título superpuestos como texto, la plantilla HTML y el generador `generar.py`. |
