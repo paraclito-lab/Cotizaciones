@@ -33,11 +33,31 @@ precaución hasta confirmar.
 
 ## Repuestos — Balanzas
 
-**Todavía no hay precio por componente individual** (celda de carga sola, caja sumatoria sola,
-indicador solo). Las 4 cotizaciones reales analizadas en
-`balanzas-industriales/casuistica-balanzas.md` (18/09/2026) siempre cotizan el mantenimiento
-como **paquete completo**, nunca desglosado por pieza — así que lo único que hay hoy son
-referencias de paquete, no un catálogo real de repuestos:
+### Costo de compra por componente (proveedor Gufra Perú)
+
+Del chat con el proveedor, ver el análisis completo en
+`balanzas-industriales/analisis-proveedor-gufra.md` (18/09/2026) — ahí está cada nota técnica de
+compatibilidad y las fuentes. Estos son **costos de compra**, no precio de venta — hay que
+aplicarles margen antes de cotizar. Precios vigentes a abril–junio 2026; el proveedor ya avisó
+un ajuste el 17/04/2026, confirmar antes de usar en una cotización nueva.
+
+| Componente | Marca / modelo | Costo de compra | Estado | Fecha |
+|---|---|---|---|---|
+| Kit de celdas (4 unid. + patas + espaciadores) | Mavin NB2, 1T o 2T | S/212.40 (US$180+IGV) | Por validar | 16/04/2026 |
+| Caja sumadora, hasta 4 celdas, inox | Mavin SS4 | S/59.00 (US$50+IGV) | Por validar | 16/04/2026 |
+| Kit de celdas (4 unid.), acero | KELI SQB "original" | US$520 | Por validar — no aclara si incluye patas/espaciadores como el kit Mavin | 03/03/2026 |
+| Indicador de peso, comercial, sin impresión | E-Accura SB51 | S/887.95 (US$215+IGV) | Por validar | 09/04/2026 |
+| Indicador de peso, industrial, plástico ABS | T-Scale BW | US$259.60 (US$220+IGV) | Por validar | 16/04/2026 |
+| Indicador de peso, industrial, acero inoxidable | T-Scale BWS | US$342.20 (US$290+IGV) | Por validar | 16/04/2026 |
+| Base móvil para indicador T-Scale | — | US$39 | Por validar | 23/06/2026 |
+
+**No usar** la cifra "S/631.8" que aparece una vez en el chat para un kit Mavin NB2 — no cuadra
+con el resto de precios del mismo kit y no está claro qué incluía (ver el análisis completo).
+
+### Referencia de paquete completo (precio de venta, de cotizaciones reales)
+
+Las 4 cotizaciones reales analizadas en `balanzas-industriales/casuistica-balanzas.md`
+(18/09/2026) cotizan el mantenimiento como paquete, no por componente:
 
 | Paquete (marca / alcance) | Precio de venta (S/) | Estado | Fuente |
 |---|---|---|---|
@@ -46,9 +66,10 @@ referencias de paquete, no un catálogo real de repuestos:
 | KELI 1T — kit celdas + patas + caja sumatoria 4 canales + cable 6m, sin indicador | 8,520.00 | Por validar | N° 6112/7171-2026 (Tarapoto/Moyobamba — rechazadas) |
 | Indicador de peso T-Scale BW (suministro, aparte) | 1,350.00 | Por validar | N° 6112/7171-2026 |
 
-**No se puede separar de estos totales cuánto es celda, cuánto es caja sumatoria y cuánto es
-mano de obra** — eso requiere el costo de compra real de cada pieza, que hoy no está en
-ninguna parte del repo (mismo vacío que carretillas, ver "Pendiente" abajo).
+Comparando: el paquete de venta de Marvin sin indicador (S/5,785) contra el costo de compra de
+celdas + caja Mavin (S/212.40 + S/59.00 = S/271.40) deja un margen amplio que incluye mano de
+obra, cableado y ganancia — pero no se puede separar cuánto de eso es cada cosa sin el dato de
+horas/personas de esa cotización puntual (ver punto 2 de `criterios-actuales.md`).
 
 ## Mano de obra — NO es un precio de catálogo fijo
 
