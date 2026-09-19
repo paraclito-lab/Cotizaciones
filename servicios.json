@@ -42,7 +42,7 @@
       "personal": 3,
       "precio_minimo_unidad": null,
       "patron_filas": "Una fila con la redacción técnica completa del servicio. Repuestos mayores (celdas, caja sumatoria, cable) pueden ir en la misma fila o separados.",
-      "sustento_base": "Mantenimiento de balanza plataforma: calibración, nivelación, alineamiento de plataforma, empotrado de cadena y brazo de acero inoxidable C-304.",
+      "sustento_base": "Revisión de batería, ramificación diac, sellado con silicona de puerta, verificación y calibración, nivelación, alineamiento de plataforma, empotrado de cadena y brazo de acero inoxidable C-304.",
       "acepta_fotos": true,
       "subtipo_obligatorio": false
     },
