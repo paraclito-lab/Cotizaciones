@@ -10,3 +10,7 @@
 COT-*.html
 COT-*.png
 COT-*.pdf
+
+# Cache de Python: se regenera solo, no va a control de versiones
+__pycache__/
+*.pyc
