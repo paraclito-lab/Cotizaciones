@@ -10,6 +10,11 @@
 COT-*.html
 COT-*.png
 COT-*.pdf
+# La numeración real que se usa hoy es tipo 8211-2026, no COT-AAAA-NNN — sin estas líneas,
+# un PDF generado con el número real se versionaría por error (bug B1, flujo-sistema-completo.md).
+[0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9].html
+[0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9].png
+[0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9].pdf
 
 # Cache de Python: se regenera solo, no va a control de versiones
 __pycache__/

@@ -294,7 +294,68 @@ falta de desarrollo.
 
 ---
 
-## 7. Qué se identificó al construir este mapa
+## 7. Auditoría del propio mapa: vacíos, duplicados, reprocesos y bugs (19/09/2026)
+
+Revisión de este flujograma contra lo que realmente ocurrió al construirlo. Todo lo de abajo
+está verificado contra el repo, no afirmado de memoria.
+
+### 7.1 Vacíos — existe en la realidad, no está en el diagrama
+
+| # | Vacío | Evidencia | Por qué importa |
+|---|---|---|---|
+| V1 | **Falta el subproceso completo de COMPRA** (cotizar al proveedor → proforma → orden → factura → guía de remisión) | 15 PDF reales en `balanzas-industriales/proveedor-gufra/`, incluida la factura F001-72 pagada | Es el **origen del costo de material**. El diagrama muestra `catalogo.md` como dato maestro pero no cómo se alimenta. Media cadena de valor sin mapear. |
+| V2 | **La fuente primaria de los costos no está en el repo** | El chat de WhatsApp con el proveedor vive solo en esta conversación; no hay ningún `.txt` en el repo | `analisis-proveedor-gufra.md` preserva las conclusiones, pero si se pierde el chat no hay forma de re-verificar de dónde salió cada precio |
+| V3 | **El tipo de cambio USD→PEN no tiene hogar** | `grep` de "tipo de cambio" en JSON y PY: **cero resultados**. El S/3.51 vive en prosa | Es una entrada directa del costeo (el indicador T-Scale se cotiza en dólares). Sin dato maestro, cada cotización lo re-asume |
+| V4 | **No existe el estado "borrador con pendientes"** | `cotizacion-santa-anita-borrador.md` vivió 2 días esperando un costo | El diagrama dibuja una línea recta captura→costeo→precio→generación; la realidad tiene un bucle de espera que puede durar días |
+| V5 | **`ejemplos-reales/` y `analisis/` no aparecen** como fuentes | Ambas carpetas existen y se usaron para decidir formato y precios de referencia | Son entrada real de la fase 1 y 3 |
+| V6 | **La hoja de costos editable no está en el repo ni en el diagrama** | El script que generó `COT-2026-002-editable.xlsx` vive en `/tmp`, no en `herramientas/` | Subproceso real ("el dueño ajusta costos en Excel") sin representar, y **no reproducible**: pedirlo de nuevo obliga a reconstruirlo desde cero |
+| V7 | **El canal real de revisión es este chat**, no Telegram | El diagrama asume el flujo de `flujo-completo.md` (vista previa por Telegram) | Lo que se diseñó y lo que se usa no coinciden |
+
+### 7.2 Duplicados — el mismo contenido en varios lugares
+
+| # | Duplicado | Riesgo |
+|---|---|---|
+| D1 | **Tres documentos de flujo**: `flujo-completo.md`, `herramientas/flujo-calculo.md`, `flujo-sistema-completo.md` | Exactamente el patrón de desincronización que este repo ya sufrió con el título del servicio (`auditoria-2026-09-14`, hallazgo B3). Ya se solapan |
+| D2 | **Cuatro auditorías** con recomendaciones repetidas | "Margen sin validar por código" aparece en la auditoría de arquitectura y en la matriz de este documento. "Vínculo factura↔cotización" aparece en **tres** lugares distintos |
+| D3 | **Dos casuísticas** con la regla de "qué va en cuál" escrita en ambas | La regla que evita duplicación está, ella misma, duplicada |
+| D4 | **`ejemplo-trabajo-cotizacion.json` es fixture y dato real a la vez** | Verificado: contiene `COT-2026-001`, cliente real (Tottus Atocongo) y **19 ítems con precios reales**. Un archivo llamado "ejemplo" que es la cotización emitida de un cliente real — confusión de categoría entre dato maestro y transaccional |
+
+### 7.3 Reprocesos medidos en esta conversación
+
+| # | Reproceso | Veces | Causa raíz |
+|---|---|---|---|
+| R1 | La cotización de Santa Anita se generó de nuevo | **5** (1 ítem → 3 ítems → título+pendiente → redacción final → el dueño la rehízo en Excel) | Los datos finales llegaron por partes, y el precio final nunca se pidió directo |
+| R2 | Mano de obra calculada con supuestos distintos | **3** (S/600 con tarifa 100; S/700 dado; luego "solo para ítem 1") | La fórmula vive en prosa (`criterios-actuales.md`), no en código |
+| R3 | Margen propuesto sin criterio objetivo | **3** (siempre 70%, "punto medio del rango") | No existe la decision table; se re-inventa el criterio cada vez |
+| R4 | Costeo hecho con `python3 -c` suelto | **4+** | No existe `costeo.py` genérico |
+| R5 | Render del mermaid reintentado | **4** (CDN bloqueado → ESM sin resolver → import map → build IIFE) | Reproceso de herramienta, no de negocio, pero consumió tiempo real |
+
+### 7.4 Bugs abiertos (verificados hoy, ninguno corregido salvo B1)
+
+| # | Bug | Verificación | Estado |
+|---|---|---|---|
+| B1 | **`.gitignore` no cubre la numeración real**: ignora `COT-*.pdf/png/html`, pero la cotización real salió como `8211-2026` | `grep` del `.gitignore` confirmado | **Corregido hoy** |
+| B2 | **`atencion` se fuerza a MAYÚSCULAS** | `generar.py:158` → `.upper()`. El documento real del dueño lo tiene en mayúscula y minúscula normal | Abierto — es decisión de diseño, no lo cambio sin confirmar |
+| B3 | **La cotización realmente enviada no está archivada** | `cotizaciones-emitidas/` solo tiene `COT-2026-001.jpg`; falta `8211-2026`, que sí se envió al cliente | Abierto — requiere decidir si se archiva la versión regenerada o la que salió de Excel |
+| B4 | **`COT-2026-002` es un número huérfano** | Se generó 4 veces, nunca se envió; el trabajo salió como `8211-2026` | Abierto — deja un hueco en el correlativo nuevo |
+| B5 | **`sustento_base` de `vitrinas` y `generales` nunca validado** contra cotizaciones reales | El de `balanzas` estaba incompleto hasta hoy y se descubrió **por casualidad**, al comparar contra el Excel del dueño | Abierto — mismo tipo de error, sin auditar |
+| B6 | **El generador de la hoja de costos no existe en el repo** | `ls herramientas/*.py` → no está | Abierto (ver V6) |
+
+### 7.5 Lo que estos hallazgos tienen en común
+
+Tres de los cinco reprocesos (R2, R3, R4) y dos de los vacíos (V3, V6) tienen **la misma causa
+raíz**: reglas y cálculos que viven en prosa o en el aire en vez de en un archivo que el código
+lea. Es la misma conclusión de `auditoria-arquitectura-2026-09-19.md`, ahora con la cuenta de
+cuánto costó esta semana: **5 regeneraciones de un documento, 3 cálculos divergentes del mismo
+costo, y una hoja de Excel que hay que reconstruir si se vuelve a pedir.**
+
+Y un hallazgo de segundo orden: **este documento es el cuarto documento de flujo y la quinta
+auditoría del repo.** Documentar más no está resolviendo el problema de que las reglas no son
+ejecutables. La prioridad 1 sigue siendo `criterios.json` + `costeo.py`, no otro `.md`.
+
+---
+
+## 8. Qué se identificó al construir este mapa
 
 1. **El ciclo de aprendizaje está cerrado** (factura → catálogo → cotización → registro → KPI →
    auditoría → regla). Pocos sistemas chicos lo tienen; este sí.
