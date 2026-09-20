@@ -30,6 +30,7 @@ precaución hasta confirmar.
 | Enderezado de chasis y reforzamiento con soldadura | 100.00 | Por validar | Moyobamba |
 | Desarmado y engrase total de chasis (por unidad) | 10.00 | Por validar | Moyobamba |
 | Alineamiento de barra de tiro | 50.00 | Por validar | Moyobamba |
+| Reparación de botella hidráulica (kit de retenes + o-rings de cilindro) | 38.00 | **Confirmado** (20/09/2026) | Precio de venta dado directamente para la cotización de TT Pucallpa |
 
 ## Repuestos — Balanzas
 
