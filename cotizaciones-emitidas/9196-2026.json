@@ -8,6 +8,8 @@
  "fecha": "20 de septiembre de 2026",
  "resumen": "Mantenimiento de 10 traspaletas hidráulicas y manuales",
  "unidades": 10,
+ "trabajo": "mantenimiento-carretillas",
+ "respuestas": {"localidad": "provincia", "solo_carretillas": "no", "diagnostico": "si"},
  "items": [
   {
    "cant": 10,

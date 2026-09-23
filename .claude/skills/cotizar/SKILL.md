@@ -37,10 +37,30 @@ placeholder. Si esta excepción no estuviera escrita, el archivo rompería la re
    `cotizaciones-reales/`, que hoy son la única referencia de precio real de este tipo (el
    catálogo general no tiene repuestos de balanza todavía).
 
+## Paso 0 — ¿El trabajo ya tiene ficha?
+
+Antes que nada, buscar en `trabajos/` una ficha cuyo `nombre` o `palabras_clave` coincida con
+lo pedido (hoy: `garruchas-coche-panaderia`, `mantenimiento-carretillas`). **Si existe, se
+cotiza con la ficha** (ver `trabajos/README.md`):
+
+1. Armar el pedido: cliente, local, unidades y las **respuestas del checklist** de la ficha.
+   Las que no se sepan se preguntan en lenguaje natural, junto con su "por qué importa".
+2. `python3 herramientas/cotizar_trabajo.py pedido.json salida/` (con `--borrador` si el
+   cliente quiere ver el alcance antes de tener todas las respuestas).
+3. Mostrar el costeo, la propuesta de precio y **lo que ya se cobró antes por ese trabajo**, y
+   esperar el precio. **El precio no se pone solo**: va en `precio_unidad` del pedido.
+4. Con el JSON que escribe el motor se sigue en el Paso 4 (generar).
+
+**Si no existe ficha**, se cotiza a mano como hasta ahora (pasos 1 a 7). Al terminar, si el
+trabajo puede volver a pedirse, **ofrecer crear su ficha** con lo aprendido
+(`python3 herramientas/nuevo_trabajo.py`, o escribirla siguiendo `trabajos/_plantilla.json`) y
+validarla con `python3 herramientas/cotizar_trabajo.py --validar`. Así la segunda vez ya no se
+piensa desde cero. Un costo que falta en la ficha se agrega a la ficha, no al pedido.
+
 ## Paso 1 — Identificar el tipo de servicio
 
-Solo existen tres. **El tipo elige el título Y el contenido a la vez** — nunca se llenan por
-separado (regla de coherencia, `criterios-actuales.md` punto 8):
+**El tipo elige el título Y el contenido a la vez** — nunca se llenan por separado (regla de
+coherencia, `criterios-actuales.md` punto 8).
 
 Los tipos, sus títulos, sus palabras clave y el patrón de redacción de la fila están en
 **`servicios.json`** — leerlo, no asumirlos de memoria ni copiarlos acá.
@@ -76,9 +96,11 @@ del 18% y el total se calculan encima.
 
 ## Paso 3 — Numeración
 
-Formato `COT-AAAA-NNN`, correlativo anual. Para saber el siguiente número, preguntar cuál fue
-el último usado (vive en el registro de costos, columna A). Si no se sabe, preguntar — **nunca
-inventar un número**, porque un correlativo duplicado rompe la trazabilidad.
+El formato en uso real es `NNNN-AAAA` (8211-2026, 9196-2026, 9197-2026). `COT-AAAA-NNN`
+quedó decidido en `criterios-actuales.md` §7 pero nunca se adoptó; cuál queda está pendiente
+(`hallazgos-abiertos.md`, Q4). El generador acepta los dos. Para el siguiente número, preguntar
+cuál fue el último usado. Si no se sabe, preguntar — **nunca inventar un número**: un
+correlativo duplicado rompe la trazabilidad. Mientras no haya número, `PENDIENTE-AAAA`.
 
 ## Paso 4 — Generar
 
@@ -92,25 +114,35 @@ Formato del JSON:
 
 ```json
 {
-  "numero": "COT-2026-001",
+  "numero": "0000-2026",
   "tipo": "carretillas",
-  "cliente": "Hipermercados Tottus S.A",
+  "cliente": "TOTTUS",
+  "cliente_corto": "TT",
   "local": "San Miguel",
   "atencion": "NOMBRE DE CONTACTO",
   "fecha": "15 de septiembre de 2026",
+  "unidades": 5,
   "items": [
-    {"cant": 5, "descripcion": "Reparación y mantenimiento de 05 carretillas hidráulicas (cambio de pasadores, orings, retenes de elevación, pines de expansión, retenes de bomba, anillos de jebe, aceite hidráulico)", "precio_unit": 650.00},
-    {"cant": 10, "descripcion": "Suministro de rueda de carga", "precio_unit": 40.00}
+    {"cant": 5, "descripcion": "Reparación y mantenimiento de 5 carretillas hidráulicas: cambio de pasadores, orings, retenes de elevación, pines de expansión, retenes de bomba, anillos de jebe, aceite hidráulico.", "precio_unit": 650.00},
+    {"cant": 10, "descripcion": "Suministro de rueda de carga.", "precio_unit": 40.00}
   ],
-  "nota": "Opcional. Ej: El servicio se realiza en dos grupos de 10 bandejas (6 días por grupo)."
+  "condiciones": ["El trabajo se ejecuta fuera del horario de atención al público."],
+  "nota": "Opcional, la ve el cliente.",
+  "nota_interna": "Por qué se cobró lo que se cobró. NUNCA se imprime."
 }
 ```
 
-**`nota` se imprime tal cual en el PDF que ve el cliente.** Nunca poner ahí referencias a
-`catalogo.md`, al piso mínimo, al margen, a si un precio está "Por validar" o a cualquier
-razonamiento interno de precio — eso es información confidencial del negocio. `nota` es solo
-para algo que el cliente necesita saber (alcance, plazos, condiciones), nunca para justificar
-un precio.
+**Lo que ve el cliente y lo que no.** `nota`, `condiciones` y las descripciones se imprimen
+tal cual. `nota_interna` no se imprime nunca: ahí va todo razonamiento de precio (excepción al
+piso, precio distinto al catálogo, origen de un número). El generador **se niega a generar** si
+en lo impreso aparece "catálogo", ".md", "piso mínimo", "markup", "por validar", "ganancia" o
+parecidos — pasó tres veces en una semana antes de que existiera este bloqueo.
+
+- `unidades`: cuántos **equipos** se atienden (10 carretillas), no la suma de repuestos. Es lo
+  que el registro divide para "precio por unidad".
+- `cliente_corto` (opcional): cómo va el cliente en el nombre del PDF ("TT" por TOTTUS).
+- `condiciones` (opcional): lista de frases (horario, retiro de lo cambiado, exclusiones). Salen
+  en su propio bloque bajo la validez, no mezcladas en la nota.
 
 - `fotos`: lista de rutas de imagen dentro de un ítem (máximo 3, opcional, solo Servicios
   Generales). Se achican y encuadran solas; **no se rechaza una foto por borrosa u oscura**.
@@ -121,9 +153,9 @@ un precio.
 - La fecha va en texto largo en español ("15 de septiembre de 2026").
 
 El script imprime los totales, las rutas del PNG y del PDF, **la fila ya armada para pegar en
-el registro de costos**, y una lista de **alertas** (ítems en
-S/0, N° con formato incorrecto, más de 3 fotos). Si hay alertas, resolverlas antes de mostrar
-nada.
+el registro de costos**, las **alertas** ("REVISAR ANTES DE ENVIAR": precio pendiente, bajo el
+piso, N° que no es real…) y aparte los **avisos** informativos. Las alertas se resuelven o se
+explican antes de mostrar nada; los avisos no exigen hacer nada.
 
 ## Paso 4b — Cuando la especificación manda el precio: propuesta técnica sin precios
 
@@ -149,9 +181,11 @@ que decir explícitamente que es para validar el alcance, **no** para aprobar.
 Mostrar el **PNG** (no el PDF: se ve al instante, sin abrir nada) y esperar. Tres respuestas
 posibles:
 
-- **Aprobado** → volver a correr el generador con `--archivar` (guarda la copia comprimida en
-  `cotizaciones-emitidas/`, ~227 KB por cotización), entregar el PDF y pasar al paso 6. Sin ese
-  paso no queda copia de lo que se envió.
+- **Aprobado** → volver a correr el generador con **`--final`**. En un solo comando: exige el
+  N° real y ningún precio pendiente, deja el PDF con su nombre de entrega ("N° 9196-2026
+  CARRETILLAS TT PUCALLPA MUNAY.pdf") y archiva imagen + JSON en `cotizaciones-emitidas/`.
+  Entregar ese PDF y pasar al paso 6. Antes de este modo, archivar dependía de acordarse de un
+  parámetro, y de 3 cotizaciones finales reales no se archivó ninguna.
 - **Corregir** → aplicar el cambio, regenerar, volver a mostrar. Sin límite de vueltas.
 - **Rechazado** → no se genera PDF.
 
@@ -160,9 +194,14 @@ cliente lo hace una persona desde Gmail. La cotización queda en estado "lista p
 
 ## Paso 6 — Fila para el registro de costos
 
-Al aprobar, entregar los datos listos para pegar en el Google Sheet, en este orden:
+Al aprobar, entregar los datos listos para pegar en el Google Sheet. El generador imprime dos
+líneas:
 
-`N° Cotización | Fecha cotización | Cliente | Local | Tipo de servicio | Subtipo | Descripción breve | Cant. unidades | Subtotal | IGV | Total`
+- Columnas A a K: `N° Cotización | Fecha | Cliente | Local | Tipo | Subtipo | Descripción breve | Unidades (equipos) | Subtotal | IGV | Total`
+- Columnas del final (Z a AB): `Costo estimado | Subtotal calculado | Nota interna`. Se llenan
+  en **todas** las cotizaciones, se ganen o se pierdan: sin eso no se mide cuánto se ajusta el
+  precio por experiencia ni a qué markup se pierde. Si la cotización salió de una ficha, el
+  motor ya las trae calculadas.
 
 El registro se reconstruye con `herramientas/armar_registro.py` si se pierde el archivo (ya
 pasó una vez). El archivo `.xlsx` no se versiona — es dato operativo; el script sí.
@@ -178,8 +217,11 @@ que está ahí. No inventar una regla nueva sobre la marcha: registrar el caso y
 
 ## Precios: lo que nunca se hace
 
-- No aplicar un margen automático. El margen (60–80%) se propone, se confirma, y el precio
-  final suele redondearse a un número comercial.
+- No aplicar un margen automático. El markup (60–80% sobre el costo) se propone, se confirma,
+  y el precio final suele redondearse a un número comercial. Ojo: markup no es margen — un
+  markup de 73% es un margen de 42% sobre la venta.
 - No inventar un precio que no esté en `catalogo.md`.
+- Antes de subir un cambio al sistema (generador, motor, fichas): `python3
+  herramientas/probar.py`. Reproduce las cotizaciones reales ya emitidas.
 - No cambiar las coordenadas de la cápsula ni del título en `plantilla/cotizacion.html` sin
   recalibrarlas contra `plantilla/headers/base.jpg` (ver `plantilla/README.md`).

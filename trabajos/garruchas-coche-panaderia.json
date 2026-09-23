@@ -1,0 +1,92 @@
+{
+ "id": "garruchas-coche-panaderia",
+ "nombre": "Cambio de garruchas de coches de panadería",
+ "tipo": "generales",
+ "subtipo": "otros",
+ "etiqueta_archivo": "GARRUCHAS",
+ "unidad": "coche",
+ "unidad_plural": "coches",
+ "palabras_clave": ["garrucha", "garruchas", "ruedas de coche", "coche de panadería",
+                    "coches de panadería", "rack de horno", "carro de panadería"],
+ "modo_precio": "costo_mas_markup",
+
+ "preguntas": [
+  {
+   "id": "horno",
+   "pregunta": "¿El coche entra a horno o leudadora?",
+   "etiqueta_cliente": "temperatura de trabajo del coche",
+   "por_que": "Si entra al calor, la rueda tiene que ser fenólica (soporta ~250 °C). Una estándar se deforma en semanas y la reposición la termina pagando la empresa.",
+   "opciones": {
+    "si": {"texto": "Sí, entra al calor: rueda fenólica obligatoria."},
+    "no": {"texto": "No, solo transporta producto frío.",
+           "aviso": "Se podría ofrecer una rueda más económica, pero no hay costo registrado para otra que no sea la fenólica: confirmarlo con el proveedor antes de ofrecerla."}
+   }
+  },
+  {
+   "id": "montaje",
+   "pregunta": "¿Cómo va fijada la garrucha al coche?",
+   "etiqueta_cliente": "tipo de montaje de la garrucha",
+   "por_que": "Soldada: se retira con disco de corte y se monta con soldadura, que es lo que está costeado. Empernada: cambia el trabajo y la pernería no tiene costo registrado.",
+   "opciones": {
+    "soldada": {"texto": "Soldada: retiro con corte y montaje con soldadura."},
+    "empernada": {"texto": "Empernada.",
+                  "costos_fijos": {"Pernería nueva (un juego por garrucha)": null},
+                  "variables": {"retiro": "retiro de las garruchas actuales",
+                                "montaje": "montaje de las nuevas con pernería nueva"}}
+   }
+  },
+  {
+   "id": "horario",
+   "pregunta": "¿El trabajo es fuera del horario de atención?",
+   "opciones": {
+    "fuera": {"texto": "Sí, fuera de horario.",
+              "condiciones": ["El trabajo se ejecuta fuera del horario de atención al público, en coordinación con el local."]},
+    "dentro": {"texto": "No, en horario normal."}
+   }
+  }
+ ],
+
+ "costos_fijos": {
+  "Mano de obra": 200,
+  "Transporte": 100,
+  "Soldadura, disco de corte y esmeril": 100,
+  "SCTR": 50
+ },
+ "costos_por_unidad": {
+  "Juego de 4 ruedas fenólicas con garrucha de acero": 250
+ },
+ "markup": {"minimo": 0.60, "maximo": 0.80},
+ "redondeo": 5,
+
+ "variables": {
+  "retiro": "retiro de las garruchas actuales mediante corte",
+  "montaje": "montaje de las nuevas con soldadura"
+ },
+ "redaccion": "Suministro e instalación de juego de 4 ruedas fenólicas con garrucha de acero por coche de panadería — {unidades} {unidad_plural}. Incluye {retiro}, {montaje} y verificación de giro libre.",
+ "condiciones": [
+  "Las garruchas retiradas se evacúan del local."
+ ],
+
+ "referencias": [
+  {
+   "fecha": "22/09/2026",
+   "fuente": "Costeo para SB Precio Uno, Mariátegui",
+   "unidades": 3,
+   "respuestas": {"montaje": "soldada"},
+   "costo": 1200,
+   "precio_final": 2170,
+   "nota": "Juego a S/250. La hoja original sumaba S/1,150 porque el SCTR no entraba al total."
+  },
+  {
+   "fecha": "22/09/2026",
+   "fuente": "Costeo para SB Precio Uno, Mariátegui (segundo escenario)",
+   "unidades": 3,
+   "respuestas": {"montaje": "soldada"},
+   "costo": 720,
+   "precio_final": 1490,
+   "nota": "El mismo juego figura a S/90. Antes de cotizarlo para horno, confirmar con el proveedor que sea fenólica de verdad: a S/22.50 por rueda conviene verificarlo."
+  }
+ ],
+
+ "_por_que_existe": "Primer trabajo costeado de punta a punta con su costo fijo por visita (mano de obra, transporte, consumibles y SCTR = S/450, igual para 3 coches que para 15). Las referencias son los precios finales ajustados por experiencia: con material caro el precio final quedó en markup 81%, con material barato en 107%. El rango 60-80% de la ficha es el de criterios-actuales.md §4; si se decide otro (hallazgos Q3), se cambia acá."
+}

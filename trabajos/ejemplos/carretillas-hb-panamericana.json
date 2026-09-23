@@ -1,0 +1,21 @@
+{
+ "_que_es": "Pedido que reproduce la cotización 9197-2026 con la biblioteca de trabajos. Sirve de ejemplo y de prueba: el subtotal tiene que dar S/2,318.00, igual que lo emitido.",
+ "trabajo": "mantenimiento-carretillas",
+ "numero": "9197-2026",
+ "cliente": "HB PRECIO UNO",
+ "local": "PANAMERICANA URBANA",
+ "fecha": "20 de septiembre de 2026",
+ "unidades": 7,
+ "respuestas": {"localidad": "lima", "solo_carretillas": "si", "diagnostico": "si"},
+ "variables": {"equipo": "carretillas hidráulicas (estocas N° 1 al 7)"},
+ "agregar": "Incluye limpieza y pintado de horquillas oxidadas.",
+ "precio_unidad": 230,
+ "lineas": [
+  {"adicional": "reparacion-timon", "cant": 5, "detalle": "Carretillas hidráulicas N° 2, 3, 4, 5 y 6"},
+  {"adicional": "etiqueta-funcion", "cant": 7, "detalle": "las 7 unidades"},
+  {"repuesto": "Eje de brazo", "cant": 1, "descripcion": "Suministro de eje de brazo de retorno"},
+  {"repuesto": "Protector soporte de pistón", "cant": 7, "detalle": "las 7 unidades"},
+  {"repuesto": "Resorte de retorno de brazo", "cant": 2}
+ ],
+ "nota_interna": "Mantenimiento a S/230 dado directamente: excepción al piso sin regla escrita (hallazgos-abiertos.md, Q6)."
+}

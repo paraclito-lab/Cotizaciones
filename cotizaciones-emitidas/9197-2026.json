@@ -7,6 +7,8 @@
  "fecha": "20 de septiembre de 2026",
  "resumen": "Mantenimiento preventivo de 7 carretillas hidráulicas (estocas)",
  "unidades": 7,
+ "trabajo": "mantenimiento-carretillas",
+ "respuestas": {"localidad": "lima", "solo_carretillas": "si", "diagnostico": "si"},
  "items": [
   {
    "cant": 7,

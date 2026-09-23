@@ -1,0 +1,70 @@
+{
+ "id": "mantenimiento-carretillas",
+ "nombre": "Mantenimiento de carretillas hidráulicas",
+ "tipo": "carretillas",
+ "unidad": "carretilla",
+ "unidad_plural": "carretillas",
+ "palabras_clave": ["carretilla", "carretillas", "estoca", "estocas", "stocka", "stockas",
+                    "traspaleta", "traspaletas", "transpaleta", "pallet", "parihuela"],
+ "modo_precio": "precio_referencia",
+ "precio_referencia": {
+  "piso": 250,
+  "nota": "La mano de obra se cobra por experiencia; todavía no hay fórmula que la reproduzca (criterios-actuales.md §4). Se deduce con los datos del mes de prueba: por eso cada cotización con --final queda en el historial de abajo."
+ },
+
+ "preguntas": [
+  {
+   "id": "localidad",
+   "pregunta": "¿Lima o provincia?",
+   "por_que": "En Lima hay tarifa por persona y amanecida; en provincia no hay fórmula fija.",
+   "opciones": {
+    "lima": {"texto": "Lima."},
+    "provincia": {"texto": "Provincia.",
+                  "aviso": "En provincia la mano de obra no tiene fórmula: el personal local cotiza aparte, o se suman pasajes, viáticos y encomienda desde Lima (criterios-actuales.md §2)."}
+   }
+  },
+  {
+   "id": "solo_carretillas",
+   "pregunta": "¿Todos los equipos son carretillas hidráulicas (estocas, traspaletas)?",
+   "por_que": "Montacargas y apiladores son otra familia: mezclados en la misma cotización, el título no corresponde al contenido.",
+   "opciones": {
+    "si": {"texto": "Sí."},
+    "no": {"texto": "No, también hay montacargas o apiladores.",
+           "aviso": "Los montacargas y apiladores no entran en esta ficha: se cotizan aparte (todavía no hay ficha ni precios para ellos). Dejarlos anotados para no perder la oportunidad."}
+   }
+  },
+  {
+   "id": "diagnostico",
+   "pregunta": "¿Hay diagnóstico por unidad (qué falla en cada equipo, con su número)?",
+   "por_que": "Con el diagnóstico por unidad cada repuesto se asigna a su equipo, y el cliente lo puede verificar contra su propio inventario.",
+   "opciones": {
+    "si": {"texto": "Sí."},
+    "no": {"texto": "No.",
+           "aviso": "Sin diagnóstico por unidad, los repuestos van sin asignar a un equipo: conviene pedir el levantamiento antes de cotizar repuestos."}
+   }
+  }
+ ],
+
+ "variables": {
+  "equipo": "carretillas hidráulicas"
+ },
+ "redaccion": "Reparación y mantenimiento de {unidades} {equipo}: cambio de pasadores, orings, retenes de elevación, pines de expansión, retenes de bomba, anillos de jebe, aceite hidráulico.",
+
+ "seccion_catalogo": "Repuestos — Carretillas",
+ "adicionales": {
+  "reparacion-timon": {
+   "descripcion": "Reparación de timón de control",
+   "precio_ref": 40,
+   "fuente": "9197-2026; es más técnica que el cambio de etiqueta, por eso cuesta el doble"
+  },
+  "etiqueta-funcion": {
+   "descripcion": "Cambio de etiqueta de función de la palanca de control",
+   "precio_ref": 20,
+   "fuente": "9197-2026"
+  }
+ },
+ "condiciones": [],
+ "referencias": [],
+
+ "_por_que_existe": "El trabajo más frecuente. Los repuestos se leen de catalogo.md (no se copian acá); los servicios propios del trabajo que no son repuestos (timón, etiqueta) viven en 'adicionales' con el precio que ya se cobró. El historial de precios sale solo de cotizaciones-emitidas/."
+}

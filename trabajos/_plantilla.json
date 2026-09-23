@@ -1,0 +1,48 @@
+{
+ "_ayuda": "Copiar este archivo como trabajos/<id>.json y llenarlo. Más simple: python3 herramientas/nuevo_trabajo.py hace las preguntas y lo escribe solo. Las claves que empiezan con _ son comentarios. Revisar con: python3 herramientas/cotizar_trabajo.py --validar",
+
+ "id": "nombre-del-trabajo",
+ "nombre": "Nombre del trabajo como se diría en voz alta",
+ "tipo": "generales",
+ "subtipo": "otros",
+ "_tipo": "carretillas | balanzas | vitrinas | generales (servicios.json). Si es generales, el subtipo sale de subtipos_sugeridos.",
+ "etiqueta_archivo": "PALABRA PARA EL NOMBRE DEL PDF",
+ "unidad": "unidad",
+ "unidad_plural": "unidades",
+ "palabras_clave": ["palabras", "con que", "se pide este trabajo"],
+
+ "modo_precio": "costo_mas_markup",
+ "_modo_precio": "costo_mas_markup: se sabe cuánto cuesta y el precio sale del markup. precio_referencia: se cobra por experiencia, sin costo desglosado (el precio lo pone el pedido).",
+
+ "preguntas": [
+  {
+   "id": "localidad",
+   "pregunta": "¿Lima o provincia?",
+   "opciones": {
+    "lima": {"texto": "Lima."},
+    "provincia": {"texto": "Provincia.", "aviso": "Sumar pasajes, viáticos y encomienda, o pedir cotización al personal local."}
+   }
+  },
+  {
+   "id": "horario",
+   "pregunta": "¿El trabajo es fuera del horario de atención?",
+   "opciones": {
+    "fuera": {"texto": "Sí, fuera de horario.", "condiciones": ["El trabajo se ejecuta fuera del horario de atención al público, en coordinación con el local."]},
+    "dentro": {"texto": "No, en horario normal."}
+   }
+  }
+ ],
+ "_preguntas": "El checklist antes de cotizar. Cada opción puede cambiar costos (costos_fijos, costos_por_unidad), la redacción (variables), agregar condiciones, o mostrar un aviso. 'etiqueta_cliente' es cómo se nombra la pregunta si queda 'sujeta a confirmación' en un borrador.",
+
+ "costos_fijos": {"Mano de obra": null, "Transporte": null},
+ "costos_por_unidad": {"Material por unidad": null},
+ "_costos": "Fijos = lo que cuesta ir, sin importar cuántas unidades. Por unidad = lo que se multiplica. null = todavía no se sabe: bloquea el precio hasta que se sepa (no se inventa).",
+ "markup": {"minimo": 0.60, "maximo": 0.80},
+ "redondeo": 5,
+
+ "variables": {},
+ "redaccion": "Descripción del trabajo para el cliente — {unidades} {unidad_plural}.",
+ "_redaccion": "Lo que va en la cotización. {unidades}, {unidad} y {unidad_plural} se llenan solas; cualquier otra {palabra} necesita su valor en 'variables'.",
+ "condiciones": [],
+ "referencias": []
+}

@@ -15,6 +15,7 @@ de costos reales se lleva en un Google Sheet aparte y se llena a mano.
 |---|---|
 | `criterios-actuales.md` | Las reglas de negocio decididas (mano de obra por localidad, márgenes, checklist, numeración, flujo de aprobación, cómo se interactúa por Telegram). Es el documento que más se actualiza. |
 | `catalogo.md` | **Única** fuente de precios de repuestos. Si un precio no está aquí, no es oficial. |
+| `trabajos/` | **Biblioteca de trabajos**: una ficha por trabajo con su checklist, sus costos (fijos por visita y por unidad), su redacción y lo que ya se cobró. Con la ficha, cotizar es llenar un pedido de pocas líneas; un trabajo nuevo se agrega con `herramientas/nuevo_trabajo.py`. Ver su README. |
 | `servicios.json` | **Única** fuente de los tipos de servicio: qué título lleva cada uno, cómo se redacta su fila, en qué categoría del registro cae y qué palabras lo reconocen. Lo lee el generador. |
 | `casuistica.md` | Bitácora de casos nuevos o dudas que no encajan en las reglas actuales. Se agrega, no se borra. |
 | `hallazgos-abiertos.md` | **Lista de trabajo única** de lo que está mal, falta o se contradice, con evidencia verificada y prioridad. Reemplaza como lista de pendientes a las auditorías de abajo, que quedan como historia. Un hallazgo se cierra marcándolo, no borrándolo. |
@@ -27,7 +28,7 @@ de costos reales se lleva en un Google Sheet aparte y se llena a mano.
 | `ejemplos-reales/` | Cotizaciones reales ya entregadas a clientes, estructuradas, usadas como referencia de formato y precios. |
 | `balanzas-industriales/` | Carpeta especializada solo para balanzas: cotizaciones reales cerradas (`cotizaciones-reales/`) y su propia bitácora de casuística (`casuistica-balanzas.md`). Existe porque balanzas es el tipo de servicio con menos data real hoy — ver el README de la carpeta. |
 | `branding/` | Logo y fondo decorativo de la marca. |
-| `herramientas/` | Cálculos de apoyo: `laminado.py` (rollos necesarios), `dibujar_rollos.py` (imagen de corte por rollo, para campo), `precio.py` (costo real → precio unitario), `costo_sesion.py` (qué cuesta operar el sistema, leído del log real), `flujo-calculo.md` (mapa completo, para validar antes de cotizar). |
+| `herramientas/` | `cotizar_trabajo.py` (pedido + ficha → costeo, propuesta de precio y JSON de la cotización), `nuevo_trabajo.py` (agrega un trabajo respondiendo preguntas), `probar.py` (**pruebas de regresión**: correrlas antes de subir cualquier cambio), `armar_registro.py` (reconstruye el registro de costos), y los cálculos de apoyo: `laminado.py`, `dibujar_rollos.py`, `precio.py`, `costo_sesion.py`, `flujo-calculo.md`. |
 | `plantilla/` | Cómo se arma el PDF/PNG de cada cotización: una sola imagen real de encabezado (`headers/base.jpg`) + N° y título superpuestos como texto, la plantilla HTML y el generador `generar.py`. |
 | `.claude/skills/cotizar/` | La skill que hace todo el proceso: se describe el trabajo en lenguaje natural y devuelve la vista previa y el PDF. |
 

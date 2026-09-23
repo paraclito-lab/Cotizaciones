@@ -1,0 +1,21 @@
+{
+ "_que_es": "Pedido que reproduce la cotización 9196-2026. Subtotal esperado: S/6,400.00. Muestra cómo queda anotado un precio distinto al del catálogo: basta con poner 'precio' en la línea.",
+ "trabajo": "mantenimiento-carretillas",
+ "numero": "9196-2026",
+ "cliente": "TOTTUS",
+ "cliente_corto": "TT",
+ "local": "PUCALLPA",
+ "atencion": "NOMBRE DE CONTACTO",
+ "fecha": "20 de septiembre de 2026",
+ "unidades": 10,
+ "respuestas": {"localidad": "provincia", "solo_carretillas": "no", "diagnostico": "si"},
+ "variables": {"equipo": "traspaletas hidráulicas y manuales"},
+ "precio_unidad": 500,
+ "lineas": [
+  {"repuesto": "Reparación de botella hidráulica", "cant": 5, "precio": 50,
+   "detalle": "Traspaletas hidráulicas N° 1, 2, 4, 6 y 8"},
+  {"repuesto": "Rueda de carga", "cant": 16, "precio": 60,
+   "detalle": "Traspaletas hidráulicas N° 3, 5 y 7 (4 unid. c/u) y Traspaleta manual N° 10 (4 unid.)"},
+  {"repuesto": "Rueda direccional", "cant": 2, "precio": 95, "detalle": "Traspaleta manual N° 9"}
+ ]
+}

@@ -1,0 +1,9 @@
+{
+ "_que_es": "El caso real de garruchas tal como está hoy: sin confirmar si el coche entra al horno ni el horario. Correr con --borrador: sale la propuesta sin precios con el alcance 'sujeto a confirmación', y el costeo interno ya calculado (S/1,200, precio sugerido S/680 por coche).",
+ "trabajo": "garruchas-coche-panaderia",
+ "cliente": "SB PRECIO UNO",
+ "local": "MARIATEGUI",
+ "unidades": 3,
+ "respuestas": {"montaje": "soldada"},
+ "nota_interna": "Montaje 'soldada' deducido del costeo (incluye soldadura y disco de corte); no confirmado con el local."
+}
