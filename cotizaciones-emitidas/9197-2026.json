@@ -8,37 +8,41 @@
  "resumen": "Mantenimiento preventivo de 7 carretillas hidráulicas (estocas)",
  "unidades": 7,
  "trabajo": "mantenimiento-carretillas",
- "respuestas": {"localidad": "lima", "solo_carretillas": "si", "diagnostico": "si"},
+ "respuestas": {
+  "localidad": "lima",
+  "solo_carretillas": "si",
+  "diagnostico": "si"
+ },
  "items": [
   {
    "cant": 7,
    "descripcion": "Mantenimiento preventivo de 7 carretillas hidráulicas (stockas N° 1 al 7): cambio de pasadores, orings, retenes de elevación, pines de expansión, retenes de bomba, anillos de jebe, aceite hidráulico. Incluye limpieza y pintado de horquillas oxidadas.",
-   "precio_unit": 230.00
+   "precio_unit": 230.0
   },
   {
    "cant": 5,
    "descripcion": "Reparación de timón de control — Carretillas hidráulicas N° 2, 3, 4, 5 y 6.",
-   "precio_unit": 40.00
+   "precio_unit": 40.0
   },
   {
    "cant": 7,
    "descripcion": "Cambio de etiqueta de función de la palanca de control — las 7 unidades.",
-   "precio_unit": 20.00
+   "precio_unit": 20.0
   },
   {
    "cant": 1,
    "descripcion": "Suministro de eje de brazo de retorno.",
-   "precio_unit": 55.00
+   "precio_unit": 55.0
   },
   {
    "cant": 7,
    "descripcion": "Suministro de protector soporte de pistón — las 7 unidades.",
-   "precio_unit": 29.00
+   "precio_unit": 29.0
   },
   {
    "cant": 2,
    "descripcion": "Suministro de resorte de retorno de brazo.",
-   "precio_unit": 55.00
+   "precio_unit": 55.0
   }
  ],
  "nota_interna": "Mantenimiento a S/230 por unidad, bajo el piso de S/250 (criterios-actuales.md §4): precio dado directamente, excepción sin regla escrita (hallazgos-abiertos.md, Q6). Timón S/40 y etiqueta S/20 dados directamente (la reparación del timón es más técnica). Protector soporte de pistón S/29, eje de brazo S/55 y resorte S/55 de catalogo.md. El PDF entregado el 20/09 decía 'tímón'; esta versión lo corrige: si ya se envió la anterior, reenviar esta."

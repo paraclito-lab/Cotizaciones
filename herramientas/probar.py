@@ -144,7 +144,8 @@ def sin_precios_no_muestra_ceros_ni_alertas_repetidas():
     contiene(validar(cot, sin_precios=True)[0], "--sin-precios pero hay", "con precios")
     html = generar.construir_html(dict(cot, items=[{"cant": 1, "descripcion": "a", "pendiente": True}]),
                                   generar.tipo_de(cot), Decimal(0), Decimal(0), Decimal(0), True)
-    assert "Por definir" in html and "S/ 0.00" not in html, "los totales deben decir Por definir"
+    celdas = html[html.index("<tfoot"):html.index("</tfoot>")]   # el CSS también dice "S/ 0.00"
+    assert "Por definir" in celdas and "S/ 0.00" not in celdas, "los totales deben decir Por definir"
 
 
 @prueba()
@@ -333,6 +334,44 @@ def repuesto_fuera_del_catalogo_no_se_inventa():
         assert "no se inventa" in str(e)
     cot, _ = motor.armar(dict(base, lineas=[{"repuesto": "Cilindro nuevo", "cant": 1, "precio": 80}]), hoy=DIA)
     assert "no está en el catálogo" in cot["nota_interna"]
+
+
+@prueba()
+def asistente_crea_una_ficha_que_el_motor_usa():
+    import builtins
+    import io
+    import contextlib
+    import nuevo_trabajo
+    respuestas = iter([
+        "Cambio de burletes de exhibidora", "", "", "", "BURLETES", "exhibidora", "", "", "1",
+        "Mano de obra = 150", "Transporte = ?", "",      # costos fijos: uno todavía sin monto
+        "Burlete = 80", "",                              # costos por unidad
+        "", "",                                          # markup 60-80 por defecto
+        "", "¿Es burlete magnético?", "", "",            # comunes + una pregunta propia
+        "Cambio de burletes magnéticos en {cantidad} de exhibición.",
+        "Los burletes retirados se evacúan del local.", "",
+    ])
+    tmp = tempfile.mkdtemp()
+    trabajos_real, input_real = motor.TRABAJOS, builtins.input
+    try:
+        motor.TRABAJOS = tmp
+        builtins.input = lambda *_: next(respuestas)
+        with contextlib.redirect_stdout(io.StringIO()):
+            nuevo_trabajo.main()
+        ficha = json.load(open(os.path.join(tmp, "cambio-de-burletes-de-exhibidora.json"), encoding="utf-8"))
+        igual(ficha["costos_fijos"], {"Mano de obra": 150.0, "Transporte": None}, "el ? queda sin monto")
+        igual([p["id"] for p in ficha["preguntas"]], ["localidad", "horario", "es-burlete-magnetico"],
+              "preguntas comunes + la propia")
+        igual(motor.validar_ficha(ficha, ficha["id"]), [], "la ficha que escribe es válida")
+        cot, info = motor.armar({"trabajo": ficha["id"], "cliente": "X", "local": "Y", "unidades": 1,
+                                 "respuestas": {"localidad": "lima", "horario": "fuera",
+                                                "es-burlete-magnetico": "si"}}, hoy=DIA)
+        assert info["propuesta"] is None, "con el transporte sin monto no se propone precio"
+        igual(cot["items"][0]["descripcion"],
+              "Cambio de burletes magnéticos en 1 exhibidora de exhibición.", "singular")
+    finally:
+        motor.TRABAJOS, builtins.input = trabajos_real, input_real
+        shutil.rmtree(tmp, ignore_errors=True)
 
 
 # ---------------------------------------------------------------- registro
