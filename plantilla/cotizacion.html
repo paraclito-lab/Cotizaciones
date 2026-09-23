@@ -45,7 +45,11 @@
     white-space: nowrap;
   }
 
-  .body-pad { padding: 4px 34px 30px 34px; }
+  /* El padding superior es chico a propósito: el encabezado (base.jpg) ya trae ~14px de aire
+     debajo del título antes de su borde inferior, así que 4px + eso da el mismo respiro que
+     abajo. Si se cambia un lado, cambiar el otro para que el marco no quede descuadrado
+     (ver plantilla/README.md, "Marco interno simétrico"). */
+  .body-pad { padding: 4px 34px 18px 34px; }
   .meta-row { display: flex; justify-content: space-between; align-items: flex-start; margin-top: 6px; font-size: 13px; }
   .meta-row .fields div { margin-bottom: 2px; }
   .meta-row .fields b { display: inline-block; width: 78px; }
@@ -59,6 +63,9 @@
      NO el verde del separador (ese es para dividir grupos, no para marcar precio pendiente). */
   tbody td.money.pendiente { color: #999; font-style: italic; font-weight: 400; }
   tfoot td { border: 1px solid #bbb; padding: 6px 8px; font-weight: 700; text-align: right; }
+  /* Documento sin precios (propuesta técnica): los totales dicen "Por definir", nunca
+     "S/ 0.00" — un total en cero se lee como gratis. Ver --sin-precios en generar.py. */
+  tfoot.sin-precios td.money { color: #999; font-style: italic; font-weight: 400; }
   tfoot tr.subtotal td { background: #fff59d; }   /* Sub Total resaltado, como el formato real */
   tfoot tr.total td { background: #f0f0f0; font-size: 13px; }
   .footer-note { margin-top: 14px; font-size: 10.5px; color: #666; font-style: italic; }
@@ -111,10 +118,10 @@
       <tbody>
 {{FILAS}}
       </tbody>
-      <tfoot>
-        <tr class="subtotal"><td colspan="4">Sub Total</td><td class="money">S/ {{SUBTOTAL}}</td></tr>
-        <tr><td colspan="4">IGV 18%</td><td class="money">S/ {{IGV}}</td></tr>
-        <tr class="total"><td colspan="4">Total</td><td class="money">S/ {{TOTAL}}</td></tr>
+      <tfoot class="{{CLASE_TOTALES}}">
+        <tr class="subtotal"><td colspan="4">Sub Total</td><td class="money">{{SUBTOTAL}}</td></tr>
+        <tr><td colspan="4">IGV 18%</td><td class="money">{{IGV}}</td></tr>
+        <tr class="total"><td colspan="4">Total</td><td class="money">{{TOTAL}}</td></tr>
       </tfoot>
     </table>
 

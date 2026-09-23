@@ -201,6 +201,22 @@ convertirse en una regla nueva dentro de `criterios-actuales.md`.
   (texto faltante) en el camino** — hay que probar el caso común, no solo el caso que
   originó el arreglo.
 
+### 22/09/2026 — Cambio de garruchas de coches de panadería: sin subtipo que calce
+
+- **Contexto**: cotización de SB Precio Uno, Mariátegui — cambio de garruchas a 3 coches de
+  panadería (4 garruchas c/u, 12 unidades en total).
+- **Qué pasó / qué no encajaba en las reglas actuales**: no es carretillas (son garruchas de
+  coches de panadería, no ruedas de carretilla hidráulica), ni balanzas, ni vitrinas. Tampoco
+  hay ningún subtipo de `subtipos_sugeridos` que calce (espejos, mamparas, laminado-seguridad,
+  acrilicos, vitrales, motores, estructuras, pintado, electrico). Tampoco hay precio de
+  referencia: ni en `catalogo.md` ni en el Excel histórico (esa celda, "ruedas de coches de
+  panadería", tenía un error `#REF!` sin dato real recuperable — ver `analisis/cchh-cot-excel.md`).
+- **Cómo se resolvió esta vez**: entra como `generales` con subtipo `otros`, como indica la
+  regla cuando ninguno calza. El precio queda `pendiente` hasta que se confirme.
+- **¿Debería ser una regla permanente?** A evaluar — si aparecen más trabajos de mobiliario de
+  panadería (coches, bandejas, etc.), considerar un subtipo `mobiliario` o similar al llegar al
+  umbral de 3 cotizaciones (ver `promocion` en `servicios.json`).
+
 ### 17/09/2026 — Las piezas se dibujaban pegadas, sin espacio para el cutter
 
 - **Contexto**: revisión de las imágenes de corte con los rollos ya confirmados en 30 m.

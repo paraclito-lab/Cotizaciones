@@ -3,11 +3,13 @@
 Genera la vista previa (PNG) y el entregable (PDF) de una cotización.
 
 Uso:
-    python3 plantilla/generar.py cotizacion.json [carpeta_de_salida] [--archivar]
+    python3 plantilla/generar.py cotizacion.json [carpeta_de_salida] [--archivar] [--sin-precios]
 
 El JSON describe la cotización; el subtotal, IGV y total se calculan solos.
 `--archivar` guarda la copia comprimida en cotizaciones-emitidas/ — solo para la cotización
 ya aprobada, porque reemplaza la copia anterior de ese N°.
+`--sin-precios` emite la propuesta técnica: todos los ítems `pendiente` y los totales en
+"Por definir". Para validar el alcance con el cliente antes de costear.
 Ver plantilla/README.md para el formato y las reglas de negocio.
 """
 import base64, io, json, os, re, sys, glob
@@ -90,7 +92,7 @@ def foto_uri(ruta, lado=180):
     return "data:image/jpeg;base64," + base64.b64encode(buf.getvalue()).decode()
 
 
-def construir_html(cot):
+def construir_html(cot, sin_precios=False):
     servicio = tipo_de(cot)
     filas, subtotal, n = [], 0.0, 0
     for it in cot["items"]:
@@ -159,9 +161,12 @@ def construir_html(cot):
         "FECHA": esc(cot["fecha"]),
         "FILAS": "\n".join(filas),
         "VALIDEZ": str(VALIDEZ_DIAS),
-        "SUBTOTAL": money(subtotal),
-        "IGV": money(igv),
-        "TOTAL": money(total),
+        # Un documento sin precios muestra "Por definir", nunca "S/ 0.00": un total en cero se
+        # lee como gratis, y ese es justamente el riesgo de emitir la propuesta técnica.
+        "SUBTOTAL": "Por definir" if sin_precios else f"S/ {money(subtotal)}",
+        "IGV": "Por definir" if sin_precios else f"S/ {money(igv)}",
+        "TOTAL": "Por definir" if sin_precios else f"S/ {money(total)}",
+        "CLASE_TOTALES": "sin-precios" if sin_precios else "",
         "NOTA": nota_html,
     }.items():
         html = html.replace("{{" + k + "}}", v)
@@ -269,7 +274,12 @@ def main():
     salida = args[1] if len(args) > 1 else "."
     os.makedirs(salida, exist_ok=True)
 
-    html, sub, igv, total = construir_html(cot)
+    # Propuesta técnica: el documento sale con el alcance definido y los precios todavía no.
+    # Sirve para que el cliente valide la especificación antes de costear (en trabajos donde la
+    # especificación es la que manda el precio, cotizar antes de fijarla es cotizar a ciegas).
+    sin_precios = "--sin-precios" in sys.argv
+
+    html, sub, igv, total = construir_html(cot, sin_precios=sin_precios)
 
     # Validación automática (criterios-actuales.md punto 9, paso 2).
     # Estas tres son bloqueantes, no advertencias: una cotización de S/0, con cantidad cero o
@@ -291,7 +301,21 @@ def main():
                 errores.append(f"ítem {i} tiene precio 0")
         if len(it.get("fotos", [])) > MAX_FOTOS:
             alertas.append(f"ítem {i} trae más de {MAX_FOTOS} fotos; se usaron las primeras {MAX_FOTOS}")
-    if sub <= 0:
+    if sin_precios:
+        # Mezclar precios con "Por definir" en los totales daría un documento que se contradice:
+        # filas con importe y un Total que dice que no hay total.
+        if sub > 0:
+            errores.append(
+                f"--sin-precios pero hay ítems con precio (subtotal S/ {money(sub)}): "
+                "o se quitan esos precios, o se genera la cotización normal")
+        if "--archivar" in sys.argv:
+            errores.append(
+                "--sin-precios con --archivar: no se archiva un documento sin precios como si "
+                "fuera una cotización emitida. Se archiva la versión aprobada, con precios")
+        alertas.append(
+            "documento SIN PRECIOS: es una propuesta técnica para validar el alcance, "
+            "NO una cotización para aprobar")
+    elif sub <= 0:
         errores.append(f"el subtotal es S/ {money(sub)}: no se emite una cotización sin monto")
     if not re.fullmatch(r"COT-\d{4}-\d{3}", cot["numero"]):
         alertas.append(f"el N° '{cot['numero']}' no sigue el formato COT-AAAA-NNN")
@@ -310,9 +334,14 @@ def main():
     # ya enviada (pasó al implementarlo: el ejemplo con placeholder sobrescribió la real).
     archivo = archivar(png, cot["numero"]) if "--archivar" in sys.argv else None
 
-    print(f"Sub Total  S/ {money(sub)}")
-    print(f"IGV {IGV:.0%}    S/ {money(igv)}")
-    print(f"Total      S/ {money(total)}")
+    if sin_precios:
+        print("Sub Total  Por definir  (documento sin precios)")
+        print(f"IGV {IGV:.0%}    Por definir")
+        print("Total      Por definir")
+    else:
+        print(f"Sub Total  S/ {money(sub)}")
+        print(f"IGV {IGV:.0%}    S/ {money(igv)}")
+        print(f"Total      S/ {money(total)}")
     print(f"Validez    {VALIDEZ_DIAS} días")
     print(f"\nVista previa: {png}\nEntregable:   {pdf}")
     if archivo:
@@ -320,16 +349,20 @@ def main():
     else:
         print("Archivado:    no (usar --archivar cuando la cotización esté aprobada)")
 
-    # Fila lista para pegar en el registro de costos (Momento 1)
-    unidades = sum(it.get("cant", 1) for it in cot["items"] if not it.get("separador"))
-    primer_item = next(x for x in cot["items"] if not x.get("separador"))
-    print("\nFila para el registro:")
-    print(" | ".join([
-        cot["numero"], cot["fecha"], cot["cliente"], cot.get("local", ""),
-        servicio["categoria_registro"], cot.get("subtipo", ""),
-        cot.get("resumen", primer_item["descripcion"])[:60],
-        str(unidades), money(sub), money(igv), money(total),
-    ]))
+    # Fila lista para pegar en el registro de costos (Momento 1). Un documento sin precios no
+    # se registra: entraría con monto 0 y ensuciaría el ticket promedio y el % de margen.
+    if sin_precios:
+        print("\nFila para el registro: no corresponde todavía — se registra cuando tenga precios.")
+    else:
+        unidades = sum(it.get("cant", 1) for it in cot["items"] if not it.get("separador"))
+        primer_item = next(x for x in cot["items"] if not x.get("separador"))
+        print("\nFila para el registro:")
+        print(" | ".join([
+            cot["numero"], cot["fecha"], cot["cliente"], cot.get("local", ""),
+            servicio["categoria_registro"], cot.get("subtipo", ""),
+            cot.get("resumen", primer_item["descripcion"])[:60],
+            str(unidades), money(sub), money(igv), money(total),
+        ]))
     if alertas:
         print("\nREVISAR ANTES DE ENVIAR:")
         for a in alertas:

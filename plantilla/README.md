@@ -112,6 +112,46 @@ la descripción + hasta 3 fotos + precio. Probado con las 3 fotos reales del PDF
 - La foto es **opcional** — si no llega ninguna, la fila queda solo con texto.
 - Si llegan más de 3 fotos: sin resolver todavía (ver `casuistica.md`).
 
+## Propuesta técnica: `--sin-precios`
+
+Hay trabajos donde **la especificación es la que manda el precio**, y cotizar antes de fijarla
+es cotizar a ciegas (caso que lo originó el 22/09/2026: cambio de garruchas de coches de
+panadería — la misma garrucha va de S/18 a S/140 según diámetro, montaje, material,
+capacidad y temperatura de trabajo). Para esos casos:
+
+```bash
+python3 plantilla/generar.py cotizacion.json salida/ --sin-precios
+```
+
+Sale el documento con el alcance completo y los totales en **"Por definir"** en gris cursiva,
+para que el cliente valide la especificación antes de costear.
+
+Reglas que hace cumplir el generador, a propósito:
+
+- **Todos** los ítems tienen que ser `pendiente`. Si alguno trae precio, no genera: un
+  documento con filas con importe y un Total que dice "Por definir" se contradice solo.
+- Nunca muestra "S/ 0.00" en los totales. **Un total en cero se lee como gratis** — ese es el
+  riesgo real de emitir un documento sin precios, y es la razón de que el modo exista en vez
+  de simplemente desactivar la validación de subtotal.
+- **No se puede combinar con `--archivar`**: no se archiva como cotización emitida algo que
+  todavía no tiene precio.
+- **No imprime la fila del registro de costos**: entraría con monto 0 y ensuciaría el ticket
+  promedio y el margen.
+
+## Marco interno simétrico
+
+El borde negro de `.sheet` tiene que quedar a la misma distancia del contenido arriba y abajo
+— si no, el marco se ve descuadrado y el contenido parece no estar centrado verticalmente
+(pasó el 20/09/2026: `.body-pad` tenía `padding: 4px 34px 30px 34px`, con 30px de aire muerto
+abajo y casi nada arriba, notorio sobre todo en cotizaciones cortas o sin `nota`).
+
+El encabezado (`base.jpg`) ya trae de fábrica ~14px de aire debajo del título antes de su
+borde inferior, así que el padding superior de `.body-pad` puede quedar chico (4px) y aun así
+verse balanceado. **Si se toca el padding inferior de `.body-pad`, hay que mantenerlo cerca de
+ese mismo total (~18px)** para que el marco no vuelva a quedar irregular. Revisar siempre
+regenerando una cotización corta (1 ítem, sin nota) Y una larga (6+ ítems, con nota): son los
+dos extremos donde la asimetría se nota más.
+
 ## Fila separadora dentro de la tabla
 
 Para dividir un mismo pedido en dos bloques sin partirlo en dos archivos (ej. piezas que

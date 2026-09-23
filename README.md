@@ -17,6 +17,7 @@ de costos reales se lleva en un Google Sheet aparte y se llena a mano.
 | `catalogo.md` | **Única** fuente de precios de repuestos. Si un precio no está aquí, no es oficial. |
 | `servicios.json` | **Única** fuente de los tipos de servicio: qué título lleva cada uno, cómo se redacta su fila, en qué categoría del registro cae y qué palabras lo reconocen. Lo lee el generador. |
 | `casuistica.md` | Bitácora de casos nuevos o dudas que no encajan en las reglas actuales. Se agrega, no se borra. |
+| `hallazgos-abiertos.md` | **Lista de trabajo única** de lo que está mal, falta o se contradice, con evidencia verificada y prioridad. Reemplaza como lista de pendientes a las auditorías de abajo, que quedan como historia. Un hallazgo se cierra marcándolo, no borrándolo. |
 | `auditoria-2026-09-14.md` | Revisión completa de todo lo construido: vacíos, contradicciones, cuellos de botella y defectos detectados, con el orden sugerido para resolverlos. Leer antes de programar nada. |
 | `auditoria-ia-2026-09-17.md` | Auditoría del sistema de IA en sí: qué cuesta operarlo (medido del log real, no estimado), los casos borde que hoy dejan salir cotizaciones inválidas, los datos de cliente expuestos en el repo, y el tablero de KPI con los campos exactos del JSONL. |
 | `auditoria-arquitectura-2026-09-19.md` | Qué patrones ya probados de la industria (rules engine, costeo ABC, cutting stock, aprobación humana) coinciden con lo que ya se construyó acá, y las 5 recomendaciones concretas para consolidar lo que hoy sigue repartido entre código y prosa. |

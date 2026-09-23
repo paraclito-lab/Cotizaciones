@@ -106,6 +106,12 @@ Formato del JSON:
 }
 ```
 
+**`nota` se imprime tal cual en el PDF que ve el cliente.** Nunca poner ahí referencias a
+`catalogo.md`, al piso mínimo, al margen, a si un precio está "Por validar" o a cualquier
+razonamiento interno de precio — eso es información confidencial del negocio. `nota` es solo
+para algo que el cliente necesita saber (alcance, plazos, condiciones), nunca para justificar
+un precio.
+
 - `fotos`: lista de rutas de imagen dentro de un ítem (máximo 3, opcional, solo Servicios
   Generales). Se achican y encuadran solas; **no se rechaza una foto por borrosa u oscura**.
 - `tipo` es obligatorio y **reemplaza al título**: el generador se niega a correr si el JSON
@@ -118,6 +124,25 @@ El script imprime los totales, las rutas del PNG y del PDF, **la fila ya armada 
 el registro de costos**, y una lista de **alertas** (ítems en
 S/0, N° con formato incorrecto, más de 3 fotos). Si hay alertas, resolverlas antes de mostrar
 nada.
+
+## Paso 4b — Cuando la especificación manda el precio: propuesta técnica sin precios
+
+Hay trabajos donde el mismo ítem cambia de precio varias veces según su especificación (una
+garrucha de coche de panadería va de S/18 a S/140 según diámetro, tipo de montaje, material
+de rueda, capacidad de carga y temperatura de trabajo). Cotizar antes de fijar la
+especificación es cotizar a ciegas, y si el precio se manda mal, la corrección la paga la
+empresa.
+
+En esos casos se emite la **propuesta técnica**: mismo documento, alcance completo, precios en
+"Por definir".
+
+```bash
+python3 plantilla/generar.py cotizacion.json salida/ --sin-precios
+```
+
+Exige que **todos** los ítems sean `pendiente`, no muestra nunca "S/ 0.00" en los totales, no
+se puede archivar y no genera fila de registro (ver `plantilla/README.md`). Al entregarla hay
+que decir explícitamente que es para validar el alcance, **no** para aprobar.
 
 ## Paso 5 — Vista previa y aprobación
 
