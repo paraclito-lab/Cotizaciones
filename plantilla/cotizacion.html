@@ -70,6 +70,10 @@
   tfoot tr.total td { background: #f0f0f0; font-size: 13px; }
   .footer-note { margin-top: 14px; font-size: 10.5px; color: #666; font-style: italic; }
   .validez { margin-top: 12px; font-size: 11px; color: #333; }
+  /* Condiciones del trabajo (horario, alcance, exclusiones): se leen, no se esconden en la nota. */
+  .condiciones { margin-top: 8px; font-size: 11px; color: #333; }
+  .condiciones ul { margin: 3px 0 0 18px; padding: 0; }
+  .condiciones li { margin: 1px 0; }
 
   /* Fila con foto (Servicios Generales) — 1 a 3 fotos, opcional */
   .photo-row { display: flex; gap: 6px; margin-top: 6px; }
@@ -104,7 +108,7 @@
       <div class="fields">
         <div><b>SE&Ntilde;ORES:</b> {{CLIENTE}}</div>
         <div><b>Local:</b> {{LOCAL}}</div>
-        <div><b>Atenci&oacute;n:</b> {{ATENCION}}</div>
+        {{FILA_ATENCION}}
       </div>
       <div><b>Fecha:</b> {{FECHA}}</div>
     </div>
@@ -125,7 +129,7 @@
       </tfoot>
     </table>
 
-    <div class="validez"><b>Validez de la oferta:</b> {{VALIDEZ}} d&iacute;as calendario desde la fecha de emisi&oacute;n.</div>
+    <div class="validez"><b>Validez de la oferta:</b> {{VALIDEZ}} d&iacute;as calendario desde la fecha de emisi&oacute;n.</div>{{CONDICIONES}}
 {{NOTA}}
   </div>
 </div>

@@ -7,11 +7,14 @@
     "carretillas": {
       "titulo": "Mantenimiento de carretillas hidráulicas",
       "categoria_registro": "Carretillas",
+      "etiqueta_archivo": "CARRETILLAS",
       "palabras_clave": [
         "carretilla",
         "carretillas",
         "stocka",
         "stockas",
+        "estoca",
+        "estocas",
         "transpaleta",
         "pallet",
         "parihuela",
@@ -28,6 +31,7 @@
     "balanzas": {
       "titulo": "Balanzas industriales",
       "categoria_registro": "Balanzas",
+      "etiqueta_archivo": "BALANZA",
       "palabras_clave": [
         "balanza",
         "balanzas",
@@ -49,6 +53,7 @@
     "vitrinas": {
       "titulo": "Mantenimiento de vitrinas comerciales",
       "categoria_registro": "Servicios Generales",
+      "etiqueta_archivo": "VITRINAS",
       "palabras_clave": [
         "vitrina",
         "vitrinas",
@@ -72,6 +77,7 @@
     "generales": {
       "titulo": "Servicios generales",
       "categoria_registro": "Servicios Generales",
+      "etiqueta_archivo": "SERVICIOS GENERALES",
       "palabras_clave": [
         "espejo",
         "espejos",

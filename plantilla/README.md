@@ -94,7 +94,9 @@ El JSON lleva `numero`, `titulo`, `cliente`, `local`, `atencion`, `fecha`, la li
    ancho mínimo y dejaba media hoja en blanco abajo — se reemplazó por este centrado
    directo, más simple y sin ese caso raro.
 5. Imprime alertas de la validación automática (`criterios-actuales.md` punto 9, paso 2):
-   ítems en S/0, N° que no cumple `COT-AAAA-NNN`, más de 3 fotos.
+   precio pendiente, mantenimiento bajo el piso de `servicios.json`, N° que no es un
+   correlativo real, más de 3 fotos. Aparte, sin mezclarlos, los avisos informativos (título
+   reducido, unidades inferidas): una alerta que sale siempre deja de leerse.
 
 Todo esto está envuelto en la skill `cotizar` (ver `.claude/skills/cotizar/SKILL.md`), que es
 la forma normal de usarlo: se describe el trabajo en lenguaje natural y ella se encarga del
@@ -137,6 +139,39 @@ Reglas que hace cumplir el generador, a propósito:
   todavía no tiene precio.
 - **No imprime la fila del registro de costos**: entraría con monto 0 y ensuciaría el ticket
   promedio y el margen.
+
+## Aprobación en un comando: `--final`
+
+```bash
+python3 plantilla/generar.py cotizacion.json salida/ --final
+```
+
+Hace de una vez lo que antes se hacía a mano después de aprobar (y se saltaba: de 3
+cotizaciones finales reales, ninguna quedó archivada):
+
+- **Exige** el N° real (`NNNN-AAAA` o `COT-AAAA-NNN`) y que ningún ítem esté pendiente.
+- Deja el PDF con su **nombre de entrega**: `N° 9196-2026 CARRETILLAS TT PUCALLPA MUNAY.pdf`
+  (N° + `etiqueta_archivo` del tipo en `servicios.json` + `cliente_corto` o cliente + local).
+- **Archiva** la imagen y el **JSON fuente** en `cotizaciones-emitidas/`. El JSON es lo que
+  permite corregir un ítem semanas después, y lo que alimenta el historial de precios que
+  muestra `herramientas/cotizar_trabajo.py`.
+
+## Lo que ve el cliente y lo que no
+
+| Campo del JSON | ¿Se imprime? | Para qué |
+|---|---|---|
+| `items[].descripcion` | Sí | El sustento técnico de cada fila |
+| `condiciones` | Sí, en su bloque bajo la validez | Horario, retiro de lo cambiado, exclusiones |
+| `nota` | Sí, en gris al pie | Algo que el cliente necesita saber |
+| `nota_interna` | **Nunca** | Por qué se cobró lo que se cobró. Va a la fila del registro |
+| `unidades`, `costo_estimado`, `subtotal_calculado` | No | Van al registro |
+
+Si en lo impreso aparece "catálogo", ".md", "piso mínimo", "markup", "por validar",
+"ganancia" o parecidos, **no se genera**. Pasó tres veces en una semana: la nota era el único
+campo de texto libre, así que ahí terminaba todo, incluido lo confidencial. `nota_interna`
+existe para que eso tenga dónde ir.
+
+Si `atencion` está vacío, la línea "Atención:" no se imprime (antes salía la etiqueta sola).
 
 ## Marco interno simétrico
 
