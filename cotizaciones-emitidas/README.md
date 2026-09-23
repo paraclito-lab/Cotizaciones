@@ -1,6 +1,13 @@
 # Cotizaciones emitidas
 
-Copia de cada cotización que **ya se envió al cliente**, como imagen comprimida.
+Copia de cada cotización que **ya se envió al cliente**, en dos archivos por N°:
+
+- `NNNN-AAAA.jpg` — la imagen comprimida, copia de lo que vio el cliente.
+- `NNNN-AAAA.json` — **la fuente**: el JSON con el que se generó. Es lo que permite corregir un
+  ítem semanas después sin rehacer la cotización de memoria. Antes vivía solo en `/tmp` y se
+  perdía con el contenedor (hallazgos-abiertos.md, N02). Lleva además `nota_interna`: por qué
+  se cobró lo que se cobró (excepciones, precios dados directamente). Ese campo **nunca** se
+  imprime en el PDF.
 
 ## Por qué imagen y no PDF
 
@@ -28,7 +35,7 @@ cotización, así que volver a archivar el mismo número reemplaza su copia: que
 ## Sobre los datos del cliente
 
 Esta carpeta es la **única excepción** a la regla de que los nombres de contacto del cliente no
-van en archivos del repositorio (ver `.claude/skills/cotizar/SKILL.md`). Va acá porque esta
-imagen es copia fiel del documento que el cliente recibió — si el cliente reclama por lo
+van en archivos del repositorio (ver `.claude/skills/cotizar/SKILL.md`). Va acá porque la
+imagen y su JSON fuente son copia fiel del documento que el cliente recibió — si el cliente reclama por lo
 cotizado, esto es lo que se muestra. En todo lo demás (ejemplos, JSON de prueba, documentación)
 va un placeholder.

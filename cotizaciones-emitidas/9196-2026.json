@@ -1,0 +1,34 @@
+{
+ "numero": "9196-2026",
+ "tipo": "carretillas",
+ "cliente": "TOTTUS",
+ "cliente_corto": "TT",
+ "local": "PUCALLPA",
+ "atencion": "Manuel Lagos",
+ "fecha": "20 de septiembre de 2026",
+ "resumen": "Mantenimiento de 10 traspaletas hidráulicas y manuales",
+ "unidades": 10,
+ "items": [
+  {
+   "cant": 10,
+   "descripcion": "Reparación y mantenimiento de 10 traspaletas hidráulicas y manuales (cambio de pasadores, orings, retenes de elevación, pines de expansión, retenes de bomba, anillos de jebe, aceite hidráulico).",
+   "precio_unit": 500.00
+  },
+  {
+   "cant": 5,
+   "descripcion": "Reparación de botella hidráulica — Traspaletas hidráulicas N° 1, 2, 4, 6 y 8.",
+   "precio_unit": 50.00
+  },
+  {
+   "cant": 16,
+   "descripcion": "Suministro de rueda de carga — Traspaletas hidráulicas N° 3, 5 y 7 (4 unid. c/u) y Traspaleta manual N° 10 (4 unid.).",
+   "precio_unit": 60.00
+  },
+  {
+   "cant": 2,
+   "descripcion": "Suministro de rueda direccional — Traspaleta manual N° 9.",
+   "precio_unit": 95.00
+  }
+ ],
+ "nota_interna": "Precios dados directamente para este trabajo: rueda de carga S/60, direccional S/95 y botella S/50, distintos de catalogo.md (S/40, S/80 y S/38). Sin decidir si actualizan el catálogo o son solo de este trabajo (hallazgos-abiertos.md, Q2). Quedaron fuera de esta cotización, para cotizarse aparte: 1 montacargas a combustión y 3 apiladores del mismo local (N25)."
+}
