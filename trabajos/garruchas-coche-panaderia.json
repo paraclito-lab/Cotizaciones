@@ -62,7 +62,7 @@
   "retiro": "retiro de las garruchas actuales mediante corte",
   "montaje": "montaje de las nuevas con soldadura"
  },
- "redaccion": "Suministro e instalación de juego de 4 ruedas fenólicas con garrucha de acero por coche de panadería — {unidades} {unidad_plural}. Incluye {retiro}, {montaje} y verificación de giro libre.",
+ "redaccion": "Suministro e instalación de juego de 4 ruedas fenólicas con garrucha de acero por coche de panadería — {cantidad}. Incluye {retiro}, {montaje} y verificación de giro libre.",
  "condiciones": [
   "Las garruchas retiradas se evacúan del local."
  ],

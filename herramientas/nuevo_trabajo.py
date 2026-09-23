@@ -147,9 +147,10 @@ def armar_ficha():
                                        for o in respuestas}})
     ficha["preguntas"] = preguntas
 
-    print("\n6. ¿Cómo se describe en la cotización? {unidades} se reemplaza por la cantidad.")
-    print(f"   Ej: Suministro e instalación de … — {{unidades}} {ficha['unidad_plural']}.")
-    ficha["redaccion"] = preguntar("   Texto", f"{nombre} — {{unidades}} {ficha['unidad_plural']}.")
+    print("\n6. ¿Cómo se describe en la cotización? {cantidad} se reemplaza por "
+          f"'3 {ficha['unidad_plural']}' o '1 {ficha['unidad']}'.")
+    print("   Ej: Suministro e instalación de … — {cantidad}.")
+    ficha["redaccion"] = preguntar("   Texto", f"{nombre} — {{cantidad}}.")
     ficha["variables"] = {}
     for marcador in sorted(motor.marcadores(ficha["redaccion"]) - set(motor.VARIABLES_FIJAS)):
         ficha["variables"][marcador] = preguntar(f"   ¿Qué va en {{{marcador}}} por defecto?")

@@ -1,0 +1,75 @@
+{
+ "id": "mantenimiento-balanza-plataforma",
+ "nombre": "Mantenimiento de balanza de plataforma",
+ "tipo": "balanzas",
+ "unidad": "balanza",
+ "unidad_plural": "balanzas",
+ "palabras_clave": ["balanza", "balanzas", "balanza de plataforma", "celda de carga", "celdas",
+                    "caja sumatoria", "calibración", "calibracion", "indicador de peso"],
+ "modo_precio": "precio_referencia",
+ "precio_referencia": {
+  "nota": "Se cotiza como paquete (mantenimiento + componentes), por experiencia. El costo de compra de cada componente está en catalogo.md, sección Balanzas (proveedor Gufra): sirve para verificar el markup del paquete antes de fijar el precio."
+ },
+
+ "preguntas": [
+  {
+   "id": "localidad",
+   "pregunta": "¿Lima o provincia?",
+   "por_que": "Las cuatro cotizaciones de referencia son de provincia o de Lima Norte: el costo real del pasaje es parte del checklist de la hoja de Tarapoto.",
+   "opciones": {
+    "lima": {"texto": "Lima."},
+    "provincia": {"texto": "Provincia.",
+                  "aviso": "Sumar el costo real del pasaje, viáticos y encomienda de componentes (criterios-actuales.md §2 y §5)."}
+   }
+  },
+  {
+   "id": "componentes",
+   "pregunta": "¿Se cambian celdas y caja? ¿De qué marca?",
+   "por_que": "Es lo que más mueve el paquete: Marvin sin indicador fue la única aprobada; KELI con indicador se perdió las dos veces.",
+   "opciones": {
+    "marvin": {"texto": "Sí, Marvin (celdas NB2 + caja SS4)."},
+    "keli": {"texto": "Sí, KELI (kit SQB + caja de 4 canales).",
+             "aviso": "Con KELI + indicador se perdió dos veces a S/9,870 (6112 y 7171). Revisar si el indicador es imprescindible antes de incluirlo."},
+    "ninguno": {"texto": "No: solo mantenimiento y calibración."}
+   }
+  },
+  {
+   "id": "indicador",
+   "pregunta": "¿Se cambia el indicador de peso?",
+   "por_que": "El indicador (T-Scale BW, S/1,350 en el catálogo) es lo que separa las cotizaciones perdidas de la ganada. Si va, se agrega como línea aparte.",
+   "opciones": {
+    "no": {"texto": "No, se mantiene el actual."},
+    "si": {"texto": "Sí: agregar la línea del indicador (repuesto 'Indicador de peso T-Scale BW')."}
+   }
+  },
+  {
+   "id": "pintura",
+   "pregunta": "¿Se pinta la estructura? ¿Con qué pintura?",
+   "etiqueta_cliente": "pintado de la estructura",
+   "por_que": "Pregunta del checklist de la hoja de Tarapoto (criterios-actuales.md §5): cambia materiales y tiempo.",
+   "opciones": {
+    "no": {"texto": "No se pinta."},
+    "si": {"texto": "Sí se pinta.",
+           "aviso": "Definir el tipo de pintura y sumarla: no hay costo de pintura registrado para balanzas."}
+   }
+  }
+ ],
+
+ "variables": {},
+ "redaccion": "Mantenimiento de {cantidad} de plataforma: revisión de batería, ramificación diac, sellado con silicona de puerta, verificación y calibración, nivelación, alineamiento de plataforma, empotrado de cadena y brazo de acero inoxidable C-304.",
+ "seccion_catalogo": "Repuestos — Balanzas",
+ "condiciones": [],
+
+ "referencias": [
+  {"fecha": "03/03/2026", "fuente": "3032-2026, HB Precio Uno Ica Panamericana, Marvin sin indicador",
+   "unidades": 1, "precio_final": 5785, "resultado": "ganada"},
+  {"fecha": "21/08/2026", "fuente": "8202-2026, Tottus Olivos, Marvin con 4 celdas y cableado, sin indicador",
+   "unidades": 1, "precio_final": 7690, "resultado": "perdida"},
+  {"fecha": "11/06/2026", "fuente": "6112-2026, HB Tarapoto, KELI + indicador T-Scale BW",
+   "unidades": 1, "precio_final": 9870, "resultado": "perdida"},
+  {"fecha": "17/07/2026", "fuente": "7171-2026, HB Precio Uno Moyobamba, KELI + indicador T-Scale BW",
+   "unidades": 1, "precio_final": 9870, "resultado": "perdida"}
+ ],
+
+ "_por_que_existe": "Las cuatro referencias salen de balanzas-industriales/casuistica-balanzas.md (una balanza por cotización, precio de paquete sin IGV). Es el único trabajo con resultado ganada/perdida registrado: por eso el motor muestra el techo visible al cotizar."
+}

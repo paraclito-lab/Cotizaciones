@@ -231,6 +231,7 @@ def motor_reproduce_el_costeo_real_de_garruchas():
     igual(cot["subtotal_calculado"], 2040, "subtotal calculado")
     igual(cot["costo_estimado"], 1200, "costo estimado al registro")
     assert cot["items"][0].get("pendiente"), "sin precio_unidad el precio NO se pone solo"
+    assert "— 3 coches." in cot["items"][0]["descripcion"], cot["items"][0]["descripcion"]
     igual(cot["fecha"], "22 de septiembre de 2026", "fecha larga")
     contiene(cot["condiciones"], "fuera del horario", "condición de la respuesta")
     contiene(cot["condiciones"], "se evacúan", "condición de la ficha")
@@ -300,6 +301,26 @@ def motor_reproduce_las_cotizaciones_emitidas():
     cot, _ = motor.armar(cargar("trabajos/ejemplos/carretillas-hb-panamericana.json"), hoy=DIA)
     assert "Eje de brazo: S/55.00 de catálogo, POR VALIDAR" in cot["nota_interna"]
     assert "Bajo el piso de S/250.00" in cot["nota_interna"]
+
+
+@prueba()
+def techo_de_precio_con_resultados_reales():
+    ficha = cargar("trabajos/mantenimiento-balanza-plataforma.json")
+    igual(motor.techo(ficha["referencias"]), (Decimal(5785), Decimal(7690)), "ganada 3032, perdida 8202")
+    igual(motor.techo(cargar("trabajos/garruchas-coche-panaderia.json")["referencias"]), None,
+          "sin resultados no hay techo")
+    igual(len(motor.leer_catalogo("Repuestos — Balanzas")), 4,
+          "solo las filas con precio de venta; las de costo de compra se descartan")
+    pedido = {"trabajo": "mantenimiento-balanza-plataforma", "cliente": "X", "local": "Y",
+              "unidades": 1, "precio_unidad": 5785,
+              "respuestas": {"localidad": "lima", "componentes": "marvin", "indicador": "si",
+                             "pintura": "no"},
+              "lineas": [{"repuesto": "Indicador de peso T-Scale BW", "cant": 1}]}
+    cot, _ = motor.armar(pedido, hoy=DIA)
+    assert cot["items"][0]["descripcion"].startswith("Mantenimiento de 1 balanza de plataforma:"), \
+        "{cantidad} en singular"
+    igual(cot["items"][1]["precio_unit"], 1350, "indicador leído del catálogo")
+    igual(validar(cot)[0], [], "el generador lo acepta")
 
 
 @prueba()

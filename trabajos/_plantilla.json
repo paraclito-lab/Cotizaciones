@@ -41,8 +41,8 @@
  "redondeo": 5,
 
  "variables": {},
- "redaccion": "Descripción del trabajo para el cliente — {unidades} {unidad_plural}.",
- "_redaccion": "Lo que va en la cotización. {unidades}, {unidad} y {unidad_plural} se llenan solas; cualquier otra {palabra} necesita su valor en 'variables'.",
+ "redaccion": "Descripción del trabajo para el cliente — {cantidad}.",
+ "_redaccion": "Lo que va en la cotización. Se llenan solas: {cantidad} ('3 coches' o '1 coche', concuerda sola), {unidades}, {unidad} y {unidad_plural}. Cualquier otra {palabra} necesita su valor en 'variables'.",
  "condiciones": [],
  "referencias": []
 }

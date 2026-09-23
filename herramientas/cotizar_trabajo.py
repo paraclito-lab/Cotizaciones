@@ -31,7 +31,9 @@ TRABAJOS = os.path.join(RAIZ, "trabajos")
 CATALOGO = os.path.join(RAIZ, "catalogo.md")
 EMITIDAS = os.path.join(RAIZ, "cotizaciones-emitidas")
 MODOS = ("costo_mas_markup", "precio_referencia")
-VARIABLES_FIJAS = ("unidades", "unidad", "unidad_plural")
+# {cantidad} = "3 coches" o "1 coche": concuerda solo, a diferencia de {unidades} {unidad_plural}.
+VARIABLES_FIJAS = ("unidades", "unidad", "unidad_plural", "cantidad")
+RESULTADOS = ("ganada", "perdida", "sin respuesta")
 MESES = ("enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto",
          "septiembre", "octubre", "noviembre", "diciembre")
 CENTIMO = Decimal("0.01")
@@ -236,6 +238,8 @@ def validar_ficha(ficha, id_esperado=None):
     for r in ficha.get("referencias", []):
         if not isinstance(r.get("precio_final"), (int, float)) or not r.get("unidades"):
             errores.append("cada referencia necesita 'precio_final' y 'unidades'")
+        if r.get("resultado") not in (None, *RESULTADOS):
+            errores.append(f"resultado '{r['resultado']}' no vale: {', '.join(RESULTADOS)}")
 
     # Lo que termina impreso para el cliente no puede llevar texto interno (hallazgos N07).
     impresos = [ficha["redaccion"], *ficha.get("condiciones", []), *variables.values(),
@@ -264,6 +268,18 @@ def cargar_ficha(trabajo_id):
         raise Problema(f"la ficha '{trabajo_id}' tiene errores:\n" +
                        "\n".join("  - " + e for e in errores))
     return ficha
+
+
+def techo(referencias):
+    """(precio por unidad más alto que se ganó, más bajo que se perdió), o None.
+
+    Es la señal del techo de precio: si se ganó a S/5,785 y se perdió desde S/7,690, el
+    techo está en algún punto de ese tramo (hallazgos-abiertos.md, O5).
+    """
+    por_unidad = lambda r: d(r["precio_final"]) / d(r["unidades"])  # noqa: E731
+    ganadas = [por_unidad(r) for r in referencias if r.get("resultado") == "ganada"]
+    perdidas = [por_unidad(r) for r in referencias if r.get("resultado") == "perdida"]
+    return (max(ganadas), min(perdidas)) if ganadas and perdidas else None
 
 
 def historial(trabajo_id):
@@ -323,7 +339,9 @@ def armar(pedido, borrador=False, hoy=None):
 
     # 2. Variables de la redacción
     variables = {"unidades": num(unidades), "unidad": ficha["unidad"],
-                 "unidad_plural": ficha["unidad_plural"], **ficha.get("variables", {})}
+                 "unidad_plural": ficha["unidad_plural"],
+                 "cantidad": f"{num(unidades)} {ficha['unidad'] if unidades == 1 else ficha['unidad_plural']}",
+                 **ficha.get("variables", {})}
     for _, _, ef in efectos:
         variables.update(ef.get("variables", {}))
     ajenas = set(pedido.get("variables", {})) - set(ficha.get("variables", {}))
@@ -565,10 +583,15 @@ def imprimir_informe(cot, info):
             por_u = d(r["precio_final"]) / d(r["unidades"])
             mk = f", markup {pct(d(r['precio_final']) / d(r['costo']) - 1)}" if r.get("costo") else ""
             costo_txt = f"costo {soles(r['costo'])} → " if r.get("costo") else ""
+            resultado = f" · {r['resultado'].upper()}" if r.get("resultado") else ""
             print(f"  {r.get('fecha', '')} · {r.get('fuente', '')} · {num(r['unidades'])} {plural} · "
-                  f"{costo_txt}{soles(r['precio_final'])} ({soles(por_u)} por {uno}{mk})")
+                  f"{costo_txt}{soles(r['precio_final'])} ({soles(por_u)} por {uno}{mk}){resultado}")
             if r.get("nota"):
                 print(f"      {r['nota']}")
+        limite = techo(f.get("referencias", []))
+        if limite:
+            print(f"  → Techo visible: se ganó hasta {soles(limite[0])} por {uno} y se perdió desde "
+                  f"{soles(limite[1])} (comparar alcances: no todas incluyen lo mismo).")
         for h in info["historial"]:
             resp = ", ".join(f"{k}: {v}" for k, v in h["respuestas"].items())
             precio = soles(h["precio_unidad"]) if h["precio_unidad"] is not None else "pendiente"

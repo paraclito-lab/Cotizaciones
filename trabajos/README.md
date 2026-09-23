@@ -82,7 +82,8 @@ explicación de cada campo). Lo esencial:
   soldada, aparece la pernería (sin monto todavía, así que bloquea el precio) y la redacción
   cambia a "montaje de las nuevas con pernería nueva".
 - **`costos_fijos`** y **`costos_por_unidad`**: `null` = todavía no se sabe.
-- **`redaccion`**: la línea que ve el cliente; `{unidades}` se reemplaza sola.
+- **`redaccion`**: la línea que ve el cliente. `{cantidad}` se reemplaza sola por "3 coches" o
+  "1 coche" (concuerda en singular y plural).
 - **`referencias`**: precios reales cobrados antes de existir la ficha.
 
 ## Reglas
@@ -103,6 +104,11 @@ explicación de cada campo). Lo esencial:
 |---|---|---|
 | `garruchas-coche-panaderia` | Costo + markup | Costeo real del 22/09/2026 (fijos S/450 + S/250 por coche) y los dos precios finales ajustados (S/2,170 y S/1,490) |
 | `mantenimiento-carretillas` | Precio de referencia | Repuestos de `catalogo.md`; timón (S/40) y etiqueta (S/20) de 9197-2026; historial de 9196 y 9197 |
+| `mantenimiento-balanza-plataforma` | Precio de referencia | Las 4 cotizaciones reales **con su resultado**: al cotizar muestra el techo visible (se ganó a S/5,785, se perdió desde S/7,690); indicador y paquetes de `catalogo.md` |
+
+Si una referencia trae `"resultado": "ganada"` o `"perdida"`, el motor calcula solo el **techo
+visible**: el precio más alto que se ganó contra el más bajo que se perdió. Es el dato que
+dice cuándo el precio empieza a costar la venta.
 
 `ejemplos/` tiene los pedidos que reproducen 9196-2026, 9197-2026 y el borrador de garruchas:
 sirven de modelo y de prueba.

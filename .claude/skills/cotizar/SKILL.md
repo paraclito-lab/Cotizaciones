@@ -40,8 +40,9 @@ placeholder. Si esta excepción no estuviera escrita, el archivo rompería la re
 ## Paso 0 — ¿El trabajo ya tiene ficha?
 
 Antes que nada, buscar en `trabajos/` una ficha cuyo `nombre` o `palabras_clave` coincida con
-lo pedido (hoy: `garruchas-coche-panaderia`, `mantenimiento-carretillas`). **Si existe, se
-cotiza con la ficha** (ver `trabajos/README.md`):
+lo pedido (hoy: `garruchas-coche-panaderia`, `mantenimiento-carretillas`,
+`mantenimiento-balanza-plataforma`). **Si existe, se cotiza con la ficha** (ver
+`trabajos/README.md`):
 
 1. Armar el pedido: cliente, local, unidades y las **respuestas del checklist** de la ficha.
    Las que no se sepan se preguntan en lenguaje natural, junto con su "por qué importa".
