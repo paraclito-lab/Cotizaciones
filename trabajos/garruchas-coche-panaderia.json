@@ -62,7 +62,9 @@
   "retiro": "retiro de las garruchas actuales mediante corte",
   "montaje": "montaje de las nuevas con soldadura"
  },
- "redaccion": "Suministro e instalación de juego de 4 ruedas fenólicas con garrucha de acero por coche de panadería — {cantidad}. Incluye {retiro}, {montaje} y verificación de giro libre.",
+ "cotizar_por": {"nombre": "rueda", "plural": "ruedas", "por_unidad": 4,
+                 "_por_que": "Al cliente le dice más '12 ruedas' que '3 juegos': la cotización se ve más completa. El costo sigue siendo por coche (juego de 4)."},
+ "redaccion": "Suministro e instalación de {cantidad_cotizada} fenólicas con garrucha de acero para {cantidad} de panadería (4 por coche). Incluye {retiro}, {montaje} y verificación de giro libre.",
  "condiciones": [
   "Las garruchas retiradas se evacúan del local."
  ],

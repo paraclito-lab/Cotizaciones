@@ -78,6 +78,10 @@ como `generales` con su subtipo, y se menciona que el conteo del registro lo va 
 cierre de mes (umbral: 3 cotizaciones del mismo subtipo). Si no hay subtipo que calce, se usa
 `otros` y se anota el caso en `casuistica.md`.
 
+**Cantidad en la pieza que el cliente ve, no en el juego**: "12 ruedas" atrae más que "3
+juegos" — la cotización se ve más completa. Si el costo es por juego, la ficha lo dice con
+`cotizar_por` (ver `trabajos/garruchas-coche-panaderia.json`) y el precio va por pieza.
+
 **El título nunca repite el sustento técnico**: el título dice la familia, la fila dice el
 trabajo. En la fila, abrir con "Suministro e instalación de..." cuando el material lo pone la
 empresa.

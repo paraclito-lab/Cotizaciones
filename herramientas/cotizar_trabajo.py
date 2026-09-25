@@ -32,7 +32,7 @@ CATALOGO = os.path.join(RAIZ, "catalogo.md")
 EMITIDAS = os.path.join(RAIZ, "cotizaciones-emitidas")
 MODOS = ("costo_mas_markup", "precio_referencia")
 # {cantidad} = "3 coches" o "1 coche": concuerda solo, a diferencia de {unidades} {unidad_plural}.
-VARIABLES_FIJAS = ("unidades", "unidad", "unidad_plural", "cantidad")
+VARIABLES_FIJAS = ("unidades", "unidad", "unidad_plural", "cantidad", "cantidad_cotizada")
 RESULTADOS = ("ganada", "perdida", "sin respuesta")
 MESES = ("enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto",
          "septiembre", "octubre", "noviembre", "diciembre")
@@ -337,10 +337,18 @@ def armar(pedido, borrador=False, hoy=None):
         raise FaltanRespuestas(faltan)
     avisos = [ef["aviso"] for _, _, ef in efectos if ef.get("aviso")]
 
+    # La línea puede contar algo más chico que la unidad costeada: 3 coches se venden como
+    # "12 ruedas", que al cliente le dice más que "3 juegos". El precio va por esa pieza.
+    cp = ficha.get("cotizar_por")
+    n_linea = unidades * cp["por_unidad"] if cp else unidades
+    pieza = cp["nombre"] if cp else ficha["unidad"]
+    piezas = cp["plural"] if cp else ficha["unidad_plural"]
+
     # 2. Variables de la redacción
     variables = {"unidades": num(unidades), "unidad": ficha["unidad"],
                  "unidad_plural": ficha["unidad_plural"],
                  "cantidad": f"{num(unidades)} {ficha['unidad'] if unidades == 1 else ficha['unidad_plural']}",
+                 "cantidad_cotizada": f"{num(n_linea)} {pieza if n_linea == 1 else piezas}",
                  **ficha.get("variables", {})}
     for _, _, ef in efectos:
         variables.update(ef.get("variables", {}))
@@ -382,7 +390,7 @@ def armar(pedido, borrador=False, hoy=None):
             paso = d(ficha.get("redondeo", 5))
 
             def precio_con(m):
-                bruto = costo * (1 + m) / d(unidades)
+                bruto = costo * (1 + m) / d(n_linea)
                 return (bruto / paso).to_integral_value(rounding=ROUND_CEILING) * paso
 
             propuesta = {"minimo": (mmin, precio_con(mmin)), "sugerido": (msug, precio_con(msug)),
@@ -397,7 +405,7 @@ def armar(pedido, borrador=False, hoy=None):
     principal = ficha["redaccion"].format_map(variables)
     if pedido.get("agregar"):
         principal = principal.rstrip() + " " + pedido["agregar"].strip()
-    item1 = {"cant": unidades, "descripcion": principal}
+    item1 = {"cant": num(n_linea), "descripcion": principal}
     precio_unidad = pedido.get("precio_unidad")
     if precio_unidad is not None:
         item1["precio_unit"] = num(precio_unidad)
@@ -472,7 +480,7 @@ def armar(pedido, borrador=False, hoy=None):
     # 7. Subtotal calculado: el que habría salido con el markup sugerido, para medir el ajuste
     otras = sum((d(it["precio_unit"]) * d(it["cant"]) for it in items[1:] if "precio_unit" in it),
                 Decimal("0"))
-    subtotal_calculado = propuesta["sugerido"][1] * d(unidades) + otras if propuesta else None
+    subtotal_calculado = propuesta["sugerido"][1] * d(n_linea) + otras if propuesta else None
 
     # 8. Nota interna: el rastro de cada precio (antes no quedaba en ninguna parte)
     nota = [f"Ficha {ficha['id']}."]
@@ -493,11 +501,11 @@ def armar(pedido, borrador=False, hoy=None):
                     f"(ficha: {soles(antes) if antes is not None else 'sin monto'}).")
     if propuesta:
         (m0, p0), (ms, ps), (m1, p1) = propuesta["minimo"], propuesta["sugerido"], propuesta["maximo"]
-        nota.append(f"Precio calculado a markup {pct(ms)}: {soles(ps)} por {ficha['unidad']} "
+        nota.append(f"Precio calculado a markup {pct(ms)}: {soles(ps)} por {pieza} "
                     f"(rango {pct(m0)}–{pct(m1)}: {soles(p0)} a {soles(p1)}).")
     if precio_unidad is not None:
         ajuste = f" ({d(precio_unidad) / propuesta['sugerido'][1] - 1:+.1%} sobre el calculado)" if propuesta else ""
-        nota.append(f"Precio final dado: {soles(precio_unidad)} por {ficha['unidad']}{ajuste}.")
+        nota.append(f"Precio final dado: {soles(precio_unidad)} por {pieza}{ajuste}.")
     piso = ficha.get("precio_referencia", {}).get("piso")
     if piso and precio_unidad is not None and d(precio_unidad) < d(piso):
         nota.append(f"Bajo el piso de {soles(piso)} por {ficha['unidad']}.")
@@ -532,7 +540,8 @@ def armar(pedido, borrador=False, hoy=None):
     info = {"ficha": ficha, "efectos": efectos, "faltan": faltan, "avisos": avisos,
             "fijos": fijos, "por_unidad": por_unidad, "cambios": cambios, "costo": costo,
             "incompleto": incompleto, "propuesta": propuesta, "trazas": trazas,
-            "historial": historial(ficha["id"]), "unidades": unidades}
+            "historial": historial(ficha["id"]), "unidades": unidades,
+            "n_linea": n_linea, "pieza": pieza}
     return cot, info
 
 
@@ -564,11 +573,13 @@ def imprimir_informe(cot, info):
         else:
             print(f"  Costo incompleto: falta {unir(info['incompleto'])}. Sin eso no hay precio que proponer.")
         if info["propuesta"]:
-            print(f"\nPRECIO POR {uno.upper()} (markup sobre el costo; el precio lo pone una persona)")
+            pieza, n = info["pieza"], info["n_linea"]
+            print(f"\nPRECIO POR {pieza.upper()} (markup sobre el costo; el precio lo pone una persona)")
             for clave in ("minimo", "sugerido", "maximo"):
                 m, p = info["propuesta"][clave]
                 marca = "   ← sugerido" if clave == "sugerido" else ""
-                print(f"  {pct(m):>4}  {soles(p):>11} por {uno}  →  total {soles(p * d(u))}{marca}")
+                print(f"  {pct(m):>4}  {soles(p):>11} por {pieza} × {num(n)}  →  total "
+                      f"{soles(p * d(n))}{marca}")
     else:
         piso = f.get("precio_referencia", {}).get("piso")
         print("\nPRECIO DE REFERENCIA (por experiencia, sin fórmula todavía)")

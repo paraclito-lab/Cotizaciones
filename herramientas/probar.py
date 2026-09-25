@@ -227,24 +227,26 @@ GARRUCHAS = {"trabajo": "garruchas-coche-panaderia", "cliente": "X", "local": "Y
 def motor_reproduce_el_costeo_real_de_garruchas():
     cot, info = motor.armar(dict(GARRUCHAS), hoy=DIA)
     igual(info["costo"], Decimal("1200"), "costo con SCTR (la hoja original daba 1,150 sin él)")
-    igual([p for _, p in info["propuesta"].values()], [Decimal(640), Decimal(680), Decimal(720)],
-          "precio por coche a 60/70/80%")
+    igual([p for _, p in info["propuesta"].values()], [Decimal(160), Decimal(170), Decimal(180)],
+          "precio por rueda a 60/70/80% (12 ruedas)")
+    igual(cot["items"][0]["cant"], 12, "se cotizan 12 ruedas, no 3 juegos")
     igual(cot["subtotal_calculado"], 2040, "subtotal calculado")
     igual(cot["costo_estimado"], 1200, "costo estimado al registro")
     assert cot["items"][0].get("pendiente"), "sin precio_unidad el precio NO se pone solo"
-    assert "— 3 coches." in cot["items"][0]["descripcion"], cot["items"][0]["descripcion"]
+    assert "12 ruedas fenólicas" in cot["items"][0]["descripcion"] and "3 coches" in \
+        cot["items"][0]["descripcion"], cot["items"][0]["descripcion"]
     igual(cot["fecha"], "22 de septiembre de 2026", "fecha larga")
     contiene(cot["condiciones"], "fuera del horario", "condición de la respuesta")
     contiene(cot["condiciones"], "se evacúan", "condición de la ficha")
 
     cot, info = motor.armar(dict(GARRUCHAS, costos={"Juego de 4 ruedas fenólicas con garrucha de acero": 90}), hoy=DIA)
     igual(info["costo"], Decimal("720"), "segundo escenario")
-    igual([p for _, p in info["propuesta"].values()], [Decimal(385), Decimal(410), Decimal(435)], "a S/90")
+    igual([p for _, p in info["propuesta"].values()], [Decimal(100), Decimal(105), Decimal(110)], "a S/90")
     assert "Costo cambiado para este pedido" in cot["nota_interna"]
 
-    cot, _ = motor.armar(dict(GARRUCHAS, precio_unidad=725, numero="9300-2026"), hoy=DIA)
-    igual(generar.calcular(cot)[0], Decimal("2175"), "3 coches a S/725")
-    assert "+6.6% sobre el calculado" in cot["nota_interna"], cot["nota_interna"]
+    cot, _ = motor.armar(dict(GARRUCHAS, precio_unidad=180, numero="9300-2026"), hoy=DIA)
+    igual(generar.calcular(cot)[0], Decimal("2160"), "12 ruedas a S/180")
+    assert "+5.9% sobre el calculado" in cot["nota_interna"], cot["nota_interna"]
     igual(validar(cot, final=True, archivar_pedido=True)[0], [], "lista para --final")
 
 
