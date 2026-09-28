@@ -22,12 +22,17 @@ recomendaciones repetidas, que es justamente el hallazgo D2 de `flujo-sistema-co
 |---|---|
 | ✅ Cerrado | **N01** (aee7eaa). **N02** y **N03**: 9196 y 9197 archivadas con imagen + JSON, 9197 con "timón" (4dbc40b, 7745893). **R1**: este registro. Con las pruebas en verde (24/24, commit 7745893): **N04** · **N05** · **N06** · **N07** · **N11** (los nombres; qué significa el 60-80% sigue en Q3) · **N12** · **N14** (la alerta; el formato sigue en Q4) · **N16** · **N24** · **N27** · **N29** · **N31** · **N32** · **N33** · **R4** |
 | 🟡 Parcial | N13 (el piso y la etiqueta de archivo ya se leen; `personal`, `patron_filas`, `sustento_base` y `acepta_fotos` no; la redacción por trabajo ahora vive en las fichas de `trabajos/`) · N17 (el costo fijo por visita está modelado en las fichas; falta como regla general en criterios) · N21 (el bloque de condiciones existe; el texto estándar depende de Q7) · N22 (checklist obligatorio en los trabajos que tienen ficha; los que se cotizan a mano siguen sin él) · N25 (anotado en la nota interna de 9196, y la ficha de carretillas lo avisa; sigue sin cotizarse) · N28 ("estoca" ya reconoce el trabajo; la descripción impresa no se cambió) |
-| ⏳ Esperan una decisión (sección 8) o un dato externo | N08 (Q1) · N09, N10, N34 (Q2) · N15, R2 (Q5) · N18 · N19 · N20 (Q7 y el contador) · N23, R3 (Q4) · N26 · N30 |
+| ⏳ Esperan una decisión (sección 8) o un dato externo | N08 (Q1; el 26/09 el Google Drive conectado no tenía ningún registro — se entregó el archivo listo para importar) · N09, N10, N34 (Q2) · N15, R2 (Q5) · N18 · N19 · N20 (Q7 y el contador) · N23, R3 (Q4) · N26 · N30 |
 
 **Cómo se verificó**: `python3 herramientas/probar.py --render` reproduce al céntimo las tres
 cotizaciones reales de referencia (9196, 9197 y Atocongo), el costeo real de garruchas, el
 techo de precio de balanzas y un `--final` completo con PDF real. Se corre antes de subir
 cualquier cambio; si mueve un céntimo de algo ya entregado, falla.
+
+**Esperando un envío**: cotizaciones con precio final pero sin cálculo, para deducir el
+criterio de ajuste por experiencia (criterios-actuales.md, punto 11.8). Por cada una sirve:
+qué se hizo, cuántas unidades, costo del material, Lima o provincia, precio final y si se
+ganó o se perdió.
 
 ## Objetivos contra los que se audita
 

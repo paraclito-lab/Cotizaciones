@@ -201,6 +201,46 @@ convertirse en una regla nueva dentro de `criterios-actuales.md`.
   (texto faltante) en el camino** — hay que probar el caso común, no solo el caso que
   originó el arreglo.
 
+### 20/09/2026 — Un pedido mezclaba carretillas con montacargas y apiladores
+
+- **Contexto**: TT Pucallpa — 10 traspaletas, 1 montacargas a combustión y 3 apiladores en el
+  mismo pedido.
+- **Qué pasó**: el título del documento es uno solo por tipo ("Mantenimiento de carretillas
+  hidráulicas"); con montacargas adentro, el título no correspondía al contenido.
+- **Cómo se resolvió**: la cotización 9196-2026 cubre solo las traspaletas; el montacargas y los
+  apiladores quedaron para cotizarse aparte (anotado en su nota interna).
+- **¿Regla permanente?** Sí — criterios-actuales.md punto 11.2, y pregunta obligatoria en la
+  ficha de carretillas. Sigue pendiente cotizarlos: no hay ficha ni precios para esos equipos.
+
+### 20/09/2026 — La nota de la cotización llevaba información interna
+
+- **Contexto**: HB Precio Uno, Panamericana Urbana (9197-2026) y dos borradores de la misma semana.
+- **Qué pasó**: la `nota` era el único campo de texto libre y se imprime al cliente. Ahí terminó
+  el razonamiento de precios (catalogo.md, piso mínimo) y una duda sobre la identidad del cliente.
+  Se detectó al revisar el PDF, antes de enviarlo.
+- **Cómo se resolvió**: campo `nota_interna`, que nunca se imprime, y bloqueo por código si el
+  texto impreso trae términos internos.
+- **¿Regla permanente?** Sí — criterios-actuales.md punto 11.1. Aprendizaje de fondo: **una
+  regla escrita no evita el error si el sistema no tiene otro lugar donde poner lo interno.**
+
+### 22/09/2026 — El precio final no sale del cálculo: se ajusta por experiencia
+
+- **Contexto**: costeo de garruchas para SB Precio Uno, Mariátegui (hoja con dos escenarios).
+- **Qué pasó**: el cálculo daba S/1,990 y S/1,390; los precios finales fueron S/2,170 y S/1,490,
+  ajustados por experiencia, sin fórmula. Además la hoja no sumaba el SCTR (S/50) al costo.
+- **Cómo se resolvió**: la ficha de garruchas guarda los dos precios finales como referencia; el
+  registro y el motor guardan el par calculado → final. Hipótesis a probar con más casos: el
+  ajuste busca una utilidad en soles por visita (S/770 a S/970), no un porcentaje.
+- **¿Regla permanente?** Sí — punto 11.8. Hacen falta 8 a 10 casos para distinguir hipótesis.
+
+### 25/09/2026 — Cotizar por pieza en vez de por juego
+
+- **Contexto**: garruchas, 3 coches × 4 ruedas.
+- **Qué pasó**: "12 ruedas" se ve más completo para el cliente que "3 juegos".
+- **Cómo se resolvió**: `cotizar_por` en la ficha: el costo sigue por coche, la línea cuenta
+  ruedas y el precio va por rueda.
+- **¿Regla permanente?** Sí — punto 11.10.
+
 ### 22/09/2026 — Cambio de garruchas de coches de panadería: sin subtipo que calce
 
 - **Contexto**: cotización de SB Precio Uno, Mariátegui — cambio de garruchas a 3 coches de

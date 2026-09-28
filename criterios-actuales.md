@@ -1,7 +1,8 @@
 # Criterios de cotización — confirmados en conversación
 
-Última actualización: 14/09/2026. Este documento resume lo confirmado hasta ahora en
-conversación; no es un sistema todavía, es la base de reglas sobre la que se va a construir.
+Última actualización: 28/09/2026 (punto 11 nuevo; notas de vigencia en los puntos 4 y 7). Este
+documento resume lo confirmado en conversación. Lo que todavía no está decidido se sigue en
+`hallazgos-abiertos.md`, sección 8.
 
 ## 1. Repuestos → precio constante
 
@@ -47,6 +48,11 @@ por caso.
 ## 4. Margen de ganancia
 
 - Referencia de experiencia: **60% a 80%** sobre el costo.
+  - **Nota (23/09/2026):** "sobre el costo" es **markup** (ganancia ÷ costo), no margen
+    (ganancia ÷ venta): un markup de 73% es un margen de 42%. El registro y el motor ya lo
+    llaman markup. Falta confirmar que la regla quiso decir eso (hallazgos Q3). En la práctica,
+    los precios finales ajustados por experiencia de las garruchas quedaron en markup 81% y
+    107% (ver punto 11).
 - Se puede bajar el margen si es una cantidad grande de unidades (ej. muchas carretillas de
   un mismo cliente).
 - El precio final suele **ajustarse a un número "redondo"** cercano (ej. S/2,490, S/2,980,
@@ -130,6 +136,12 @@ para después de que el proceso manual demuestre que funciona.
 PDFs reales entregados se encontró N° 100 (28-ago), N° 107 (2-sep), N° 9053 (5-sep) y N° 9127
 (12-sep) — sin relación con la fecha, porque cada cotizador usa su propio rango de números.
 Con `COT-AAAA-NNN` hay un solo correlativo compartido, ordenable y sin choques.
+
+**Nota de vigencia (23/09/2026):** esta decisión no se adoptó. Las cotizaciones reales siguen
+saliendo como `NNNN-AAAA` (8211-2026, 9196-2026, 9197-2026), y "continúa la numeración
+anterior" se toma como el siguiente número (9196 → 9197). El generador acepta los dos
+formatos. Qué formato queda y quién lleva el correlativo sigue abierto (hallazgos Q4). Nunca
+se inventa un número: sin número real, `PENDIENTE-AAAA`.
 
 ## 8. Marca y formato del PDF final — DECIDIDO
 
@@ -253,3 +265,41 @@ libre con IA) y se eligió la más simple e intuitiva:
   natural y más trabajo de construcción) y un formato de texto con etiquetas fijas (obliga a
   recordar una sintaxis). Quedan como opción futura si la conversación libre resulta lenta o
   poco confiable en el uso real.
+
+## 11. Decisiones del 20 al 25/09/2026
+
+Cada una dice dónde quedó aplicada. Si el código y este texto no coinciden, manda el código
+(`python3 herramientas/probar.py` lo verifica) y este punto se corrige.
+
+1. **Lo interno no se imprime — DECIDIDO (20/09).** Razonamiento de precios, referencias al
+   catálogo, piso o margen, y dudas sobre la identidad del cliente van en `nota_interna`, que
+   nunca sale en el PDF. El generador se niega a generar si el texto impreso trae términos
+   internos. *Aplicado en `plantilla/generar.py` y en la skill.*
+2. **Una cotización = una familia de equipos — DECIDIDO (20/09).** Si un pedido mezcla
+   carretillas con montacargas o apiladores, la cotización cubre solo las carretillas y lo
+   demás se cotiza aparte (caso Pucallpa). *Pregunta obligatoria en la ficha de carretillas.*
+3. **Nombre del PDF de entrega — DECIDIDO (20/09):** `N° NNNN-AAAA TIPO CLIENTE LOCAL
+   MUNAY.pdf`; el cliente puede ir abreviado (TT = TOTTUS). *Lo arma `--final`.*
+4. **El nombre del cliente va completo en el documento** ("HB PRECIO UNO", no "HB"). *Datos de
+   9197-2026.*
+5. **Redacción técnica según la dificultad del trabajo (20/09):** "reparación de timón de
+   control" (sin "válvula") se cobra más que el cambio de etiqueta (S/40 contra S/20) porque es
+   más técnica. *Ficha `mantenimiento-carretillas`, adicionales.*
+6. **Marco del documento simétrico (20/09).** *`plantilla/README.md`, "Marco interno simétrico".*
+7. **Propuesta técnica sin precios (22/09):** cuando la especificación define el precio, se
+   emite primero el alcance con totales "Por definir", nunca "S/ 0.00". *`--sin-precios`.*
+8. **Precio final ajustado por experiencia (22/09).** El precio de venta final lo ajusta, por
+   experiencia, quien conoce la operación, sobre el precio calculado. Ese ajuste es un dato: se
+   registra el par calculado → final para poder deducir el criterio con el tiempo. *Registro,
+   columnas Z a AE; motor, `subtotal_calculado`; referencias de las fichas.*
+9. **Costo fijo por visita (22/09).** Mano de obra, transporte, consumibles y SCTR se costean
+   una vez por visita, no por unidad (garruchas: S/450). El SCTR es costo real y va sumado.
+   *Ficha `garruchas-coche-panaderia`, `costos_fijos`.*
+10. **Cantidad en la pieza que ve el cliente (25/09):** "12 ruedas" atrae más que "3 juegos". El
+    costo puede ser por juego, pero la línea cuenta la pieza y el precio va por pieza.
+    *`cotizar_por` en las fichas; skill.*
+11. **Trabajos que se repiten tienen ficha (23/09).** La primera vez se cotiza a mano; si puede
+    volver a pedirse, se crea su ficha en `trabajos/` para que la próxima salga sola. Un costo
+    que falta se agrega a la ficha, no al pedido. *`trabajos/README.md`.*
+12. **Aprobar = `--final` (23/09):** exige el N° real y ningún precio pendiente, nombra el PDF y
+    archiva imagen + JSON en `cotizaciones-emitidas/`.

@@ -19,9 +19,9 @@ precaución hasta confirmar.
 
 | Repuesto | Precio (S/) | Estado | Fuente |
 |---|---|---|---|
-| Rueda de carga | 40.00 | **Confirmado** (14/09/2026) | Precio de venta vigente. Corrige el S/65 que aparece en Moyobamba y Porongoche — ese S/65 fue un error o un ajuste de conveniencia puntual, no el precio real. |
+| Rueda de carga | 40.00 | **Confirmado** (14/09/2026) | Precio de venta vigente. Corrige el S/65 que aparece en Moyobamba y Porongoche — ese S/65 fue un error o un ajuste de conveniencia puntual, no el precio real. **Ojo: en 9196-2026 (TT Pucallpa, 20/09) se cobró S/60** — sin decidir si el catálogo cambia (hallazgos-abiertos.md, Q2). |
 | Resorte de retorno de brazo | 55.00 | **Confirmado** (14/09/2026) | Coincide con Moyobamba |
-| Rueda direccional / rueda giratoria o delantera (mismo ítem, nombre unificado) | 80.00 | **Confirmado** (14/09/2026) | Precio de venta vigente. Corrige el S/95 de Moyobamba y Porongoche. |
+| Rueda direccional / rueda giratoria o delantera (mismo ítem, nombre unificado) | 80.00 | **Confirmado** (14/09/2026) | Precio de venta vigente. Corrige el S/95 de Moyobamba y Porongoche. **Ojo: en 9196-2026 (TT Pucallpa, 20/09) se cobró S/95** — sin decidir si el catálogo cambia (Q2). |
 | Protector soporte de pistón | 29.00 | Por validar | Moyobamba |
 | Trapecio y ejes de rueda de carga | 300.00 | Por validar | Moyobamba |
 | Eje de brazo | 55.00 | Por validar | Moyobamba |
@@ -30,7 +30,7 @@ precaución hasta confirmar.
 | Enderezado de chasis y reforzamiento con soldadura | 100.00 | Por validar | Moyobamba |
 | Desarmado y engrase total de chasis (por unidad) | 10.00 | Por validar | Moyobamba |
 | Alineamiento de barra de tiro | 50.00 | Por validar | Moyobamba |
-| Reparación de botella hidráulica (kit de retenes + o-rings de cilindro) | 38.00 | **Confirmado** (20/09/2026) | Precio de venta dado directamente para la cotización de TT Pucallpa |
+| Reparación de botella hidráulica (kit de retenes + o-rings de cilindro) | 38.00 | **Confirmado** (20/09/2026) | Dado el 20/09 en la preparación de TT Pucallpa; **la cotización emitida (9196-2026) salió finalmente a S/50** — sin decidir cuál vale (Q2). |
 
 ## Repuestos — Balanzas
 
