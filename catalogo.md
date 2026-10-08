@@ -25,7 +25,7 @@ precaución hasta confirmar.
 | Protector soporte de pistón | 29.00 | Por validar | Moyobamba |
 | Trapecio y ejes de rueda de carga | 300.00 | Por validar | Moyobamba |
 | Eje de brazo | 55.00 | Por validar | Moyobamba |
-| Bocina de eje (por par) | 15.00 | Por validar | Indicado el 08/10/2026 para TT Calle 7 (un par por carretilla). Tarapoto la cobró a S/15 y el Excel histórico a S/30: sin confirmar cuál vale. |
+| Bocina de eje (por par) | 18.00 | Validado | Fijado el 08/10/2026. Antes: 10082-2026 (TT Calle 7) salió a S/15, Tarapoto S/15, Excel histórico S/30. |
 | Suministro y regulación de cadena y varilla de retorno | 190.00 | Por validar | Moyobamba |
 | Brazo (suministro) | 320.00 | Por validar | Moyobamba |
 | Enderezado de chasis y reforzamiento con soldadura | 100.00 | Por validar | Moyobamba |

@@ -143,7 +143,7 @@ sirven.
 | Q4 | Numeración real: formato, quién lleva el correlativo y qué rango usa cada cotizador | N14, N23, R3 |
 | Q5 | Telegram: ¿se retoma o se retira de los criterios? | N15, R2 |
 | Q6 | El piso de S/250: ¿admite excepciones? ¿Quién las autoriza y dónde quedan registradas? | N12 |
-| Q7 | Condiciones comerciales estándar: forma de pago, plazo, garantía, leyenda de detracción | N20, N21 |
+| Q7 | Condiciones comerciales estándar: forma de pago, plazo, garantía, leyenda de detracción — **ya establecidas (08/10/2026); falta el texto para cargarlo en la plantilla** | N20, N21 |
 
 ## 9. Lo que tienen en común
 

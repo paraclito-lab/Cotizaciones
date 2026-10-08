@@ -185,7 +185,7 @@ def plantilla_sin_marcadores_sueltos_y_atencion_opcional():
 def catalogo_se_lee_y_no_adivina():
     cat = motor.leer_catalogo("Repuestos — Carretillas")
     assert len(cat) >= 12, f"el catálogo de carretillas perdió filas: {len(cat)}"
-    igual(motor.buscar_repuesto("Bocina de eje", cat)[1]["precio"], Decimal("15.00"), "bocina de eje")
+    igual(motor.buscar_repuesto("Bocina de eje", cat)[1]["precio"], Decimal("18.00"), "bocina de eje")
     igual(motor.buscar_repuesto("rueda de carga", cat)[1]["precio"], Decimal("40.00"), "rueda de carga")
     assert motor.buscar_repuesto("Rueda direccional", cat)[0].startswith("Rueda direccional")
     assert motor.buscar_repuesto("Protector soporte de piston", cat) is not None, "sin tilde"
