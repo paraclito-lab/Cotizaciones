@@ -343,7 +343,8 @@ def nombre_entrega(cot, servicio):
     partes = [cot["numero"],
               cot.get("etiqueta_archivo") or servicio.get("etiqueta_archivo", ""),
               cot.get("cliente_corto") or cot["cliente"],
-              cot.get("local", "")]
+              cot.get("local", ""),
+              cot.get("detalle_archivo", "")]       # opcional: "AMASADORA", justo antes de MUNAY
     nombre = " ".join(" ".join(str(p).split()).upper() for p in partes if str(p).strip())
     return "N° " + re.sub(r'[\\/:*?"<>|]', "-", nombre) + " MUNAY.pdf"
 
