@@ -1,0 +1,45 @@
+{
+ "numero": "10082-2026",
+ "tipo": "carretillas",
+ "cliente": "TOTTUS",
+ "cliente_corto": "TT",
+ "local": "CALLE 7",
+ "atencion": "Edgar Hanco",
+ "fecha": "8 de octubre de 2026",
+ "resumen": "Mantenimiento de carretillas hidráulicas — 3 carretillas",
+ "unidades": 3,
+ "trabajo": "mantenimiento-carretillas",
+ "respuestas": {
+  "localidad": "lima",
+  "solo_carretillas": "si",
+  "diagnostico": "no"
+ },
+ "items": [
+  {
+   "cant": 3,
+   "descripcion": "Reparación y mantenimiento de 3 carretillas hidráulicas: cambio de pasadores, orings, retenes de elevación, pines de expansión, retenes de bomba, anillos de jebe, aceite hidráulico y pintado.",
+   "precio_unit": 250
+  },
+  {
+   "cant": 1,
+   "descripcion": "Suministro de protector soporte de pistón.",
+   "precio_unit": 29
+  },
+  {
+   "cant": 1,
+   "descripcion": "Suministro de resorte de retorno de brazo.",
+   "precio_unit": 55
+  },
+  {
+   "cant": 1,
+   "descripcion": "Suministro de eje de brazo de retorno.",
+   "precio_unit": 55
+  },
+  {
+   "cant": 3,
+   "descripcion": "Suministro de bocinas de eje.",
+   "precio_unit": 15
+  }
+ ],
+ "nota_interna": "Ficha mantenimiento-carretillas. Respuestas: ¿Lima o provincia? Lima.; ¿Todos los equipos son carretillas hidráulicas (estocas, traspaletas)? Sí.; ¿Hay diagnóstico por unidad (qué falla en cada equipo, con su número)? No.. Precio final dado: S/250.00 por carretilla. Protector soporte de pistón: S/29.00 de catálogo, POR VALIDAR. Resorte de retorno de brazo: S/55.00 de catálogo. Eje de brazo: S/55.00 de catálogo, POR VALIDAR. Bocina de eje: S/15.00 de catálogo, POR VALIDAR. Mantenimiento a S/250 por unidad (Lima), dado directamente. 'Tapa protector de resorte' cotizada como protector soporte de pistón, la equivalencia definida en 9197-2026. Bocina de eje: S/15 por par, un par por carretilla (3 pares), dado directamente; en Tarapoto figuraba a S/15 y en el Excel histórico a S/30."
+}
