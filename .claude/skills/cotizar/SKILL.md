@@ -217,7 +217,7 @@ datos con los que se va a deducir la fórmula de precio al cierre del mes de pru
 ## Paso 7 — Casuística
 
 Si apareció algo que las reglas no cubrían (un servicio raro, un título que no entra en una
-línea, más de 3 fotos, un repuesto sin precio), anotarlo en `casuistica.md` con la plantilla
+línea, más de 4 fotos, un repuesto sin precio), anotarlo en `casuistica.md` con la plantilla
 que está ahí. No inventar una regla nueva sobre la marcha: registrar el caso y seguir.
 
 ## Precios: lo que nunca se hace

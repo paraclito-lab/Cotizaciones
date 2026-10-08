@@ -95,7 +95,7 @@ El JSON lleva `numero`, `titulo`, `cliente`, `local`, `atencion`, `fecha`, la li
    directo, más simple y sin ese caso raro.
 5. Imprime alertas de la validación automática (`criterios-actuales.md` punto 9, paso 2):
    precio pendiente, mantenimiento bajo el piso de `servicios.json`, N° que no es un
-   correlativo real, más de 3 fotos. Aparte, sin mezclarlos, los avisos informativos (título
+   correlativo real, más de 4 fotos. Aparte, sin mezclarlos, los avisos informativos (título
    reducido, unidades inferidas): una alerta que sale siempre deja de leerse.
 
 Todo esto está envuelto en la skill `cotizar` (ver `.claude/skills/cotizar/SKILL.md`), que es
@@ -105,14 +105,14 @@ resto.
 ## Fila con foto (tipo "Servicios Generales") — construida y probada
 
 Para motores/estructuras/pintado (ver `criterios-actuales.md` punto 8), la fila de ítem lleva
-la descripción + hasta 3 fotos + precio. Probado con las 3 fotos reales del PDF de Angamos
+la descripción + hasta 4 fotos + precio. Probado con las 3 fotos reales del PDF de Angamos
 (cambio de motor).
 
 - Contenedor `.photo-row` (flex, `gap: 6px`) debajo del texto de la descripción.
 - Cada foto: `90x90px`, `object-fit: cover` (así se "encuadra" sin importar la proporción
   original de la foto del celular), borde gris 1px, esquinas levemente redondeadas.
 - La foto es **opcional** — si no llega ninguna, la fila queda solo con texto.
-- Si llegan más de 3 fotos: sin resolver todavía (ver `casuistica.md`).
+- Si llegan más de 4 fotos: sin resolver todavía (ver `casuistica.md`).
 
 ## Propuesta técnica: `--sin-precios`
 
@@ -218,4 +218,4 @@ tiene la estructura real de Atocongo con 16 ítems y un separador en la fila 13)
 - Si algún día se consigue el archivo fuente editable (AI/Figma/PSD) del diseño, se puede
   reemplazar este método por una plantilla 100% vectorial — pero mientras no exista, este
   método es el más eficiente y fiel disponible.
-- Definir qué pasa si llegan más de 3 fotos para un mismo ítem.
+- Definir qué pasa si llegan más de 4 fotos para un mismo ítem.

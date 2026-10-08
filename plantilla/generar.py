@@ -26,7 +26,7 @@ TPL = os.path.join(RAIZ, "plantilla", "cotizacion.html")
 SERVICIOS = json.load(open(os.path.join(RAIZ, "servicios.json"), encoding="utf-8"))
 IGV = Decimal(str(SERVICIOS["igv"]))
 VALIDEZ_DIAS = SERVICIOS["validez_dias"]
-MAX_FOTOS = 3
+MAX_FOTOS = 4
 CENTIMO = Decimal("0.01")
 OPCIONES = {"--sin-precios", "--final", "--archivar"}
 

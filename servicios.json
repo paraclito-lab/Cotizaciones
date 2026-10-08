@@ -69,7 +69,7 @@
       ],
       "personal": null,
       "precio_minimo_unidad": null,
-      "patron_filas": "Una fila: qué se suministra e instala + dimensiones + si se reutiliza el marco. Hasta 3 fotos opcionales.",
+      "patron_filas": "Una fila: qué se suministra e instala + dimensiones + si se reutiliza el marco. Hasta 4 fotos opcionales.",
       "sustento_base": "Suministro e instalación de {descripcion}, de dimensiones aproximadas {medidas}, utilizando el marco existente.",
       "acepta_fotos": true,
       "subtipo_obligatorio": false
@@ -104,7 +104,7 @@
       ],
       "personal": null,
       "precio_minimo_unidad": null,
-      "patron_filas": "Una fila: descripción del trabajo + hasta 3 fotos opcionales + precio final. Es el cajón para todo lo que no tiene título propio.",
+      "patron_filas": "Una fila: descripción del trabajo + hasta 4 fotos opcionales + precio final. Es el cajón para todo lo que no tiene título propio.",
       "sustento_base": "SERVICIO: {descripcion}",
       "acepta_fotos": true,
       "subtipo_obligatorio": true
