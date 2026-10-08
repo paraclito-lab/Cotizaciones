@@ -108,13 +108,17 @@ def data_uri(ruta, mime="image/jpeg"):
         return f"data:{mime};base64," + base64.b64encode(f.read()).decode()
 
 
-def foto_uri(ruta, lado=180):
-    """Achica y encuadra la foto en un cuadrado, sin exigir calidad (criterios punto 8)."""
+def foto_uri(ruta, lado=180, completa=False):
+    """Achica la foto, sin exigir calidad (criterios punto 8). Por defecto la encuadra en un
+    cuadrado; con completa=True conserva toda la imagen y su proporción (sin recortar)."""
     from PIL import Image
     im = Image.open(ruta).convert("RGB")
     w, h = im.size
-    c = min(w, h)
-    im = im.crop(((w - c) // 2, (h - c) // 2, (w + c) // 2, (h + c) // 2)).resize((lado, lado), Image.LANCZOS)
+    if completa:
+        im.thumbnail((lado * 2, lado * 2), Image.LANCZOS)
+    else:
+        c = min(w, h)
+        im = im.crop(((w - c) // 2, (h - c) // 2, (w + c) // 2, (h + c) // 2)).resize((lado, lado), Image.LANCZOS)
     buf = io.BytesIO()
     im.save(buf, "JPEG", quality=82)
     return "data:image/jpeg;base64," + base64.b64encode(buf.getvalue()).decode()
@@ -279,8 +283,10 @@ def construir_html(cot, servicio, sub, igv, total, sin_precios=False):
         fotos = it.get("fotos", [])[:MAX_FOTOS]
         bloque = ""
         if fotos:
-            imgs = "".join(f'<img src="{foto_uri(f)}">' for f in fotos)
-            bloque = f'\n        <div class="photo-row">{imgs}</div>'
+            completas = bool(it.get("fotos_completas"))
+            imgs = "".join(f'<img src="{foto_uri(f, completa=completas)}">' for f in fotos)
+            clase = "photo-row completas" if completas else "photo-row"
+            bloque = f'\n        <div class="{clase}">{imgs}</div>'
         if it.get("pendiente"):
             # Ítem con sustento técnico ya definido pero sin precio todavía: fila normal,
             # numerada, que no suma al Sub Total hasta que tenga precio.
