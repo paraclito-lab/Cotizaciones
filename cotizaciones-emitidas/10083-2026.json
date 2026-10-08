@@ -13,11 +13,15 @@
    "descripcion": "SERVICIO: Reparación y soldadura TIG de equipos amasadora.",
    "precio_unit": 430,
    "fotos": [
-    "/tmp/claude-0/-home-user-webmunay/e6e7a7ea-b9c6-5728-847a-6c940cc80ebb/scratchpad/lince/foto-1.jpg"
-   ]
+    "/tmp/claude-0/-home-user-webmunay/e6e7a7ea-b9c6-5728-847a-6c940cc80ebb/scratchpad/lince/g1.jpg",
+    "/tmp/claude-0/-home-user-webmunay/e6e7a7ea-b9c6-5728-847a-6c940cc80ebb/scratchpad/lince/g2.jpg",
+    "/tmp/claude-0/-home-user-webmunay/e6e7a7ea-b9c6-5728-847a-6c940cc80ebb/scratchpad/lince/g3.jpg",
+    "/tmp/claude-0/-home-user-webmunay/e6e7a7ea-b9c6-5728-847a-6c940cc80ebb/scratchpad/lince/g4.jpg"
+   ],
+   "fotos_completas": true
   }
  ],
- "nota_interna": "Precio S/430 dado directamente (subtotal sin IGV). Sin ficha de trabajo: entra como generales/otros (soldadura TIG en equipos de cocina/producción, candidato a subtipo propio si se repite). Foto recortada para quitar el sello GPS con dirección, mapa y brújula.",
- "cliente_corto": "SCR",
- "detalle_archivo": "AMASADORA"
+ "nota_interna": "Precio S/430 dado directamente (subtotal sin IGV). Sin ficha: generales/otros. 4 fotos recortadas para quitar el sello GPS (dirección, mapa, brújula), sin forzar cuadrado.",
+ "cliente_corto": "NGR",
+ "etiqueta_archivo": "AMASADORA"
 }

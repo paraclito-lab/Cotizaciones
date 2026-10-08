@@ -82,7 +82,8 @@
   .photo-row { display: flex; justify-content: center; gap: 6px; margin-top: 6px; }
   .photo-row img { width: 90px; height: 90px; object-fit: cover; border: 1px solid #ccc; border-radius: 3px; }
   /* "fotos_completas": la foto entera, sin recorte, con su proporción original. */
-  .photo-row.completas img { width: auto; height: 150px; object-fit: contain; }
+  .photo-row.completas { flex-wrap: nowrap; }
+  .photo-row.completas img { width: auto; height: 86px; min-width: 0; object-fit: contain; }
 
   /* Fila separadora: divide visualmente un grupo de ítems dentro de la misma tabla
      (ej. piezas que necesitan un rollo de ancho distinto). No es un ítem cotizado. */
