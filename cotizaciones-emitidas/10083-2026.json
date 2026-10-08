@@ -1,0 +1,20 @@
+{
+ "numero": "10083-2026",
+ "tipo": "generales",
+ "subtipo": "otros",
+ "cliente": "SERVICIOS COMPARTIDOS DE RESTAURANTES",
+ "local": "LINCE",
+ "fecha": "8 de octubre de 2026",
+ "resumen": "Reparación y soldadura TIG de equipos amasadora",
+ "items": [
+  {
+   "cant": 1,
+   "descripcion": "SERVICIO: Reparación y soldadura TIG de equipos amasadora.",
+   "precio_unit": 430,
+   "fotos": [
+    "/tmp/claude-0/-home-user-webmunay/e6e7a7ea-b9c6-5728-847a-6c940cc80ebb/scratchpad/lince/foto-1.jpg"
+   ]
+  }
+ ],
+ "nota_interna": "Precio S/430 dado directamente (subtotal sin IGV). Sin ficha de trabajo: entra como generales/otros (soldadura TIG en equipos de cocina/producción, candidato a subtipo propio si se repite). Foto recortada para quitar el sello GPS con dirección, mapa y brújula."
+}

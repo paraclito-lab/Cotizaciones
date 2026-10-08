@@ -273,3 +273,17 @@ convertirse en una regla nueva dentro de `criterios-actuales.md`.
   Aprendizaje de fondo: **una separación real entre piezas no es un detalle del dibujo, es
   parte del cálculo de material** — tratarla solo como estética habría subestimado el
   rollo en trabajos más ajustados que el de Atocongo.
+
+### 08/10/2026 — Soldadura TIG en equipo de producción (10083-2026, Lince)
+
+- **Contexto**: reparación y soldadura TIG de un equipo de producción de acero inoxidable, con
+  precio único dado directamente y una foto del equipo.
+- **Qué pasó / qué no encajaba en las reglas actuales**: no es carretillas, balanzas ni vitrinas,
+  y ningún subtipo sugerido calza (`estructuras` es otra cosa). La foto venía con el sello de la
+  app de cámara: dirección, mapa, brújula y hora quemados en la imagen.
+- **Cómo se resolvió esta vez**: `generales` con subtipo `otros`. La foto se recortó al equipo
+  antes de usarla, para que el documento no lleve la ubicación del cliente.
+- **¿Debería ser una regla permanente?** El recorte, sí: toda foto con sello de ubicación se
+  recorta antes de ir a una cotización. El subtipo, a evaluar: si se repiten trabajos de
+  soldadura en equipos de cocina o producción, considerar un subtipo `soldadura` al llegar al
+  umbral de 3.
