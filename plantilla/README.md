@@ -173,6 +173,17 @@ existe para que eso tenga dónde ir.
 
 Si `atencion` está vacío, la línea "Atención:" no se imprime (antes salía la etiqueta sola).
 
+## Acabado del PDF: centrado y marco continuo (08/10/2026)
+
+Dos defectos vistos en el PDF de 10082-2026, ya corregidos y vigilados por `probar.py --render`:
+
+- **No estaba centrada:** el CSS `@page { margin: 0 }` anulaba el margen vertical, así que la
+  cotización quedaba pegada arriba con más aire abajo. Ahora la página mide exactamente la hoja
+  más `AIRE_PX` (28px) por lado y los márgenes del PDF salen iguales: 34/35/34/35 px.
+- **Línea de más en el marco:** con el marco como borde de `.sheet`, el PDF dibujaba el lado
+  derecho con un escalón de ~1px donde termina la imagen del encabezado. El marco es ahora una
+  capa encima (`.sheet::after`), un solo trazo continuo.
+
 ## Marco interno simétrico
 
 El borde negro de `.sheet` tiene que quedar a la misma distancia del contenido arriba y abajo

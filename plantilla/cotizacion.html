@@ -12,7 +12,10 @@
      --------------------------------------------------------------------- */
   * { box-sizing: border-box; }
   body { margin: 0; font-family: Arial, Helvetica, sans-serif; color: #1a1a1a; background: #fff; }
-  .sheet { width: 900px; margin: 0 auto; border: 2px solid #111; }
+  .sheet { width: 900px; margin: 0 auto; position: relative; }
+  /* El marco es una capa encima, no el borde de .sheet: con borde, el PDF dibujaba el lado derecho
+     con un escalón de ~1px donde termina la imagen del encabezado (linea de más en el marco). */
+  .sheet::after { content: ""; position: absolute; inset: 0; border: 2px solid #111; pointer-events: none; }
   /* container-type permite que el N° y el título se midan en % del ancho real
      de la hoja (unidad cqw), así escalan solos si la hoja cambia de ancho. */
   .header-wrap { position: relative; width: 100%; container-type: inline-size; }

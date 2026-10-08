@@ -375,7 +375,7 @@ def chromium():
 # fijo: cuando una cotización con muchas filas crecía en alto más que en ancho, el contenido se
 # ajustaba por la altura y sobraba muchísimo margen vacío a los costados (ver casuistica.md).
 # LADO_MAYOR_MM es solo una referencia de tamaño "más o menos A4", no un marco que llenar.
-MARGEN_MM = 8
+AIRE_PX = 28          # aire entre el marco y el borde de la página, igual en los 4 lados
 PX_POR_MM = 96 / 25.4
 LADO_MAYOR_MM = 297
 ESCALA_MIN, ESCALA_MAX = 0.55, 1.30
@@ -414,24 +414,20 @@ def render(html, base_salida):
         achicado = encajar_titulo(pg)
         pg.locator(".sheet").screenshot(path=base_salida + ".png")
 
-        # El ancho de la hoja queda fijo (900px, el diseño base); la escala se calcula para
-        # que su lado más largo (ancho o alto, según cuál domine) llegue a "más o menos A4".
-        # La página del PDF se dimensiona EXACTO al contenido ya escalado + el margen fijo, así
-        # que no queda holgura que repartir: el margen es el mismo en los 4 lados por
-        # construcción, no por centrado después.
+        # La hoja (900px) queda con un marco de aire igual en los 4 lados: la página del PDF mide
+        # exactamente hoja + aire, sin márgenes del navegador (antes el @page en 0 anulaba el margen
+        # vertical y la cotización quedaba pegada arriba y descentrada). La escala hace que el lado
+        # mayor llegue a "más o menos A4".
+        pg.add_style_tag(content=f"body{{padding:{AIRE_PX}px;margin:0}} .sheet{{margin:0}}")
         caja = pg.locator(".sheet").bounding_box()
-        lado_mayor_px = max(caja["width"], caja["height"])
-        escala = (LADO_MAYOR_MM - 2 * MARGEN_MM) * PX_POR_MM / lado_mayor_px
-        escala = min(escala, ESCALA_MAX)
-        escala = max(escala, ESCALA_MIN)     # más abajo sería ilegible: mejor una 2da página
-
-        ancho_mm = caja["width"] * escala / PX_POR_MM + 2 * MARGEN_MM
-        alto_mm = caja["height"] * escala / PX_POR_MM + 2 * MARGEN_MM
-        margen = f"{MARGEN_MM}mm"
-
+        ancho_css, alto_css = caja["width"] + 2 * AIRE_PX, caja["height"] + 2 * AIRE_PX
+        escala = LADO_MAYOR_MM * PX_POR_MM / max(ancho_css, alto_css)
+        escala = max(min(escala, ESCALA_MAX), ESCALA_MIN)     # más abajo sería ilegible
+        ancho_mm = ancho_css * escala / PX_POR_MM
+        alto_mm = alto_css * escala / PX_POR_MM + 0.3        # holgura: evita una 2da página por redondeo
         pg.pdf(path=base_salida + ".pdf", width=f"{ancho_mm:.2f}mm", height=f"{alto_mm:.2f}mm",
-               print_background=True, scale=round(escala, 3),
-               margin={"top": margen, "bottom": margen, "left": margen, "right": margen})
+               print_background=True, scale=round(escala, 4),
+               margin={"top": "0", "bottom": "0", "left": "0", "right": "0"})
         nav.close()
     return base_salida + ".png", base_salida + ".pdf", achicado
 

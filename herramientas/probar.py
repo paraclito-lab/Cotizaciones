@@ -9,7 +9,7 @@ La referencia son cotizaciones REALES ya emitidas: si un cambio mueve un céntim
 se le entregó a un cliente, falla. Agregar un trabajo nuevo a la biblioteca no debería romper
 ninguna — para eso existen.
 """
-import datetime, json, os, shutil, sys, tempfile, traceback
+import datetime, json, os, shutil, subprocess, sys, tempfile, traceback
 from decimal import Decimal
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
@@ -418,6 +418,18 @@ def render_final_real_sin_tocar_el_archivo():
             generar.main()
         finally:
             sys.argv = argv
+        pdf = os.path.join(tmp, "N° 9196-2026 CARRETILLAS TT PUCALLPA MUNAY.pdf")
+        subprocess.run(["pdftoppm", "-r", "100", "-png", pdf, os.path.join(tmp, "pag")], check=True)
+        from PIL import Image
+        im = Image.open(os.path.join(tmp, "pag-1.png")).convert("L")
+        w, h = im.size
+        px = im.load()
+        xs = [x for x in range(w) if any(px[x, y] < 200 for y in range(0, h, 2))]
+        ys = [y for y in range(h) if any(px[x, y] < 200 for x in range(0, w, 2))]
+        m = [xs[0], w - 1 - xs[-1], ys[0], h - 1 - ys[-1]]
+        assert max(m) - min(m) <= 3, f"cotización descentrada en la página, márgenes izq/der/arr/abj: {m}"
+        escalones = {sum(1 for y in range(a, a + 40) if px[xs[-1], y] < 100) for a in range(ys[0] + 5, ys[-1] - 40, 80)}
+        igual(escalones, {40}, "el borde derecho del marco es continuo")
         for nombre in ("9196-2026.png", "N° 9196-2026 CARRETILLAS TT PUCALLPA MUNAY.pdf",
                        "archivo/9196-2026.jpg", "archivo/9196-2026.json"):
             assert os.path.getsize(os.path.join(tmp, nombre)) > 0, f"falta {nombre}"
