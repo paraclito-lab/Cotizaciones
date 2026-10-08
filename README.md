@@ -9,6 +9,19 @@ cualquier otro cambio de código, en vez de vivir solo en una conversación de c
 cotización ya está automatizada — ver `plantilla/generar.py` y la skill `cotizar`. El registro
 de costos reales se lleva en un Google Sheet aparte y se llena a mano.
 
+## Instalar y probar en otra máquina
+
+```
+git clone https://github.com/paraclito-lab/Cotizaciones.git && cd Cotizaciones
+python3 -m venv .venv && . .venv/bin/activate
+pip install -r requirements.txt
+python3 -m playwright install chromium        # el navegador que arma la imagen y el PDF
+python3 herramientas/probar.py --render       # debe terminar en "0 con falla"
+```
+
+Para regenerar una cotización ya emitida (sin gastar número):
+`python3 plantilla/generar.py cotizaciones-emitidas/10083-2026.json salida --final`
+
 ## Mapa del repositorio
 
 | Carpeta / archivo | Qué es |

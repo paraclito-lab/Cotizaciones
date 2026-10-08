@@ -371,6 +371,8 @@ def fila_registro(cot, servicio, sub, igv, total):
 
 
 def chromium():
+    """Chromium ya instalado en esta máquina, si hay uno en la ruta del entorno remoto. Si no,
+    None: Playwright usa el que instaló `python3 -m playwright install chromium`."""
     c = glob.glob("/opt/pw-browsers/chromium*/chrome-linux/chrome")
     return c[0] if c else None
 
@@ -457,9 +459,38 @@ def archivar(png, numero):
     return destino
 
 
+def id_item(cot, it):
+    """Número de ítem (1, 2, ...) para nombrar sus fotos archivadas."""
+    return cot["items"].index(it) + 1
+
+
+def resolver_fotos(cot, base):
+    """Las fotos con ruta relativa se buscan junto al JSON (así funciona el archivo emitido)."""
+    for it in cot["items"]:
+        it["fotos"] = [f if os.path.isabs(f) else os.path.join(base, f) for f in it.get("fotos", [])]
+        if not it["fotos"]:
+            it.pop("fotos")
+
+
 def archivar_json(cot):
-    """Guarda el JSON fuente junto a la imagen: es lo que permite corregir después."""
+    """Guarda el JSON fuente junto a la imagen: es lo que permite corregir después.
+
+    Las fotos se copian a cotizaciones-emitidas/fotos/<N°>/ y el JSON las apunta con ruta
+    relativa. Antes quedaban con la ruta de una carpeta temporal y la cotización no se podía
+    regenerar desde el repositorio."""
     os.makedirs(ARCHIVO, exist_ok=True)
+    cot = json.loads(json.dumps(cot))
+    for it in cot["items"]:
+        nuevas = []
+        for i, f in enumerate(it.get("fotos", []), start=1):
+            carpeta = os.path.join(ARCHIVO, "fotos", cot["numero"])
+            os.makedirs(carpeta, exist_ok=True)
+            dest = os.path.join(carpeta, f"{id_item(cot, it)}-{i}.jpg")
+            if not (os.path.exists(dest) and os.path.samefile(f, dest)):
+                shutil.copyfile(f, dest)
+            nuevas.append(os.path.relpath(dest, ARCHIVO))
+        if nuevas:
+            it["fotos"] = nuevas
     destino = os.path.join(ARCHIVO, cot["numero"] + ".json")
     with open(destino, "w", encoding="utf-8") as f:
         json.dump(cot, f, ensure_ascii=False, indent=1)
@@ -477,6 +508,7 @@ def main():
         raise SystemExit(f"Opción desconocida: {', '.join(sorted(opciones - OPCIONES))}. "
                          f"Válidas: {', '.join(sorted(OPCIONES))}")
     cot = json.load(open(args[0], encoding="utf-8"))
+    resolver_fotos(cot, os.path.dirname(os.path.abspath(args[0])))
     servicio = tipo_de(cot)
     salida = args[1] if len(args) > 1 else "."
     os.makedirs(salida, exist_ok=True)
