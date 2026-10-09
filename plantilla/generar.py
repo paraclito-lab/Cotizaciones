@@ -417,7 +417,7 @@ def render(html, base_salida):
     with sync_playwright() as p:
         nav = p.chromium.launch(executable_path=chromium(), args=["--no-sandbox"])
         pg = nav.new_page(viewport={"width": 940, "height": 1400}, device_scale_factor=2)
-        pg.goto("file://" + ruta_html)
+        pg.goto("file://" + os.path.abspath(ruta_html))
         pg.wait_for_timeout(400)
 
         achicado = encajar_titulo(pg)
