@@ -42,6 +42,7 @@
   nav { display: flex; background: var(--verde-osc); }
   nav button { flex: 1; background: none; color: #d8efe5; border-radius: 0; padding: 12px 4px; font-weight: 700; border-bottom: 3px solid transparent; }
   nav button.activa { color: #fff; border-bottom-color: #fff; }
+  nav button.novedad::after { content: ' ●'; color: #ffd54f; }
   button:disabled { opacity: .6; }
 </style>
 </head>
@@ -366,7 +367,14 @@ function mostrarErrores(lista, dondeId) {
 }
 var seccionCotizar = 'formulario';   // dónde quedó la cotización al cambiar de pestaña
 function ver(seccion) {
-  if (seccion !== 'gasto' && seccion !== 'entrada') seccionCotizar = seccion;
+  if (seccion !== 'gasto' && seccion !== 'entrada') {
+    seccionCotizar = seccion;
+    // Si está anotando un gasto, la cotización que llega no lo saca de ahí: se avisa en la pestaña.
+    if (!$('gasto').classList.contains('oculto')) {
+      $('ir-cotizar').classList.toggle('novedad', seccion === 'vista');
+      return;
+    }
+  }
   ['entrada', 'formulario', 'espera', 'vista', 'gasto'].forEach(function (s) { $(s).classList.toggle('oculto', s !== seccion); });
   window.scrollTo(0, 0);
 }
@@ -374,7 +382,10 @@ function ver(seccion) {
 function pestana(cual) {
   $('ir-cotizar').classList.toggle('activa', cual === 'cotizar');
   $('ir-gasto').classList.toggle('activa', cual === 'gasto');
-  ver(cual === 'gasto' ? 'gasto' : seccionCotizar);
+  if (cual === 'gasto') return ver('gasto');
+  $('ir-cotizar').classList.remove('novedad');
+  $('gasto').classList.add('oculto');
+  ver(seccionCotizar);
 }
 
 // ------------------------------------------------------------------ gastos

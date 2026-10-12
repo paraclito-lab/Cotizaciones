@@ -23,10 +23,14 @@ Segunda pestaña de la app. Se usa en el momento en que se gasta, con el mismo c
   el monto ÷ 1.18 (el IGV es crédito fiscal); con boleta o sin comprobante, el monto completo.
 
 No pasa por GitHub: escribe directo en la hoja **Gastos** del registro (la crea sola la primera
-vez) y guarda la foto en la carpeta **Comprobantes de gastos**, junto a `PDF emitidos`. Los
+vez) y guarda la foto en la carpeta **Comprobantes de gastos**, junto a `PDF emitidos` (si a la
+cuenta de la app solo se le compartió `PDF emitidos`, la crea dentro de esa). Los
 gastos son dato financiero y no se versionan en el repositorio. Cada gasto lleva un ID que
 genera el celular: si se corta la conexión y se vuelve a tocar "Guardar", no se duplica. La
 columna "Registrado por" sale del código personal.
+
+Si alguien está en esta pestaña cuando llega una vista previa que pidió, la app no lo saca del
+gasto: la pestaña **Cotizar** muestra un punto amarillo hasta que vuelva a ella.
 
 Después de publicar esta versión, correr **probarConexion** una vez: crea la hoja y la carpeta,
 y pide el permiso nuevo si hiciera falta.

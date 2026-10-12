@@ -381,8 +381,14 @@ function hojaGastos_() {
   return hoja;
 }
 
+/**
+ * Junto a "PDF emitidos" si la carpeta MUNAY - Cotizaciones está compartida entera; si solo se
+ * compartió "PDF emitidos", la cuenta no ve la carpeta de arriba y va dentro de esa.
+ */
 function carpetaComprobantes_() {
-  const padre = DriveApp.getFolderById(CARPETA_PDF_ID).getParents().next();
+  const pdf = DriveApp.getFolderById(CARPETA_PDF_ID);
+  const padres = pdf.getParents();
+  const padre = padres.hasNext() ? padres.next() : pdf;
   const hay = padre.getFoldersByName(CARPETA_COMPROBANTES);
   return hay.hasNext() ? hay.next() : padre.createFolder(CARPETA_COMPROBANTES);
 }
