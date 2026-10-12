@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<base target="_top">
+<meta charset="utf-8">
+<style>
+  :root { --verde: #1f9e6e; --verde-osc: #17795f; --gris: #f3f4f3; --borde: #d6dad8; --rojo: #b3261e; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: Arial, Helvetica, sans-serif; background: var(--gris); color: #1a1a1a; font-size: 16px; }
+  header { background: var(--verde); color: #fff; padding: 14px 16px; font-weight: 700; font-size: 18px; }
+  main { padding: 12px 12px 90px; max-width: 640px; margin: 0 auto; }
+  .card { background: #fff; border: 1px solid var(--borde); border-radius: 10px; padding: 14px; margin-bottom: 12px; }
+  .card h2 { font-size: 15px; margin: 0 0 10px; color: var(--verde-osc); }
+  label { display: block; font-size: 13px; color: #555; margin: 10px 0 4px; }
+  input, select, textarea { width: 100%; font-size: 16px; padding: 10px; border: 1px solid var(--borde); border-radius: 8px; background: #fff; }
+  textarea { min-height: 70px; }
+  .fila { display: grid; grid-template-columns: 1fr 70px 90px 34px; gap: 6px; margin-bottom: 6px; align-items: center; }
+  .fila input { padding: 9px 6px; }
+  .dos { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .seg { display: flex; gap: 6px; }
+  .seg label { flex: 1; margin: 0; text-align: center; border: 1px solid var(--borde); border-radius: 8px; padding: 10px 4px; background: #fff; font-size: 14px; color: #1a1a1a; }
+  .seg input { display: none; }
+  .seg input:checked + span { color: #fff; }
+  .seg label:has(input:checked) { background: var(--verde); border-color: var(--verde); color: #fff; }
+  button { font-size: 16px; padding: 12px; border-radius: 8px; border: 0; cursor: pointer; }
+  .prim { background: var(--verde); color: #fff; width: 100%; font-weight: 700; }
+  .sec { background: #fff; border: 1px solid var(--verde); color: var(--verde-osc); width: 100%; }
+  .quitar { background: #fff; border: 1px solid var(--borde); color: var(--rojo); padding: 8px 0; }
+  .mas { background: none; color: var(--verde-osc); padding: 6px 0; font-size: 14px; }
+  .oculto { display: none; }
+  .nota { font-size: 13px; color: #666; margin-top: 6px; }
+  .aviso { background: #fff8e1; border: 1px solid #f0d58a; border-radius: 8px; padding: 10px; font-size: 14px; margin: 8px 0; }
+  .error { background: #fdecea; border: 1px solid #f3b6b0; color: var(--rojo); border-radius: 8px; padding: 10px; font-size: 14px; margin: 8px 0; }
+  .ok { background: #e8f5ee; border: 1px solid #a8d8bf; border-radius: 8px; padding: 12px; font-size: 15px; }
+  #vista img { width: 100%; border: 1px solid var(--borde); border-radius: 6px; }
+  .totales { display: flex; justify-content: space-between; font-size: 15px; margin: 8px 0; }
+  .espera { text-align: center; padding: 24px 8px; color: #555; }
+  .rueda { width: 34px; height: 34px; border: 4px solid #cfe7dc; border-top-color: var(--verde); border-radius: 50%; margin: 0 auto 12px; animation: g 1s linear infinite; }
+  @keyframes g { to { transform: rotate(360deg); } }
+  .fotos { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+  .fotos img { width: 72px; height: 72px; object-fit: cover; border-radius: 6px; border: 1px solid var(--borde); }
+</style>
+</head>
+<body>
+<header>Cotizaciones Munay</header>
+<main>
+
+<section id="formulario">
+  <div class="card">
+    <h2>Tipo de trabajo</h2>
+    <div class="seg">
+      <label><input type="radio" name="tipo" value="carretillas" checked><span>Carretillas</span></label>
+      <label><input type="radio" name="tipo" value="general"><span>Servicio general</span></label>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Cliente</h2>
+    <label>Cliente (razón social)</label>
+    <input id="cliente" list="clientes" autocomplete="off">
+    <datalist id="clientes">
+      <option>TOTTUS</option><option>HB PRECIO UNO</option><option>SB PRECIO UNO</option>
+      <option>SERVICIOS COMPARTIDOS DE RESTAURANTES</option>
+    </datalist>
+    <div class="dos">
+      <div><label>Local</label><input id="local"></div>
+      <div><label>Abreviatura (nombre del archivo)</label><input id="corto" placeholder="TT, NGR…"></div>
+    </div>
+    <label>Atención (opcional)</label>
+    <input id="atencion">
+  </div>
+
+  <div class="card" id="bloque-carretillas">
+    <h2>Mantenimiento de carretillas</h2>
+    <div class="dos">
+      <div><label>N° de carretillas</label><input id="unidades" type="number" min="1" inputmode="numeric"></div>
+      <div><label>Precio por carretilla (S/, sin IGV)</label><input id="precio" type="number" min="0" step="0.01" inputmode="decimal"></div>
+    </div>
+    <label>Lugar</label>
+    <div class="seg">
+      <label><input type="radio" name="localidad" value="lima" checked><span>Lima</span></label>
+      <label><input type="radio" name="localidad" value="provincia"><span>Provincia</span></label>
+    </div>
+    <label>¿Todos son carretillas hidráulicas?</label>
+    <div class="seg">
+      <label><input type="radio" name="solo" value="si" checked><span>Sí</span></label>
+      <label><input type="radio" name="solo" value="no"><span>No, hay montacargas</span></label>
+    </div>
+    <label>¿Hay diagnóstico por unidad?</label>
+    <div class="seg">
+      <label><input type="radio" name="diag" value="no" checked><span>No</span></label>
+      <label><input type="radio" name="diag" value="si"><span>Sí</span></label>
+    </div>
+    <label>Repuestos y adicionales</label>
+    <div class="nota">Nombre · cantidad · precio. Si dejas el precio vacío, se usa el del catálogo.</div>
+    <div id="lineas-c"></div>
+    <button type="button" class="mas" onclick="agregarLinea('c')">+ Agregar repuesto</button>
+    <datalist id="repuestos"></datalist>
+  </div>
+
+  <div class="card oculto" id="bloque-general">
+    <h2>Servicio general</h2>
+    <label>Subtipo</label>
+    <select id="subtipo">
+      <option value="otros">otros</option><option value="estructuras">estructuras</option>
+      <option value="motores">motores</option><option value="electrico">eléctrico</option>
+      <option value="pintado">pintado</option><option value="espejos">espejos</option>
+      <option value="mamparas">mamparas</option><option value="laminado-seguridad">laminado de seguridad</option>
+      <option value="acrilicos">acrílicos</option><option value="vitrales">vitrales</option>
+    </select>
+    <label>Trabajos</label>
+    <div class="nota">Descripción · cantidad · precio unitario (S/, sin IGV).</div>
+    <div id="lineas-g"></div>
+    <button type="button" class="mas" onclick="agregarLinea('g')">+ Agregar línea</button>
+    <label>Fotos (hasta 4; recórtalas antes si muestran la dirección)</label>
+    <input id="fotos" type="file" accept="image/*" multiple>
+    <div class="fotos" id="miniaturas"></div>
+  </div>
+
+  <div class="card">
+    <h2>Opcional</h2>
+    <label>Garantía (solo si se ofrece)</label>
+    <input id="garantia" placeholder="Ej.: 3 meses en mano de obra">
+    <label>Palabra extra en el nombre del archivo</label>
+    <input id="etiqueta" placeholder="Ej.: AMASADORA, RAMPA">
+    <label>N° de cotización (vacío = el siguiente)</label>
+    <input id="numero" placeholder="Ej.: 10120-2026">
+  </div>
+
+  <div id="errores-form"></div>
+  <button class="prim" onclick="pedirVista()">Ver vista previa</button>
+</section>
+
+<section id="espera" class="oculto">
+  <div class="card espera"><div class="rueda"></div><div id="texto-espera">Generando la cotización…</div>
+  <div class="nota">Suele tardar entre 1 y 2 minutos.</div></div>
+</section>
+
+<section id="vista" class="oculto">
+  <div class="card">
+    <h2 id="titulo-vista">Vista previa</h2>
+    <div id="mensajes"></div>
+    <img id="imagen" alt="Vista previa de la cotización">
+    <div class="totales"><span>Subtotal <b id="t-sub"></b></span><span>IGV <b id="t-igv"></b></span><span>Total <b id="t-tot"></b></span></div>
+  </div>
+  <div id="acciones-vista">
+    <button class="prim" onclick="emitir()">Emitir cotización</button>
+    <div style="height:8px"></div>
+    <button class="sec" onclick="volver()">Corregir</button>
+  </div>
+  <div id="acciones-final" class="oculto">
+    <div class="ok" id="entrega"></div>
+    <div style="height:8px"></div>
+    <button class="sec" onclick="nueva()">Nueva cotización</button>
+  </div>
+</section>
+
+</main>
+<script>
+var CAT = { repuestos: [], adicionales: [] };
+var grupo = null, fotosSubidas = [], fotosNuevas = [], ultimoPedido = null;
+
+function $(id) { return document.getElementById(id); }
+function tipo() { return document.querySelector('input[name=tipo]:checked').value; }
+function radio(n) { return document.querySelector('input[name=' + n + ']:checked').value; }
+function soles(n) { return 'S/ ' + Number(n).toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+function nuevoGrupo() {
+  var d = new Date(), p = function (x) { return ('0' + x).slice(-2); };
+  return d.getFullYear() + p(d.getMonth() + 1) + p(d.getDate()) + '-' + p(d.getHours()) + p(d.getMinutes()) + '-' + Math.random().toString(36).slice(2, 6);
+}
+
+document.querySelectorAll('input[name=tipo]').forEach(function (r) {
+  r.addEventListener('change', function () {
+    $('bloque-carretillas').classList.toggle('oculto', tipo() !== 'carretillas');
+    $('bloque-general').classList.toggle('oculto', tipo() !== 'general');
+  });
+});
+
+function agregarLinea(cual) {
+  var d = document.createElement('div');
+  d.className = 'fila';
+  d.innerHTML = '<input class="nom" ' + (cual === 'c' ? 'list="repuestos" placeholder="Repuesto"' : 'placeholder="Descripción"') + '>' +
+    '<input class="cant" type="number" min="1" value="1" inputmode="numeric">' +
+    '<input class="pre" type="number" min="0" step="0.01" placeholder="' + (cual === 'c' ? 'Catálogo' : 'Precio') + '" inputmode="decimal">' +
+    '<button type="button" class="quitar" onclick="this.parentNode.remove()">✕</button>';
+  $('lineas-' + cual).appendChild(d);
+}
+agregarLinea('g');
+
+google.script.run.withSuccessHandler(function (c) {
+  CAT = c;
+  $('repuestos').innerHTML = c.repuestos.concat(c.adicionales).map(function (r) {
+    return '<option value="' + r.nombre.replace(/"/g, '&quot;') + '">' + soles(r.precio) + '</option>';
+  }).join('');
+}).withFailureHandler(function (e) { mostrarErrores([e.message]); }).catalogo();
+
+$('fotos').addEventListener('change', function (ev) {
+  var archivos = Array.prototype.slice.call(ev.target.files, 0, 4);
+  var sello = Date.now().toString(36);   // nombre nuevo cada vez: GitHub no reemplaza sin aviso
+  fotosNuevas = []; fotosSubidas = []; $('miniaturas').innerHTML = '';
+  archivos.forEach(function (a, i) {
+    reducir(a, function (b64) {
+      fotosNuevas.push({ orden: i, nombre: 'foto-' + sello + '-' + (i + 1) + '.jpg', base64: b64 });
+      fotosNuevas.sort(function (x, y) { return x.orden - y.orden; });
+      var img = document.createElement('img'); img.src = 'data:image/jpeg;base64,' + b64;
+      $('miniaturas').appendChild(img);
+    });
+  });
+});
+
+/** Achica la foto a 1600 px y la vuelve a codificar: también borra los metadatos de ubicación. */
+function reducir(archivo, listo) {
+  var lector = new FileReader();
+  lector.onload = function () {
+    var img = new Image();
+    img.onload = function () {
+      var lado = 1600, k = Math.min(1, lado / Math.max(img.width, img.height));
+      var c = document.createElement('canvas'); c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      listo(c.toDataURL('image/jpeg', 0.85).split(',')[1]);
+    };
+    img.src = lector.result;
+  };
+  lector.readAsDataURL(archivo);
+}
+
+function lineas(cual) {
+  return Array.prototype.map.call(document.querySelectorAll('#lineas-' + cual + ' .fila'), function (f) {
+    return { nombre: f.querySelector('.nom').value.trim(), cant: Number(f.querySelector('.cant').value || 1),
+             precio: f.querySelector('.pre').value === '' ? null : Number(f.querySelector('.pre').value) };
+  }).filter(function (l) { return l.nombre; });
+}
+
+function armarPedido() {
+  var errores = [];
+  var base = { cliente: $('cliente').value.trim().toUpperCase(), local: $('local').value.trim().toUpperCase(),
+               atencion: $('atencion').value.trim() };
+  if (!base.cliente) errores.push('Falta el cliente.');
+  if (!base.local) errores.push('Falta el local.');
+  if ($('corto').value.trim()) base.cliente_corto = $('corto').value.trim().toUpperCase();
+  // En servicios generales la palabra reemplaza a "SERVICIOS GENERALES" en el nombre del PDF
+  // (N° 10112-2026 RAMPA NGR LINCE MUNAY); en carretillas va antes de MUNAY.
+  if ($('etiqueta').value.trim()) base[tipo() === 'general' ? 'etiqueta_archivo' : 'detalle_archivo'] = $('etiqueta').value.trim().toUpperCase();
+  if ($('garantia').value.trim()) base.condiciones = ['Garantía: ' + $('garantia').value.trim()];
+  var p;
+  if (tipo() === 'carretillas') {
+    var n = Number($('unidades').value);
+    if (!n) errores.push('Falta el número de carretillas.');
+    p = Object.assign(base, { trabajo: 'mantenimiento-carretillas', unidades: n,
+      respuestas: { localidad: radio('localidad'), solo_carretillas: radio('solo'), diagnostico: radio('diag') },
+      lineas: lineas('c').map(function (l) {
+        var ad = CAT.adicionales.filter(function (a) { return a.nombre.toLowerCase() === l.nombre.toLowerCase(); })[0];
+        var esRep = CAT.repuestos.some(function (r) { return r.nombre.toLowerCase() === l.nombre.toLowerCase(); });
+        var x = ad ? { adicional: ad.id } : (esRep ? { repuesto: l.nombre } : { descripcion: l.nombre });
+        x.cant = l.cant; if (l.precio !== null) x.precio = l.precio;
+        return x;
+      }) });
+    if ($('precio').value !== '') p.precio_unidad = Number($('precio').value);
+  } else {
+    var ls = lineas('g');
+    if (!ls.length) errores.push('Agrega al menos una línea con la descripción del trabajo.');
+    var fotos = fotosSubidas.concat(fotosNuevas.map(function (f) { return f.nombre; }))
+      .filter(function (v, i, a) { return a.indexOf(v) === i; })
+      .map(function (n) { return '../' + grupo + '/fotos/' + n; });
+    p = Object.assign(base, { tipo: 'generales', subtipo: $('subtipo').value,
+      unidades: ls.length ? ls[0].cant : 1,
+      items: ls.map(function (l, i) {
+        var desc = l.nombre.replace(/\.?$/, '.');
+        if (i === 0 && !/^SERVICIO:/i.test(desc)) desc = 'SERVICIO: ' + desc;
+        var it = { cant: l.cant, descripcion: desc };
+        if (l.precio === null) it.pendiente = true; else it.precio_unit = l.precio;
+        if (i === 0 && fotos.length) { it.fotos = fotos; it.fotos_completas = true; }
+        return it;
+      }) });
+  }
+  return { pedido: p, errores: errores };
+}
+
+function mostrarErrores(lista, dondeId) {
+  $(dondeId || 'errores-form').innerHTML = lista.map(function (e) { return '<div class="error">' + e + '</div>'; }).join('');
+}
+function ver(seccion) {
+  ['formulario', 'espera', 'vista'].forEach(function (s) { $(s).classList.toggle('oculto', s !== seccion); });
+  window.scrollTo(0, 0);
+}
+
+function pedirVista() {
+  if (!grupo) grupo = nuevoGrupo();
+  var a = armarPedido();
+  if (a.errores.length) return mostrarErrores(a.errores);
+  mostrarErrores([]);
+  ultimoPedido = a.pedido;
+  enviarAlMotor('vista', a.pedido);
+}
+
+function emitir() {
+  if (!confirm('Se emitirá la cotización con el N° que corresponde y quedará registrada. ¿Continuar?')) return;
+  var p = JSON.parse(JSON.stringify(ultimoPedido));
+  if ($('numero').value.trim()) p.numero = $('numero').value.trim();
+  enviarAlMotor('emitir', p);
+}
+
+function enviarAlMotor(modo, pedido) {
+  $('texto-espera').textContent = modo === 'emitir' ? 'Emitiendo la cotización…' : 'Generando la vista previa…';
+  ver('espera');
+  var fotos = fotosNuevas;
+  google.script.run.withSuccessHandler(function (r) {
+    fotosSubidas = fotosSubidas.concat(fotos.map(function (f) { return f.nombre; }));
+    fotosNuevas = [];
+    esperar(r.id, modo, Date.now());
+  }).withFailureHandler(function (e) { ver('formulario'); mostrarErrores([e.message]); })
+    .enviar({ grupo: grupo, modo: modo, pedido: pedido, fotos: fotos });
+}
+
+function esperar(id, modo, inicio) {
+  google.script.run.withSuccessHandler(function (r) {
+    if (r.estado === 'pendiente') {
+      if (Date.now() - inicio > 6 * 60 * 1000) {
+        ver('formulario');
+        return mostrarErrores(['El motor no respondió en 6 minutos. Revisa tu conexión e inténtalo de nuevo; si se repite, avisa.']);
+      }
+      return setTimeout(function () { esperar(id, modo, inicio); }, 8000);
+    }
+    if (r.estado !== 'ok') {
+      ver('formulario');
+      return mostrarErrores(r.errores.concat((r.preguntas || []).map(function (q) { return 'Falta responder: ' + q.pregunta; })));
+    }
+    mostrarResultado(r, modo);
+  }).withFailureHandler(function () { setTimeout(function () { esperar(id, modo, inicio); }, 8000); })
+    .consultar(id);
+}
+
+function mostrarResultado(r, modo) {
+  $('imagen').src = r.imagen;
+  $('t-sub').textContent = r.sin_precios ? 'Por definir' : soles(r.subtotal);
+  $('t-igv').textContent = r.sin_precios ? '—' : soles(r.igv);
+  $('t-tot').textContent = r.sin_precios ? '—' : soles(r.total);
+  var avisos = (r.alertas || []).filter(function (a) { return a.indexOf('PENDIENTE-') < 0 || modo === 'emitir'; });
+  $('mensajes').innerHTML = avisos.map(function (a) { return '<div class="aviso">' + a + '</div>'; }).join('');
+  var final = modo === 'emitir';
+  $('titulo-vista').textContent = final ? 'Cotización N° ' + r.numero : 'Vista previa (sin número)';
+  $('acciones-vista').classList.toggle('oculto', final);
+  $('acciones-final').classList.toggle('oculto', !final);
+  if (final) {
+    $('entrega').innerHTML = '<b>Emitida y registrada.</b><br>' + r.entrega.pdf +
+      '<br><br><a href="' + r.entrega.url + '" target="_blank">Abrir el PDF en Drive</a> para enviarlo al cliente.';
+  }
+  ver('vista');
+}
+
+function volver() { ver('formulario'); }
+function nueva() {
+  if (!confirm('¿Empezar una cotización nueva?')) return;
+  google.script.run.withSuccessHandler(function () {}).catalogo();
+  location.reload();
+}
+</script>
+</body>
+</html>

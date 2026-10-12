@@ -79,6 +79,10 @@ def procesar(carpeta):
 
         if "trabajo" in pedido:
             cot, _ = motor.armar(pedido, borrador=(modo == "vista"), hoy=hoy)
+            # Lo que la ficha no decide y quien cotiza sí: cómo se llama el archivo.
+            for clave in ("etiqueta_archivo", "detalle_archivo"):
+                if pedido.get(clave):
+                    cot[clave] = pedido[clave]
         else:
             cot = json.loads(json.dumps(pedido))
             cot.setdefault("fecha", motor.fecha_larga(hoy))
