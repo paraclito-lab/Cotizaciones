@@ -1,5 +1,5 @@
 {
- "numero": "10084-2026",
+ "numero": "10112-2026",
  "tipo": "generales",
  "subtipo": "estructuras",
  "cliente": "SERVICIOS COMPARTIDOS DE RESTAURANTES",
@@ -14,8 +14,12 @@
   {
    "cant": 1,
    "descripcion": "SERVICIO: Fabricación de una rampa de acero inoxidable calidad 304, de medidas 1.70 m de largo x 80 cm de ancho x 19.5 cm de altura.",
-   "precio_unit": 2390
+   "precio_unit": 2390,
+   "fotos": [
+    "fotos/10112-2026/1-1.jpg"
+   ],
+   "fotos_completas": true
   }
  ],
- "nota_interna": "Precio S/2,390 dado directamente (subtotal sin IGV). Sin ficha: generales/estructuras. Medidas dadas como 1.7 de largo x 80 de ancho x 19.5 de altura; interpretadas como m, cm y cm."
+ "nota_interna": "Precio S/2,390 dado directamente (subtotal sin IGV). Sin ficha: generales/estructuras. Medidas dadas como 1.7 de largo x 80 de ancho x 19.5 de altura; interpretadas como m, cm y cm. N° 10112-2026 indicado directamente. Foto recortada para quitar el sello GPS (dirección, mapa, brújula)."
 }
