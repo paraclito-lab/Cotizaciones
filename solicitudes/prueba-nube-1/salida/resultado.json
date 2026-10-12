@@ -1,0 +1,17 @@
+{
+ "estado": "ok",
+ "errores": [],
+ "alertas": [
+  "el N° 'PENDIENTE-2026' no es un correlativo real (NNNN-AAAA)"
+ ],
+ "avisos": [],
+ "id": "prueba-nube-1",
+ "modo": "vista",
+ "numero": "PENDIENTE-2026",
+ "png": "PENDIENTE-2026.png",
+ "subtotal": 859.0,
+ "igv": 154.62,
+ "total": 1013.62,
+ "sin_precios": false,
+ "pdf": "PENDIENTE-2026.pdf"
+}
