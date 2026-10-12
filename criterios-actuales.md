@@ -310,9 +310,8 @@ Cada una dice dónde quedó aplicada. Si el código y este texto no coinciden, m
     cambiar el precio antes de emitir; los accesos se dan por correo autorizado.
 14. **Garantía: no se incluye** en la cotización, salvo que quien cotiza la mencione.
 15. **Detracción: no se incluye** en la cotización.
-16. **Margen (provisorio):** el "60–80 %" se entiende, por ahora, como margen sobre la venta. Las
-    fichas actuales aplican markup sobre el costo; no se cambian hasta confirmar la definición
-    (hallazgos-abiertos.md, Q3).
+16. **Markup (confirmado 12/10/2026):** el "60–80 %" es markup sobre el costo, como aplican las
+    fichas actuales. El margen sobre la venta se calcula aparte en el registro (hallazgos-abiertos.md, Q3).
 17. **Rueda de carga S/40 y rueda direccional S/80** son los precios del catálogo; lo cobrado en
     9196-2026 (S/60 y S/95) fue un ajuste de ese trabajo (Q2).
 18. **Precio cambiado al validar la vista previa:** rige para esa cotización. Un precio que falte
