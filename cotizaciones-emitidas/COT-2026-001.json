@@ -1,0 +1,114 @@
+{
+ "numero": "COT-2026-001",
+ "tipo": "generales",
+ "subtipo": "laminado-seguridad",
+ "cliente": "Hipermercados Tottus S.A",
+ "local": "Atocongo",
+ "atencion": "Jose Vega",
+ "fecha": "17 de septiembre de 2026",
+ "resumen": "Cambio de laminado de seguridad certificado en espejos y vidrio templado",
+ "items": [
+  {
+   "cant": 33,
+   "descripcion": "Suministro e instalación de laminado de seguridad certificado — Altillos: ventanas de 0.97m x 0.96m c/u.",
+   "precio_unit": 53
+  },
+  {
+   "cant": 1,
+   "descripcion": "Suministro e instalación de laminado de seguridad certificado — Gestión Humana: ventana de 1.60m x 1.00m.",
+   "precio_unit": 91
+  },
+  {
+   "cant": 1,
+   "descripcion": "Suministro e instalación de laminado de seguridad certificado — Baño hombres: espejo de 1.73m x 1.07m.",
+   "precio_unit": 105
+  },
+  {
+   "cant": 1,
+   "descripcion": "Suministro e instalación de laminado de seguridad certificado — Baño hombres: espejo de 1.60m x 1.07m.",
+   "precio_unit": 97
+  },
+  {
+   "cant": 1,
+   "descripcion": "Suministro e instalación de laminado de seguridad certificado — Baño hombres: espejo de 1.64m x 1.07m.",
+   "precio_unit": 100
+  },
+  {
+   "cant": 1,
+   "descripcion": "Suministro e instalación de laminado de seguridad certificado — Baño hombres: espejo de 1.70m x 1.07m.",
+   "precio_unit": 103
+  },
+  {
+   "cant": 1,
+   "descripcion": "Suministro e instalación de laminado de seguridad certificado — Baños mujeres: espejo de 1.00m x 1.74m.",
+   "precio_unit": 99
+  },
+  {
+   "cant": 12,
+   "descripcion": "Suministro e instalación de laminado de seguridad certificado — Comedor empleados: ventanas de 0.95m x 0.95m c/u.",
+   "precio_unit": 51
+  },
+  {
+   "cant": 1,
+   "descripcion": "Suministro e instalación de laminado de seguridad certificado — Baño gerencia hombres: espejo de 0.75m x 1.07m.",
+   "precio_unit": 46
+  },
+  {
+   "cant": 1,
+   "descripcion": "Suministro e instalación de laminado de seguridad certificado — Baño gerencia mujeres: espejo de 0.75m x 1.07m.",
+   "precio_unit": 46
+  },
+  {
+   "cant": 2,
+   "descripcion": "Suministro e instalación de laminado de seguridad certificado — Ingreso 211: espejos de 0.30m x 1.22m c/u.",
+   "precio_unit": 21
+  },
+  {
+   "cant": 1,
+   "descripcion": "Suministro e instalación de laminado de seguridad certificado — Oficina Bravo 2: ventana de 1.98m x 1.00m.",
+   "precio_unit": 113
+  },
+  {
+   "cant": 1,
+   "descripcion": "Suministro e instalación de laminado de seguridad certificado — Oficina Bravo 3: ventana de 2.12m x 1.00m.",
+   "precio_unit": 120
+  },
+  {
+   "cant": 1,
+   "descripcion": "Suministro e instalación de laminado de seguridad certificado — Espejo Non Food: espejo de 0.40m x 1.90m.",
+   "precio_unit": 43
+  },
+  {
+   "cant": 1,
+   "descripcion": "Suministro e instalación de laminado de seguridad certificado — Tesorería: ventana de 1.52m x 0.95m.",
+   "precio_unit": 82
+  },
+  {
+   "separador": true,
+   "texto": "Piezas de medida especial (mayor a 1.50 m) — material de rollo distinto"
+  },
+  {
+   "cant": 1,
+   "descripcion": "Suministro e instalación de laminado de seguridad certificado — Baño hombres: espejo de 1.54m x 1.73m.",
+   "precio_unit": 363
+  },
+  {
+   "cant": 1,
+   "descripcion": "Suministro e instalación de laminado de seguridad certificado — Baños mujeres: espejo de 1.74m x 1.74m.",
+   "precio_unit": 411
+  },
+  {
+   "cant": 1,
+   "descripcion": "Suministro e instalación de laminado de seguridad certificado — Baños mujeres: espejo de 1.60m x 1.74m.",
+   "precio_unit": 379
+  },
+  {
+   "cant": 1,
+   "descripcion": "Suministro e instalación de laminado de seguridad certificado — Baños mujeres: espejo de 1.60m x 1.74m.",
+   "precio_unit": 379
+  }
+ ],
+ "nota": "63 piezas, 71.94 m² en total. Las 4 piezas marcadas usan un rollo especial de 1.82 m porque su lado menor supera 1.50 m — no entran en el rollo estándar. Incluye emisión de certificado por espejos y vidrio templado.",
+ "unidades": 63,
+ "nota_interna": "JSON fuente recuperado el 12/10/2026 de la copia temporal del 17/09/2026 (no se había guardado junto a la imagen). Mismos ítems y totales que la imagen archivada: S/4,980.00 + IGV S/896.40 = S/5,876.40. La imagen no se regeneró: queda la del 17/09/2026."
+}

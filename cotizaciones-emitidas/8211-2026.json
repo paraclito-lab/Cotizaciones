@@ -1,0 +1,29 @@
+{
+ "numero": "8211-2026",
+ "tipo": "balanzas",
+ "cliente": "TOTTUS",
+ "cliente_corto": "TT",
+ "local": "SANTA ANITA",
+ "atencion": "Pascual Johnny Inquillay Alegre",
+ "fecha": "17 de septiembre de 2026",
+ "resumen": "Cambio de plataforma metálica, celdas de carga, caja sumatoria e indicador de peso",
+ "unidades": 1,
+ "items": [
+  {
+   "cant": 1,
+   "descripcion": "Cambio de plataforma metalica con plancha estriada a nivel del piso, con sistema brazo cadena de acero inoxidable c-304, topes de fijación, Pintado base zincromato y acabado gloss color gris",
+   "precio_unit": 3800.0
+  },
+  {
+   "cant": 1,
+   "descripcion": "Ramificacion diac, Sellado con silicona de puerta, verificacion y calibracion, nivelacion, Alienamiento de plataforma, de 4 celdas de carga MAVIN NB2-1T, caja sumatoria MAVIN modelo SS4",
+   "precio_unit": 1980.0
+  },
+  {
+   "cant": 1,
+   "descripcion": "Suministro de Indicador T-SCALE",
+   "precio_unit": 1380.0
+  }
+ ],
+ "nota_interna": "Cotización enviada al cliente desde Excel (17/09/2026), con los precios finales de los 3 ítems dados directamente: S/3,800, S/1,980 y S/1,380. Esta copia se regeneró con el sistema el 19/09/2026 y se archivó el 12/10/2026: mismos ítems y totales (S/7,160.00 + IGV S/1,288.80 = S/8,448.80). Diferencia conocida con el Excel: 'Atención' sale en mayúsculas (flujo-sistema-completo.md, B2). El borrador de costos previo, con el ítem 1 pendiente, salió como COT-2026-002 y nunca se envió (B4)."
+}

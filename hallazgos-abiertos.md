@@ -130,14 +130,14 @@ sirven.
 | Arquitectura 19/09, n.° 3 | Tabla de decisión para el margen | No existe (y N11 muestra que primero hay que definir qué significa "margen") |
 | Flujo 19/09, V6/B6 | Generador de la hoja de costos editable dentro del repo | No existe |
 | Flujo 19/09, B5 | Validar `sustento_base` de vitrinas y generales | Abierto; N13 muestra además que el código ni lo usa |
-| Flujo 19/09, B3/B4 | Cotización enviada sin archivar; COT-2026-002 huérfano | Empeoró: hay 3 PDFs finales sin archivar |
+| Flujo 19/09, B3/B4 | Cotización enviada sin archivar; COT-2026-002 huérfano | B3 cerrado el 12/10: 8211-2026 archivada y COT-2026-001 con su JSON fuente. B4 sigue (hueco en COT-AAAA-NNN, sin efecto en la numeración NNNN-AAAA) |
 | 14/09, B1 · B5 · C2 · C4 | Moyobamba "más reciente" · Telegram · custodia del correlativo · checklist | Los cuatro siguen abiertos (N34, N15, N23, N22) |
 
 ## 8. Decisiones que no se pueden tomar desde el sistema
 
 | ID | Pregunta | Destraba |
 |---|---|---|
-| Q1 | ¿Se está llenando el registro desde el 15/09? — **Registro creado el 12/10/2026 como Google Sheet en Drive (carpeta "MUNAY - Cotizaciones"), con las 6 cotizaciones emitidas; falta decidir quién llena las etapas 2 y 3** | N08 |
+| Q1 | ¿Se está llenando el registro desde el 15/09? — **Registro creado el 12/10/2026 como Google Sheet en Drive (carpeta "MUNAY - Cotizaciones"), con las 6 cotizaciones emitidas; falta agregar 8211-2026 (balanza TT Santa Anita, archivada el 12/10) y decidir quién llena las etapas 2 y 3** | N08 |
 | Q2 | Los precios de Pucallpa (60/95/50): **rueda de carga S/40 y direccional S/80 quedan en el catálogo (12/10/2026)**; falta definir la botella (38 en catálogo, 50 cobrado) | N09, N10 |
 | Q3 | "Margen 60-80%": **es markup sobre el costo (confirmado 12/10/2026); las fichas ya lo aplican así** | N11 |
 | Q4 | Numeración real: formato, quién lleva el correlativo y qué rango usa cada cotizador | N14, N23, R3 |

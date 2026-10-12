@@ -1,5 +1,10 @@
 # Borrador — cotización TT Santa Anita
 
+> **Cerrada: se envió como N° 8211-2026 (17/09/2026).** Precios finales dados directamente:
+> ítem 1 plataforma S/3,800, ítem 2 celdas y caja S/1,980, ítem 3 indicador S/1,380 →
+> S/7,160.00 + IGV = S/8,448.80. Copia y JSON fuente en `cotizaciones-emitidas/8211-2026.*`.
+> Lo que sigue es el borrador de costos previo, que se conserva como historial.
+
 Estado: **incompleto, no generar PDF todavía.** Faltan dos datos que no dependen del costeo:
 si Santa Anita es Lima o provincia (cambia la fórmula de mano de obra) y el precio de la
 plataforma metálica (pendiente por diseño, ver abajo). Este archivo es el borrador de trabajo,

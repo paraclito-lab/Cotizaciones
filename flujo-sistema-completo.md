@@ -336,7 +336,7 @@ está verificado contra el repo, no afirmado de memoria.
 |---|---|---|---|
 | B1 | **`.gitignore` no cubre la numeración real**: ignora `COT-*.pdf/png/html`, pero la cotización real salió como `8211-2026` | `grep` del `.gitignore` confirmado | **Corregido hoy** |
 | B2 | **`atencion` se fuerza a MAYÚSCULAS** | `generar.py:158` → `.upper()`. El documento real del dueño lo tiene en mayúscula y minúscula normal | Abierto — es decisión de diseño, no lo cambio sin confirmar |
-| B3 | **La cotización realmente enviada no está archivada** | `cotizaciones-emitidas/` solo tiene `COT-2026-001.jpg`; falta `8211-2026`, que sí se envió al cliente | Abierto — requiere decidir si se archiva la versión regenerada o la que salió de Excel |
+| B3 | **La cotización realmente enviada no está archivada** | `cotizaciones-emitidas/` solo tiene `COT-2026-001.jpg`; falta `8211-2026`, que sí se envió al cliente | **Corregido el 12/10/2026**: se archivó la versión regenerada (`cotizaciones-emitidas/8211-2026.*`), con los mismos ítems y totales que la de Excel; la diferencia (Atención en mayúsculas, B2) queda anotada en su `nota_interna` |
 | B4 | **`COT-2026-002` es un número huérfano** | Se generó 4 veces, nunca se envió; el trabajo salió como `8211-2026` | Abierto — deja un hueco en el correlativo nuevo |
 | B5 | **`sustento_base` de `vitrinas` y `generales` nunca validado** contra cotizaciones reales | El de `balanzas` estaba incompleto hasta hoy y se descubrió **por casualidad**, al comparar contra el Excel del dueño | Abierto — mismo tipo de error, sin auditar |
 | B6 | **El generador de la hoja de costos no existe en el repo** | `ls herramientas/*.py` → no está | Abierto (ver V6) |
