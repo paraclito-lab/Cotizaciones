@@ -138,8 +138,8 @@ sirven.
 | ID | Pregunta | Destraba |
 |---|---|---|
 | Q1 | ¿Se está llenando el registro desde el 15/09? | N08 |
-| Q2 | Los precios de Pucallpa (60/95/50): ¿actualizan el catálogo, son solo de ese trabajo, o son más altos por ser provincia? | N09, N10 |
-| Q3 | "Margen 60-80%": ¿es sobre el costo (markup) o sobre la venta? | N11 |
+| Q2 | Los precios de Pucallpa (60/95/50): **rueda de carga S/40 y direccional S/80 quedan en el catálogo (12/10/2026)**; falta definir la botella (38 en catálogo, 50 cobrado) | N09, N10 |
+| Q3 | "Margen 60-80%": ¿es sobre el costo (markup) o sobre la venta? — **por ahora se entiende como margen sobre la venta (12/10/2026); falta ajustar las fichas** | N11 |
 | Q4 | Numeración real: formato, quién lleva el correlativo y qué rango usa cada cotizador | N14, N23, R3 |
 | Q5 | Telegram: ¿se retoma o se retira de los criterios? | N15, R2 |
 | Q6 | El piso de S/250: ¿admite excepciones? ¿Quién las autoriza y dónde quedan registradas? | N12 |

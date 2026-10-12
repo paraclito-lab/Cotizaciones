@@ -303,3 +303,17 @@ Cada una dice dónde quedó aplicada. Si el código y este texto no coinciden, m
     que falta se agrega a la ficha, no al pedido. *`trabajos/README.md`.*
 12. **Aprobar = `--final` (23/09):** exige el N° real y ningún precio pendiente, nombra el PDF y
     archiva imagen + JSON en `cotizaciones-emitidas/`.
+
+## 12. Decisiones del 12/10/2026
+
+13. **Varias personas cotizan y deciden el precio.** Quien cotiza revisa la vista previa y puede
+    cambiar el precio antes de emitir; los accesos se dan por correo autorizado.
+14. **Garantía: no se incluye** en la cotización, salvo que quien cotiza la mencione.
+15. **Detracción: no se incluye** en la cotización.
+16. **Margen (provisorio):** el "60–80 %" se entiende, por ahora, como margen sobre la venta. Las
+    fichas actuales aplican markup sobre el costo; no se cambian hasta confirmar la definición
+    (hallazgos-abiertos.md, Q3).
+17. **Rueda de carga S/40 y rueda direccional S/80** son los precios del catálogo; lo cobrado en
+    9196-2026 (S/60 y S/95) fue un ajuste de ese trabajo (Q2).
+18. **Precio cambiado al validar la vista previa:** rige para esa cotización. Un precio que falte
+    en el catálogo se agrega a `catalogo.md` con su origen.
