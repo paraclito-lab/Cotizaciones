@@ -1,0 +1,21 @@
+{
+ "numero": "10084-2026",
+ "tipo": "generales",
+ "subtipo": "estructuras",
+ "cliente": "SERVICIOS COMPARTIDOS DE RESTAURANTES",
+ "cliente_corto": "NGR",
+ "local": "LINCE",
+ "atencion": "Randol Tinco",
+ "fecha": "12 de octubre de 2026",
+ "etiqueta_archivo": "RAMPA",
+ "resumen": "Fabricación de rampa de acero inoxidable 304",
+ "unidades": 1,
+ "items": [
+  {
+   "cant": 1,
+   "descripcion": "SERVICIO: Fabricación de una rampa de acero inoxidable calidad 304, de medidas 1.70 m de largo x 80 cm de ancho x 19.5 cm de altura.",
+   "precio_unit": 2390
+  }
+ ],
+ "nota_interna": "Precio S/2,390 dado directamente (subtotal sin IGV). Sin ficha: generales/estructuras. Medidas dadas como 1.7 de largo x 80 de ancho x 19.5 de altura; interpretadas como m, cm y cm."
+}
