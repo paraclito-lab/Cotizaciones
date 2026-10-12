@@ -143,6 +143,13 @@ anterior" se toma como el siguiente número (9196 → 9197). El generador acepta
 formatos. Qué formato queda y quién lleva el correlativo sigue abierto (hallazgos Q4). Nunca
 se inventa un número: sin número real, `PENDIENTE-AAAA`.
 
+**Formato en uso (confirmado 12/10/2026):** el N° es **mes + día (dos dígitos) + cuántas van ese
+día**, y el año: el 12/10/2026 la primera es `10121-2026`, la segunda `10122-2026`, la tercera
+`10123-2026`; el 5/09 sería `9051-2026`. Lo confirman los reales: 9053 (5/09), 9127 (12/09), 10082
+y 10083 (8/10). La app lo asigna sola al emitir (`herramientas/procesar_solicitud.py`), con la
+fecha de Lima, contando las ya archivadas de ese día y siguiendo a la mayor. Un N° dado a mano
+fuera del sistema no se cuenta: si ya se usó uno ese día, escribirlo en el campo N° de la app.
+
 ## 8. Marca y formato del PDF final — DECIDIDO
 
 Datos reales de la empresa (tomados de las cotizaciones ya entregadas a clientes):

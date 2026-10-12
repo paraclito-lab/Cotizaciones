@@ -101,7 +101,8 @@ del 18% y el total se calculan encima.
 
 ## Paso 3 — Numeración
 
-El formato en uso real es `NNNN-AAAA` (8211-2026, 9196-2026, 9197-2026). `COT-AAAA-NNN`
+El formato en uso real es `NNNN-AAAA` = **mes + día (dos dígitos) + n° del día** - año: el 12/10/2026
+la primera es `10121-2026`, la segunda `10122-2026` (`criterios-actuales.md` §7). `COT-AAAA-NNN`
 quedó decidido en `criterios-actuales.md` §7 pero nunca se adoptó; cuál queda está pendiente
 (`hallazgos-abiertos.md`, Q4). El generador acepta los dos. Para el siguiente número, preguntar
 cuál fue el último usado. Si no se sabe, preguntar — **nunca inventar un número**: un

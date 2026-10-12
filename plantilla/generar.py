@@ -37,7 +37,8 @@ OPCIONES = {"--sin-precios", "--final", "--archivar"}
 ARCHIVO = os.path.join(RAIZ, "cotizaciones-emitidas")
 ARCHIVO_CALIDAD = 85
 
-# La numeración que se usa en la práctica es NNNN-AAAA (8211-2026, 9196-2026). COT-AAAA-NNN
+# La numeración que se usa en la práctica es NNNN-AAAA = mes + día + n° del día (10121-2026 es la
+# primera del 12/10; criterios §7, la asigna procesar_solicitud.py). COT-AAAA-NNN
 # quedó decidida pero nunca se adoptó (hallazgos N14, Q4). Se aceptan las dos: una alerta que
 # sale en el 100% de las cotizaciones reales entrena a ignorar todas las alertas.
 NUMERO_REAL = re.compile(r"COT-\d{4}-\d{3}|\d{3,5}-\d{4}")

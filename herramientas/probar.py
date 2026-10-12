@@ -402,6 +402,35 @@ def registro_agrega_columnas_al_final():
     reg.hoja_instrucciones(wb)
 
 
+@prueba()
+def numero_del_dia_mes_dia_y_cuantas_van():
+    import datetime
+    import procesar_solicitud as ps
+    tmp = tempfile.mkdtemp()
+    archivo_real = generar.ARCHIVO
+    try:
+        generar.ARCHIVO = tmp
+        dia = datetime.date(2026, 10, 12)
+        igual(ps.siguiente_numero(dia), "10121-2026", "la primera del día")
+        for n in ("10122-2026", "10124-2026", "10113-2026"):
+            open(os.path.join(tmp, n + ".json"), "w").close()
+        igual(ps.siguiente_numero(dia), "10125-2026", "sigue a la mayor del día, sin reusar huecos")
+        igual(ps.siguiente_numero(datetime.date(2026, 9, 5)), "9051-2026", "mes de un dígito")
+        open(os.path.join(tmp, "1011-2026.json"), "w").close()   # 1/01 n° 1: no es del 12/10
+        igual(ps.siguiente_numero(datetime.date(2026, 1, 1)), "1012-2026", "enero no choca con octubre")
+        for n in range(5, 10):
+            open(os.path.join(tmp, f"1012{n}-2026.json"), "w").close()
+        try:
+            ps.siguiente_numero(dia)
+            raise AssertionError("con 9 en el día debe pedir el N° a mano")
+        except ps.motor.Problema:
+            pass
+        assert ps.hoy_lima() == datetime.datetime.now(ps.LIMA).date()
+    finally:
+        generar.ARCHIVO = archivo_real
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
 # ---------------------------------------------------------------- render (lento)
 
 @prueba(lenta=True)

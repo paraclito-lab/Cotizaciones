@@ -140,7 +140,7 @@ sirven.
 | Q1 | ¿Se está llenando el registro desde el 15/09? — **Registro creado el 12/10/2026 como Google Sheet en Drive (carpeta "MUNAY - Cotizaciones"), con las 6 cotizaciones emitidas; falta agregar 8211-2026 (balanza TT Santa Anita, archivada el 12/10) y decidir quién llena las etapas 2 y 3** | N08 |
 | Q2 | Los precios de Pucallpa (60/95/50): **rueda de carga S/40 y direccional S/80 quedan en el catálogo (12/10/2026)**; falta definir la botella (38 en catálogo, 50 cobrado) | N09, N10 |
 | Q3 | "Margen 60-80%": **es markup sobre el costo (confirmado 12/10/2026); las fichas ya lo aplican así** | N11 |
-| Q4 | Numeración real: formato, quién lleva el correlativo y qué rango usa cada cotizador | N14, N23, R3 |
+| Q4 | Numeración real: formato, quién lleva el correlativo y qué rango usa cada cotizador — **Formato confirmado (12/10/2026): mes + día + n° del día (10121-2026); la app lo asigna al emitir. Falta: qué pasa con los N° dados fuera de la app el mismo día** | N14, N23, R3 |
 | Q5 | Telegram: ¿se retoma o se retira de los criterios? | N15, R2 |
 | Q6 | El piso de S/250: ¿admite excepciones? ¿Quién las autoriza y dónde quedan registradas? — **Dato (08/10/2026):** 10082-2026 (TT Calle 7, Lima, 3 carretillas) se pidió a S/230 y salió a S/250: el piso se sostuvo. Con 9197-2026 (salió a S/230) son 2 pedidos bajo el piso, 1 aceptado y 1 corregido; sigue sin regla escrita | N12 |
 | Q7 | Condiciones comerciales estándar: forma de pago, plazo, garantía, leyenda de detracción — **ya establecidas (08/10/2026); falta el texto para cargarlo en la plantilla** | N20, N21 |

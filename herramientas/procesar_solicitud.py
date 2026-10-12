@@ -22,7 +22,7 @@ Uso:
     python3 herramientas/procesar_solicitud.py              (todas las pendientes)
     python3 herramientas/procesar_solicitud.py <carpeta>    (una sola)
 """
-import datetime, glob, json, os, re, shutil, sys, traceback
+import datetime, glob, json, os, re, shutil, sys, traceback, zoneinfo
 
 RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [os.path.join(RAIZ, "plantilla"), os.path.join(RAIZ, "herramientas")]
@@ -31,27 +31,39 @@ import cotizar_trabajo as motor  # noqa: E402
 
 SOLICITUDES = os.path.join(RAIZ, "solicitudes")
 MODOS = ("vista", "emitir")
+LIMA = zoneinfo.ZoneInfo("America/Lima")
 
 
-def siguiente_numero(anio):
-    """El N° que sigue al más alto emitido en el año (NNNN-AAAA). Nunca reutiliza uno."""
-    mayor = 0
-    for p in glob.glob(os.path.join(g.ARCHIVO, f"*-{anio}.json")):
-        m = re.fullmatch(r"(\d{3,5})-" + str(anio), os.path.basename(p)[:-5])
+def hoy_lima():
+    """La fecha en Lima. El motor corre en GitHub con hora UTC: desde las 7 p. m. de Lima ya
+    sería el día siguiente, en la fecha impresa y en el N°."""
+    return datetime.datetime.now(LIMA).date()
+
+
+def siguiente_numero(dia):
+    """N° del día: mes + día (dos dígitos) + cuántas van ese día, y el año.
+    12/10/2026 → 10121-2026 la primera, 10122-2026 la segunda; 5/09/2026 → 9051-2026.
+    Así salen los N° reales (9053 el 5/09, 9127 el 12/09, 10082 y 10083 el 8/10). Cuenta las
+    archivadas de ese día y sigue a la mayor: nunca reutiliza uno, aunque haya un hueco."""
+    prefijo = f"{dia.month}{dia.day:02d}"
+    usados = []
+    for p in glob.glob(os.path.join(g.ARCHIVO, f"{prefijo}*-{dia.year}.json")):
+        m = re.fullmatch(prefijo + r"(\d)-" + str(dia.year), os.path.basename(p)[:-5])
         if m:
-            mayor = max(mayor, int(m.group(1)))
-    if not mayor:
-        raise motor.Problema(f"no hay ninguna cotización de {anio} archivada para continuar la "
-                             "numeración: indicar el N° en el pedido")
-    return f"{mayor + 1}-{anio}"
+            usados.append(int(m.group(1)))
+    n = max(usados, default=0) + 1
+    if n > 9:
+        raise motor.Problema(f"ya hay 9 cotizaciones emitidas el {dia:%d/%m/%Y}: indicar el N° "
+                             "en el pedido")
+    return f"{prefijo}{n}-{dia.year}"
 
 
-def fila_registro(cot, servicio, sub, igv, total):
+def fila_registro(cot, servicio, sub, igv, total, hoy):
     """Los valores de la fila del registro, como números (no texto) para que sumen en Sheets."""
     primero = g.items_cotizados(cot)[0]
     return {
         "numero": cot["numero"], "fecha": cot["fecha"],
-        "fecha_iso": datetime.date.today().isoformat(), "cliente": cot["cliente"],
+        "fecha_iso": hoy.isoformat(), "cliente": cot["cliente"],
         "local": cot.get("local", ""), "tipo": servicio["categoria_registro"],
         "subtipo": cot.get("subtipo", ""),
         "descripcion": g.recortar(cot.get("resumen") or primero["descripcion"]),
@@ -75,7 +87,7 @@ def procesar(carpeta):
             raise motor.Problema(f"modo '{modo}' desconocido: debe ser 'vista' o 'emitir'")
         res.update(id=sol.get("id", os.path.basename(carpeta)), modo=modo)
         pedido = sol["pedido"]
-        hoy = datetime.date.today()
+        hoy = hoy_lima()
 
         if "trabajo" in pedido:
             cot, _ = motor.armar(pedido, borrador=(modo == "vista"), hoy=hoy)
@@ -88,7 +100,7 @@ def procesar(carpeta):
             cot.setdefault("fecha", motor.fecha_larga(hoy))
 
         if modo == "emitir":
-            cot["numero"] = pedido.get("numero") or siguiente_numero(hoy.year)
+            cot["numero"] = pedido.get("numero") or siguiente_numero(hoy)
         else:
             cot["numero"] = f"PENDIENTE-{hoy.year}"
 
@@ -118,7 +130,7 @@ def procesar(carpeta):
             res["pdf"] = nombre
             res["archivado"] = [os.path.relpath(g.archivar(png, cot["numero"]), RAIZ),
                                 os.path.relpath(g.archivar_json(cot), RAIZ)]
-            res["registro"] = fila_registro(cot, servicio, sub, igv, total)
+            res["registro"] = fila_registro(cot, servicio, sub, igv, total, hoy)
         else:
             res["pdf"] = os.path.basename(pdf)
     except motor.FaltanRespuestas as e:
