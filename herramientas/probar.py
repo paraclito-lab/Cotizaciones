@@ -446,6 +446,17 @@ def balanza_desde_la_app_reproduce_8211():
 
 
 @prueba()
+def precio_en_cero_es_precio_pendiente():
+    import procesar_solicitud as ps
+    for pedido in ({"precio_unidad": 0}, {"precio_unidad": ""}, {"precio_total": 0}, {"precio_unidad": "0"}):
+        ps.sin_precio(pedido)
+        assert pedido == {}, f"un precio vacío o en 0 se quita: {pedido}"
+    pedido = {"precio_unidad": 1980, "precio_total": "4980"}
+    ps.sin_precio(pedido)
+    assert pedido == {"precio_unidad": 1980, "precio_total": "4980"}, "un precio real se respeta"
+
+
+@prueba()
 def tablero_formulas_y_graficos_en_su_lugar():
     import re
     import armar_tablero as tab

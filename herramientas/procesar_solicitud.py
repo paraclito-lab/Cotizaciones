@@ -79,6 +79,19 @@ def fila_registro(cot, servicio, sub, igv, total, hoy):
     }
 
 
+def sin_precio(pedido):
+    """Un precio en 0 o vacío es "todavía no lo tengo", no un precio de S/ 0: la línea queda
+    Pendiente, la vista previa sale y emitir sigue bloqueado hasta que haya precio."""
+    for clave in ("precio_unidad", "precio_total"):
+        if clave in pedido:
+            try:
+                vacio = float(pedido[clave]) <= 0
+            except (TypeError, ValueError):
+                vacio = pedido[clave] in ("", None)
+            if vacio:
+                del pedido[clave]
+
+
 def procesar(carpeta):
     salida = os.path.join(carpeta, "salida")
     os.makedirs(salida, exist_ok=True)
@@ -90,6 +103,7 @@ def procesar(carpeta):
             raise motor.Problema(f"modo '{modo}' desconocido: debe ser 'vista' o 'emitir'")
         res.update(id=sol.get("id", os.path.basename(carpeta)), modo=modo)
         pedido = sol["pedido"]
+        sin_precio(pedido)
         hoy = hoy_lima()
 
         resumen = []
