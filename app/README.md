@@ -35,6 +35,18 @@ oficial y los cotizadores no necesitan ninguna clave de Google: entran con un c�
 Pegar el archivo nuevo → **Implementar → Administrar implementaciones → editar (lápiz) →
 Versión: Nueva versión → Implementar**. La URL no cambia.
 
+No usar **Nueva implementación** para actualizar: crea otra URL, y si se archiva la anterior,
+los accesos guardados en los celulares dejan de abrir.
+
+## Si la app no abre
+
+| Lo que aparece | Causa | Qué hacer |
+|---|---|---|
+| Página de Drive: *No se pudo abrir el archivo en este momento* | La URL es de una implementación archivada, o tiene `/u/0/`, `/u/1/` (varias cuentas de Google abiertas en el navegador) | **Administrar implementaciones** → la implementación **activa** → copiar su URL con el botón. Debe ser `https://script.google.com/macros/s/…/exec`, sin `/u/N/`. Probarla en una ventana de incógnito. En el celular, borrar el acceso viejo de la pantalla principal y crearlo con la URL nueva |
+| *No se encontró el archivo HTML llamado Index* | La versión implementada es anterior al archivo `Index` | Revisar que el archivo se llame `Index` (sin `.html`) y publicar **Nueva versión** de la misma implementación |
+| Pide iniciar sesión en Google | La implementación no tiene acceso **Cualquier persona** | Editar la implementación activa → Quién tiene acceso: **Cualquier persona** |
+| *Código incorrecto* | El código no está en `CODIGOS`, o tiene espacios | Revisar la propiedad del script |
+
 ## Seguridad
 
 - El token y los códigos viven solo en las propiedades del script. Para dar de baja a un
