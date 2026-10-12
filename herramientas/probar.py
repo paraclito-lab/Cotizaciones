@@ -400,6 +400,9 @@ def laminado_reproduce_cot_2026_001():
     igual(sum(i["cant"] * i["precio_unit"] for i in items), 4980, "subtotal exacto")
     assert sum(1 for i in cot["items"] if i.get("separador")) == 1, "un separador antes del rollo especial"
     assert any("1.82 m → 10 m" in r for r in resumen), resumen
+    # La banda Bravo 3 + Non Food deja 4 cm libres: la vista previa tiene que avisarlo.
+    assert any("Corte justo" in r and "Bravo 3" in r and "4 cm" in r for r in resumen), resumen
+    assert "Cortes justos" in cot["nota_interna"], "el aviso queda en la nota interna"
 
 
 @prueba()
@@ -410,6 +413,9 @@ def laminado_sin_precio_y_piezas_imposibles():
     cot, _ = cl.armar(dict(base, piezas=[{"zona": "A", "tipo": "ventana", "ancho": 1, "alto": 1, "cant": 2}]),
                       datetime.date(2026, 10, 12))
     assert all(i.get("pendiente") for i in cot["items"]), "sin precio total: propuesta sin precios"
+    cot, resumen = cl.armar(dict(base, piezas=[{"zona": "A", "tipo": "ventana", "ancho": 1, "alto": 1, "cant": 2}]),
+                            datetime.date(2026, 10, 12))
+    assert not any("Corte justo" in r for r in resumen), "sin bandas justas no debe avisar"
     for piezas, texto in (([{"zona": "A", "tipo": "espejo", "ancho": 2.0, "alto": 1.9, "cant": 1}], "empalme"),
                           ([{"zona": "A", "tipo": "ventana", "ancho": 97, "alto": 96, "cant": 1}], "metros"),
                           ([], "al menos una pieza")):

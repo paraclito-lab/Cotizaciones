@@ -154,6 +154,18 @@ def armar(pedido, hoy):
                        "compra": compra, "area": sum(p["area"] * p["cant"] for p in suyas)})
     material = sum(g["material"] for g in grupos)
 
+    # Piezas que encajan en el papel con muy poco aire entre ellas: a pulso con cutter un
+    # desvío de esa magnitud arruina las dos (casuística 16/09/2026).
+    justas = []
+    for g in grupos:
+        c = g["calc"]
+        for b in c["bandas"]:
+            libre = c["ancho_rollo"] - sum(x["across"] for x in b["piezas"])
+            if libre < c["holgura_minima"] - 1e-9 and len(b["piezas"]) > 1:
+                justas.append(f"rollo {c['ancho_rollo']:.2f} m: "
+                              + " + ".join(x["zona"] for x in b["piezas"])
+                              + f" ({libre * 100:.0f} cm libres)")
+
     # 4-5. Reparto del precio dado.
     total = pedido.get("precio_total")
     total = entero(total) if total not in (None, "") else None
@@ -197,6 +209,8 @@ def armar(pedido, hoy):
         nota += " Incluye emisión de certificado."
 
     internas = [f"Laminado de seguridad: {n} piezas, {m2:.2f} m²."]
+    if justas:
+        internas.append("Cortes justos (menos de 5 cm libres entre piezas): " + "; ".join(justas) + ".")
     for g in grupos:
         c = g["calc"]
         linea = (f"Rollo {g['rollo']['ancho']:.2f} m: {sum(p['cant'] for p in g['piezas'])} piezas, "
@@ -226,6 +240,9 @@ def armar(pedido, hoy):
             cot[clave] = pedido[clave]
     resumen = ["Rollos: " + "; ".join(f"{g['rollo']['ancho']:.2f} m → {g['compra']} (S/{g['material']:,.2f})"
                                     for g in grupos)]
+    if justas:
+        resumen.append("⚠ Corte justo — " + "; ".join(justas) + ". A pulso con cutter un desvío así "
+                       "arruina las dos piezas: cortarlas por separado o con más cuidado.")
     if total is not None:
         resumen.append("Precio por m²: " + "; ".join(f"rollo {g['rollo']['ancho']:.2f} m S/{g['tarifa']:,.2f}"
                                                     for g in grupos) +

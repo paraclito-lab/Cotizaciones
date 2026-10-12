@@ -302,3 +302,12 @@ convertirse en una regla nueva dentro de `criterios-actuales.md`.
 - **¿Debería ser una regla permanente?** Sí: un trabajo con cálculo propio entra a la app con
   su propio formulario; como línea libre se pierde lo que el sistema ya sabe hacer.
 
+- **Revisión posterior (12/10/2026)**: se cotejó cada caso de esta bitácora con lo que la app
+  hace hoy. Entran con formulario propio: carretillas, balanzas y laminado (con sangría 2 cm,
+  merma 10 %, 1 cm de corte entre piezas y rollo especial bajo separador). Faltaba el aviso de
+  **corte justo** (menos de 5 cm libres entre dos piezas de una banda): la herramienta vieja lo
+  marcaba y la vista previa de la app no; ahora sale en la vista previa y en la nota interna
+  (Atocongo: Bravo 3 + Non Food, 4 cm). Siguen sin formulario propio y se arman como "General":
+  garruchas de coches (su ficha existe y el motor la entiende), soldadura, pintado, motores,
+  espejos y mamparas. Montacargas y apiladores no tienen ficha ni precios. El plano de corte por
+  rollo (`dibujar_rollos.py`) sigue siendo una herramienta aparte, no sale de la app.
