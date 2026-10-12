@@ -316,3 +316,12 @@ Cada una dice dónde quedó aplicada. Si el código y este texto no coinciden, m
     9196-2026 (S/60 y S/95) fue un ajuste de ese trabajo (Q2).
 18. **Precio cambiado al validar la vista previa:** rige para esa cotización. Un precio que falte
     en el catálogo se agrega a `catalogo.md` con su origen.
+
+## 13. Gastos operativos — DECIDIDO (12/10/2026)
+
+Los gastos se registran en el momento, desde la app del celular (pestaña "Registrar gasto"),
+en la hoja **Gastos** del registro. Obligatorio: fecha, monto y categoría. Se identifica a qué
+corresponde por activo, cliente, local o descripción (al menos uno); **no** lleva N° de
+cotización. El comprobante y su foto son opcionales. Con factura, el costo se guarda **sin
+IGV** (crédito fiscal); sin factura, el monto pagado completo. Detalle en `app/README.md`.
+Queda fuera por ahora lo administrativo (planilla, alquiler, contador, impuestos).

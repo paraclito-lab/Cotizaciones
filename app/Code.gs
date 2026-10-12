@@ -20,6 +20,17 @@ const HOJA = 'Cotizaciones';
 const FICHA_CARRETILLAS = 'trabajos/mantenimiento-carretillas.json';
 const SECCION_CATALOGO = '## Repuestos — Carretillas';
 
+// Gastos operativos: hoja del mismo registro y carpeta de comprobantes junto a "PDF emitidos".
+const HOJA_GASTOS = 'Gastos';
+const CARPETA_COMPROBANTES = 'Comprobantes de gastos';
+const CATEGORIAS_GASTO = ['Repuestos y materiales', 'Mano de obra', 'Pasajes y viáticos',
+  'Transporte y combustible', 'Consumibles', 'SCTR y EPP', 'Herramientas', 'Otros'];
+const COMPROBANTES = ['Sin comprobante', 'Boleta', 'Factura', 'Otro'];
+const IGV = 0.18;
+const COLUMNAS_GASTOS = ['Fecha', 'Categoría', 'Monto pagado (S/)', 'Comprobante',
+  'Costo sin IGV (S/)', 'Cliente', 'Local', 'Activo', 'Descripción', 'Foto del comprobante',
+  'Registrado por', 'Registrado el', 'ID'];
+
 // Bloqueo por códigos incorrectos. Se pueden cambiar; vale al publicar una versión nueva.
 const INTENTOS = 8;          // seguidos en un mismo celular: bloquea ese celular
 const INTENTOS_TOTAL = 30;   // entre todos los celulares: frena a quien pruebe códigos al azar
@@ -43,6 +54,8 @@ function probarConexion() {
   Logger.log('Catálogo: %s repuestos, %s adicionales', cat.repuestos.length, cat.adicionales.length);
   Logger.log('Registro: %s', SpreadsheetApp.openById(REGISTRO_ID).getName());
   Logger.log('Carpeta de PDF: %s', DriveApp.getFolderById(CARPETA_PDF_ID).getName());
+  Logger.log('Hoja de gastos: %s', hojaGastos_().getName());
+  Logger.log('Carpeta de comprobantes: %s', carpetaComprobantes_().getName());
   Logger.log('Todo conectado.');
 }
 
@@ -254,4 +267,122 @@ function registrar_(id, res) {
   } finally {
     lock.releaseLock();
   }
+}
+
+// ------------------------------------------------------------------ gastos operativos
+
+/** Listas del formulario de gastos (viven aquí para que la pantalla no las repita). */
+function opcionesGasto(codigo) {
+  verificarCodigo_(codigo);
+  return { categorias: CATEGORIAS_GASTO, comprobantes: COMPROBANTES };
+}
+
+/**
+ * datos = {codigo, id, fecha: 'AAAA-MM-DD', monto, categoria, comprobante,
+ *          cliente, local, activo, descripcion, foto: base64 jpg | null}
+ * No pasa por GitHub: los gastos son dato financiero y no se versionan. Escribe directo en la
+ * hoja "Gastos" del registro. El id lo genera el celular: si la conexión se corta y se reenvía,
+ * no se duplica la fila.
+ */
+function registrarGasto(datos) {
+  const usuario = verificarCodigo_(datos.codigo);
+  const g = validarGasto_(datos);
+
+  const lock = LockService.getScriptLock();
+  lock.waitLock(30000);
+  try {
+    const hoja = hojaGastos_();
+    const ultima = hoja.getLastRow();
+    const col = COLUMNAS_GASTOS.length;
+    if (ultima > 1) {
+      const ids = hoja.getRange(2, col, ultima - 1, 1).getValues();
+      for (let i = 0; i < ids.length; i++) {
+        if (String(ids[i][0]) === g.id) return { fila: i + 2, repetido: true, costo: g.costo };
+      }
+    }
+    let enlace = '';
+    if (g.foto) {
+      const nombre = g.fecha.replace(/-/g, '') + ' ' + g.categoria + ' S' + g.monto + ' ' + g.id + '.jpg';
+      enlace = carpetaComprobantes_().createFile(
+        Utilities.newBlob(Utilities.base64Decode(g.foto), 'image/jpeg', nombre)).getUrl();
+    }
+    const f = g.fecha.split('-').map(Number);
+    hoja.appendRow([new Date(f[0], f[1] - 1, f[2]), g.categoria, g.monto, g.comprobante, g.costo,
+      texto_(g.cliente), texto_(g.local), texto_(g.activo), texto_(g.descripcion), enlace,
+      usuario, new Date(), g.id]);
+    return { fila: hoja.getLastRow(), repetido: false, costo: g.costo };
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+function validarGasto_(d) {
+  const errores = [];
+  const id = String(d.id || '');
+  if (!/^[0-9a-z-]{8,40}$/.test(id)) errores.push('Identificador del gasto inválido.');
+
+  const fecha = String(d.fecha || '');
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(fecha);
+  const hoy = Utilities.formatDate(new Date(), 'America/Lima', 'yyyy-MM-dd');
+  const dia = m ? new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3])) : null;
+  if (!dia || dia.getMonth() !== Number(m[2]) - 1 || dia.getDate() !== Number(m[3])) {
+    errores.push('Falta la fecha.');
+  } else if (fecha > hoy) {
+    errores.push('La fecha no puede ser futura.');
+  }
+
+  const monto = Math.round(Number(d.monto) * 100) / 100;
+  if (!(monto > 0) || monto > 1000000) errores.push('El monto tiene que ser mayor que cero.');
+
+  const categoria = String(d.categoria || '');
+  if (CATEGORIAS_GASTO.indexOf(categoria) < 0) errores.push('Elige una categoría.');
+
+  const comprobante = String(d.comprobante || 'Sin comprobante');
+  if (COMPROBANTES.indexOf(comprobante) < 0) errores.push('Tipo de comprobante inválido.');
+
+  const campos = {};
+  ['cliente', 'local', 'activo', 'descripcion'].forEach(function (k) {
+    campos[k] = String(d[k] || '').trim().slice(0, k === 'descripcion' ? 500 : 120);
+  });
+  if (!campos.cliente && !campos.local && !campos.activo && !campos.descripcion) {
+    errores.push('Indica a qué corresponde el gasto: activo, cliente, local o una descripción.');
+  }
+
+  const foto = d.foto ? String(d.foto) : null;
+  if (foto && (foto.length > 4000000 || !/^[A-Za-z0-9+/=]+$/.test(foto))) {
+    errores.push('La foto no es válida o es demasiado grande.');
+  }
+  if (errores.length) throw new Error(errores.join(' '));
+
+  // Con factura el IGV es crédito fiscal: el costo real es el neto. Sin factura no se recupera.
+  const costo = comprobante === 'Factura' ? Math.round(monto / (1 + IGV) * 100) / 100 : monto;
+  return Object.assign({ id: id, fecha: fecha, monto: monto, categoria: categoria,
+                         comprobante: comprobante, costo: costo, foto: foto }, campos);
+}
+
+/** Texto libre a la hoja sin que se interprete como fórmula (=, +, -, @). */
+function texto_(s) {
+  return /^[=+\-@]/.test(s) ? "'" + s : s;
+}
+
+function hojaGastos_() {
+  const libro = SpreadsheetApp.openById(REGISTRO_ID);
+  let hoja = libro.getSheetByName(HOJA_GASTOS);
+  if (hoja) return hoja;
+  hoja = libro.insertSheet(HOJA_GASTOS);
+  const col = COLUMNAS_GASTOS.length;
+  hoja.getRange(1, 1, 1, col).setValues([COLUMNAS_GASTOS]).setFontWeight('bold')
+    .setBackground('#1f9e6e').setFontColor('#ffffff');
+  hoja.setFrozenRows(1);
+  hoja.getRange('A2:A').setNumberFormat('dd/mm/yyyy');
+  hoja.getRange('C2:C').setNumberFormat('#,##0.00');
+  hoja.getRange('E2:E').setNumberFormat('#,##0.00');
+  hoja.getRange('L2:L').setNumberFormat('dd/mm/yyyy hh:mm');
+  return hoja;
+}
+
+function carpetaComprobantes_() {
+  const padre = DriveApp.getFolderById(CARPETA_PDF_ID).getParents().next();
+  const hay = padre.getFoldersByName(CARPETA_COMPROBANTES);
+  return hay.hasNext() ? hay.next() : padre.createFolder(CARPETA_COMPROBANTES);
 }

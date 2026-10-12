@@ -9,7 +9,27 @@ previa o la cotización emitida, y la app la muestra. Al emitir, guarda el PDF e
 | Archivo | Qué es |
 |---|---|
 | `Code.gs` | Servidor: conversa con GitHub, Drive y el registro |
-| `Index.html` | Pantalla del celular: formulario, vista previa, emitir |
+| `Index.html` | Pantalla del celular: formulario, vista previa, emitir, registrar gasto |
+
+## Registrar gasto
+
+Segunda pestaña de la app. Se usa en el momento en que se gasta, con el mismo código personal.
+
+- **Obligatorio:** fecha, monto pagado y categoría (la lista está en `CATEGORIAS_GASTO`, al
+  inicio de `Code.gs`).
+- **A qué corresponde:** activo (equipo), cliente, local o una descripción; basta con uno. No
+  lleva N° de cotización.
+- **Opcional:** tipo de comprobante y su foto. Con **factura**, la columna "Costo sin IGV" guarda
+  el monto ÷ 1.18 (el IGV es crédito fiscal); con boleta o sin comprobante, el monto completo.
+
+No pasa por GitHub: escribe directo en la hoja **Gastos** del registro (la crea sola la primera
+vez) y guarda la foto en la carpeta **Comprobantes de gastos**, junto a `PDF emitidos`. Los
+gastos son dato financiero y no se versionan en el repositorio. Cada gasto lleva un ID que
+genera el celular: si se corta la conexión y se vuelve a tocar "Guardar", no se duplica. La
+columna "Registrado por" sale del código personal.
+
+Después de publicar esta versión, correr **probarConexion** una vez: crea la hoja y la carpeta,
+y pide el permiso nuevo si hiciera falta.
 
 ## Instalación (una vez, desde una computadora)
 

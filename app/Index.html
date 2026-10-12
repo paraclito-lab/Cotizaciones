@@ -12,7 +12,7 @@
   .card { background: #fff; border: 1px solid var(--borde); border-radius: 10px; padding: 14px; margin-bottom: 12px; }
   .card h2 { font-size: 15px; margin: 0 0 10px; color: var(--verde-osc); }
   label { display: block; font-size: 13px; color: #555; margin: 10px 0 4px; }
-  input, select, textarea { width: 100%; font-size: 16px; padding: 10px; border: 1px solid var(--borde); border-radius: 8px; background: #fff; }
+  input, select, textarea { width: 100%; font-family: inherit; font-size: 16px; padding: 10px; border: 1px solid var(--borde); border-radius: 8px; background: #fff; }
   textarea { min-height: 70px; }
   .fila { display: grid; grid-template-columns: 1fr 70px 90px 34px; gap: 6px; margin-bottom: 6px; align-items: center; }
   .fila input { padding: 9px 6px; }
@@ -39,10 +39,18 @@
   @keyframes g { to { transform: rotate(360deg); } }
   .fotos { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
   .fotos img { width: 72px; height: 72px; object-fit: cover; border-radius: 6px; border: 1px solid var(--borde); }
+  nav { display: flex; background: var(--verde-osc); }
+  nav button { flex: 1; background: none; color: #d8efe5; border-radius: 0; padding: 12px 4px; font-weight: 700; border-bottom: 3px solid transparent; }
+  nav button.activa { color: #fff; border-bottom-color: #fff; }
+  button:disabled { opacity: .6; }
 </style>
 </head>
 <body>
 <header>Cotizaciones Munay</header>
+<nav id="menu" class="oculto">
+  <button type="button" id="ir-cotizar" class="activa" onclick="pestana('cotizar')">Cotizar</button>
+  <button type="button" id="ir-gasto" onclick="pestana('gasto')">Registrar gasto</button>
+</nav>
 <main>
 
 <section id="entrada">
@@ -166,6 +174,44 @@
   </div>
 </section>
 
+<section id="gasto" class="oculto">
+  <div class="card">
+    <h2>Gasto</h2>
+    <div class="dos">
+      <div><label>Fecha</label><input id="g-fecha" type="date"></div>
+      <div><label>Monto pagado (S/)</label><input id="g-monto" type="number" min="0" step="0.01" inputmode="decimal"></div>
+    </div>
+    <label>Categoría</label>
+    <select id="g-categoria"><option value="">Elegir…</option></select>
+  </div>
+
+  <div class="card">
+    <h2>¿A qué corresponde?</h2>
+    <div class="nota">Llena al menos uno.</div>
+    <label>Activo (equipo)</label>
+    <input id="g-activo" placeholder="Ej.: carretilla 07, balanza de recepción, camioneta">
+    <div class="dos">
+      <div><label>Cliente</label><input id="g-cliente" list="clientes" autocomplete="off"></div>
+      <div><label>Local</label><input id="g-local"></div>
+    </div>
+    <label>Descripción del servicio o del gasto</label>
+    <textarea id="g-descripcion" placeholder="Ej.: retenes para el mantenimiento de 3 carretillas"></textarea>
+  </div>
+
+  <div class="card">
+    <h2>Comprobante (opcional)</h2>
+    <div class="seg" id="g-comprobantes"></div>
+    <div class="nota">Con factura, el registro guarda el costo sin IGV.</div>
+    <label>Foto del comprobante</label>
+    <input id="g-foto" type="file" accept="image/*">
+    <div class="fotos" id="g-miniatura"></div>
+  </div>
+
+  <div id="errores-gasto"></div>
+  <div id="ok-gasto"></div>
+  <button class="prim" id="g-guardar" onclick="guardarGasto()">Guardar gasto</button>
+</section>
+
 </main>
 <script>
 var CAT = { repuestos: [], adicionales: [] };
@@ -223,7 +269,9 @@ function entrar(automatico) {
     CODIGO = c; NOMBRE = nombre;
     try { localStorage.setItem('codigo', c); } catch (e) {}
     $('entrada').classList.add('oculto'); ver('formulario');
+    $('menu').classList.remove('oculto');
     cargarCatalogo();
+    cargarOpcionesGasto();
   }).withFailureHandler(function (e) {
     try { localStorage.removeItem('codigo'); } catch (x) {}
     if (!automatico) $('errores-entrada').innerHTML = '<div class="error">' + e.message + '</div>';
@@ -316,9 +364,89 @@ function armarPedido() {
 function mostrarErrores(lista, dondeId) {
   $(dondeId || 'errores-form').innerHTML = lista.map(function (e) { return '<div class="error">' + e + '</div>'; }).join('');
 }
+var seccionCotizar = 'formulario';   // dónde quedó la cotización al cambiar de pestaña
 function ver(seccion) {
-  ['entrada', 'formulario', 'espera', 'vista'].forEach(function (s) { $(s).classList.toggle('oculto', s !== seccion); });
+  if (seccion !== 'gasto' && seccion !== 'entrada') seccionCotizar = seccion;
+  ['entrada', 'formulario', 'espera', 'vista', 'gasto'].forEach(function (s) { $(s).classList.toggle('oculto', s !== seccion); });
   window.scrollTo(0, 0);
+}
+
+function pestana(cual) {
+  $('ir-cotizar').classList.toggle('activa', cual === 'cotizar');
+  $('ir-gasto').classList.toggle('activa', cual === 'gasto');
+  ver(cual === 'gasto' ? 'gasto' : seccionCotizar);
+}
+
+// ------------------------------------------------------------------ gastos
+
+var gastoId = null, gastoFoto = null;
+function nuevoGastoId() { return 'g' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8); }
+function hoyLima() {
+  var p = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Lima', year: 'numeric', month: '2-digit', day: '2-digit' });
+  return p.format(new Date());
+}
+function escapar(s) { return String(s).replace(/[&<>"']/g, function (c) { return '&#' + c.charCodeAt(0) + ';'; }); }
+
+function cargarOpcionesGasto() {
+  google.script.run.withSuccessHandler(function (o) {
+    $('g-categoria').innerHTML = '<option value="">Elegir…</option>' + o.categorias.map(function (c) {
+      return '<option>' + escapar(c) + '</option>';
+    }).join('');
+    $('g-comprobantes').innerHTML = o.comprobantes.map(function (c, i) {
+      return '<label><input type="radio" name="g-comp" value="' + escapar(c) + '"' + (i === 0 ? ' checked' : '') +
+        '><span>' + escapar(c) + '</span></label>';
+    }).join('');
+  }).withFailureHandler(function (e) { mostrarErrores([e.message], 'errores-gasto'); }).opcionesGasto(CODIGO);
+}
+
+function limpiarGasto(todo) {
+  ['g-monto', 'g-activo', 'g-cliente', 'g-local', 'g-descripcion', 'g-foto'].forEach(function (id) { $(id).value = ''; });
+  if (todo) { $('g-fecha').value = hoyLima(); $('g-categoria').value = ''; }
+  var primero = document.querySelector('input[name=g-comp]'); if (primero) primero.checked = true;
+  $('g-miniatura').innerHTML = ''; gastoFoto = null; gastoId = null;
+}
+$('g-fecha').value = hoyLima();
+
+$('g-foto').addEventListener('change', function (ev) {
+  gastoFoto = null; $('g-miniatura').innerHTML = '';
+  var a = ev.target.files[0];
+  if (!a) return;
+  reducir(a, function (b64) {
+    gastoFoto = b64;
+    var img = document.createElement('img'); img.src = 'data:image/jpeg;base64,' + b64;
+    $('g-miniatura').appendChild(img);
+  });
+});
+
+function guardarGasto() {
+  var comp = document.querySelector('input[name=g-comp]:checked');
+  var d = { codigo: CODIGO, fecha: $('g-fecha').value, monto: $('g-monto').value === '' ? null : Number($('g-monto').value),
+            categoria: $('g-categoria').value, comprobante: comp ? comp.value : 'Sin comprobante',
+            activo: $('g-activo').value.trim(), cliente: $('g-cliente').value.trim().toUpperCase(),
+            local: $('g-local').value.trim().toUpperCase(), descripcion: $('g-descripcion').value.trim(), foto: gastoFoto };
+  var errores = [];
+  if (!d.fecha) errores.push('Falta la fecha.');
+  if (!(d.monto > 0)) errores.push('Falta el monto.');
+  if (!d.categoria) errores.push('Elige una categoría.');
+  if (!d.activo && !d.cliente && !d.local && !d.descripcion) errores.push('Indica a qué corresponde: activo, cliente, local o una descripción.');
+  if ($('g-foto').value && !gastoFoto) errores.push('La foto todavía se está preparando: espera un segundo.');
+  $('ok-gasto').innerHTML = '';
+  if (errores.length) return mostrarErrores(errores, 'errores-gasto');
+  mostrarErrores([], 'errores-gasto');
+  if (!gastoId) gastoId = nuevoGastoId();   // el mismo id si se reintenta: no duplica la fila
+  d.id = gastoId;
+  $('g-guardar').disabled = true; $('g-guardar').textContent = 'Guardando…';
+  google.script.run.withSuccessHandler(function (r) {
+    $('g-guardar').disabled = false; $('g-guardar').textContent = 'Guardar gasto';
+    var neto = d.comprobante === 'Factura' ? ' (costo sin IGV ' + soles(r.costo) + ')' : '';
+    $('ok-gasto').innerHTML = '<div class="ok"><b>Gasto guardado.</b><br>' + escapar(d.categoria) + ': ' + soles(d.monto) + neto +
+      '<br>Fila ' + r.fila + ' de la hoja Gastos.' + (r.repetido ? ' Ya estaba guardado; no se duplicó.' : '') + '</div>';
+    limpiarGasto(false);
+    window.scrollTo(0, document.body.scrollHeight);
+  }).withFailureHandler(function (e) {
+    $('g-guardar').disabled = false; $('g-guardar').textContent = 'Guardar gasto';
+    mostrarErrores([escapar(e.message)], 'errores-gasto');
+  }).registrarGasto(d);
 }
 
 function pedirVista() {
