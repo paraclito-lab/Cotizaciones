@@ -46,6 +46,7 @@ los accesos guardados en los celulares dejan de abrir.
 | *No se encontró el archivo HTML llamado Index* | La versión implementada es anterior al archivo `Index` | Revisar que el archivo se llame `Index` (sin `.html`) y publicar **Nueva versión** de la misma implementación |
 | Pide iniciar sesión en Google | La implementación no tiene acceso **Cualquier persona** | Editar la implementación activa → Quién tiene acceso: **Cualquier persona** |
 | *Código incorrecto* | El código no está en `CODIGOS`, o tiene espacios | Revisar la propiedad del script |
+| *Demasiados intentos fallidos* | 8 códigos incorrectos seguidos en ese celular | Esperar 10 minutos, o en el editor: **desbloquear → Ejecutar** |
 
 ## Seguridad
 
@@ -53,8 +54,12 @@ los accesos guardados en los celulares dejan de abrir.
   cotizador se borra su par de `CODIGOS`; si se pierde un celular se cambia su código. Si se
   sospecha del token, se borra en GitHub y se crea otro.
 - Con "Cualquier persona", la URL abre la pantalla de entrada, pero **no se puede ver ni hacer
-  nada sin código**: el catálogo, las solicitudes y los resultados lo piden en cada llamada. Tras
-  8 códigos incorrectos seguidos se bloquea durante 10 minutos.
+  nada sin código**: el catálogo, las solicitudes y los resultados lo piden en cada llamada.
+- Tras 8 códigos incorrectos seguidos se bloquea **ese celular** 10 minutos (los demás siguen
+  entrando); acertar el código reinicia la cuenta. Si entre todos los celulares suman 30 fallos,
+  se bloquea la entrada para todos 10 minutos. Los tres números están al inicio de `Code.gs`
+  (`INTENTOS`, `INTENTOS_TOTAL`, `BLOQUEO_MIN`). Para desbloquear antes: en el editor, función
+  **desbloquear → Ejecutar** (no hace falta publicar nada).
 - Cada solicitud guarda quién la hizo (`creado_por`).
 - La cuenta de servicio solo ve lo que se le comparte (la carpeta y el registro). El token da
   acceso únicamente al repositorio Cotizaciones.

@@ -170,6 +170,14 @@
 <script>
 var CAT = { repuestos: [], adicionales: [] };
 var CODIGO = '', NOMBRE = '';
+// Identificador al azar de este celular: si alguien se equivoca de código, solo se bloquea su celular.
+var EQUIPO = (function () {
+  try {
+    var e = localStorage.getItem('equipo');
+    if (!e) { e = Math.random().toString(36).slice(2, 12) + Date.now().toString(36); localStorage.setItem('equipo', e); }
+    return e;
+  } catch (x) { return ''; }
+})();
 var grupo = null, fotosSubidas = [], fotosNuevas = [], ultimoPedido = null;
 
 function $(id) { return document.getElementById(id); }
@@ -219,7 +227,7 @@ function entrar(automatico) {
   }).withFailureHandler(function (e) {
     try { localStorage.removeItem('codigo'); } catch (x) {}
     if (!automatico) $('errores-entrada').innerHTML = '<div class="error">' + e.message + '</div>';
-  }).validar(c);
+  }).validar(c, EQUIPO);
 }
 try { var guardado = localStorage.getItem('codigo'); if (guardado) { $('codigo').value = guardado; entrar(true); } } catch (e) {}
 

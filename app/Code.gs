@@ -20,6 +20,11 @@ const HOJA = 'Cotizaciones';
 const FICHA_CARRETILLAS = 'trabajos/mantenimiento-carretillas.json';
 const SECCION_CATALOGO = '## Repuestos — Carretillas';
 
+// Bloqueo por códigos incorrectos. Se pueden cambiar; vale al publicar una versión nueva.
+const INTENTOS = 8;          // seguidos en un mismo celular: bloquea ese celular
+const INTENTOS_TOTAL = 30;   // entre todos los celulares: frena a quien pruebe códigos al azar
+const BLOQUEO_MIN = 10;      // minutos que dura el bloqueo
+
 function doGet() {
   return HtmlService.createHtmlOutputFromFile('Index')
     .setTitle('Cotizaciones Munay')
@@ -47,11 +52,18 @@ function probarConexion() {
  * Cada cotizador entra con su código personal. Se guardan en la propiedad CODIGOS del script,
  * separados por coma:  Ana:ana-4821,Luis:luis-9370   (nombre:código, mínimo 6 caracteres).
  * Para dar de baja a alguien se borra su par y se guarda. Devuelve el nombre.
+ * equipo: identificador al azar que cada celular guarda, para bloquear solo al que se equivoca.
  */
-function verificarCodigo_(codigo) {
+function verificarCodigo_(codigo, equipo) {
   const cache = CacheService.getScriptCache();
-  const fallos = Number(cache.get('fallos') || 0);
-  if (fallos >= 8) throw new Error('Demasiados intentos fallidos. Esperar 10 minutos.');
+  const ronda = cache.get('ronda') || '0';
+  const total = 'fallos-' + ronda;
+  const propio = total + '-' + (/^[0-9a-z]{8,40}$/.test(equipo || '') ? equipo : 'sin-equipo');
+  const fallos = Number(cache.get(propio) || 0);
+  const fallosTotal = Number(cache.get(total) || 0);
+  if (fallos >= INTENTOS || fallosTotal >= INTENTOS_TOTAL) {
+    throw new Error('Demasiados intentos fallidos. Esperar ' + BLOQUEO_MIN + ' minutos.');
+  }
   const lista = (PropertiesService.getScriptProperties().getProperty('CODIGOS') || '')
     .split(',').map(function (par) { return par.trim(); }).filter(String);
   for (let i = 0; i < lista.length; i++) {
@@ -59,16 +71,24 @@ function verificarCodigo_(codigo) {
     if (corte < 1) continue;
     const clave = lista[i].slice(corte + 1).trim();
     if (clave.length >= 6 && String(codigo || '').trim() === clave) {
+      if (fallos) cache.remove(propio);
       return lista[i].slice(0, corte).trim();
     }
   }
-  cache.put('fallos', String(fallos + 1), 600);
+  cache.put(propio, String(fallos + 1), BLOQUEO_MIN * 60);
+  cache.put(total, String(fallosTotal + 1), BLOQUEO_MIN * 60);
   throw new Error('Código incorrecto.');
 }
 
 /** La pantalla de entrada llama a esta función: devuelve el nombre si el código es válido. */
-function validar(codigo) {
-  return verificarCodigo_(codigo);
+function validar(codigo, equipo) {
+  return verificarCodigo_(codigo, equipo);
+}
+
+/** Correr desde el editor si alguien quedó bloqueado: borra los intentos fallidos de todos. */
+function desbloquear() {
+  CacheService.getScriptCache().put('ronda', String(Date.now()), 21600);
+  Logger.log('Desbloqueado: ya se puede entrar.');
 }
 
 // ------------------------------------------------------------------ GitHub
