@@ -1,0 +1,18 @@
+{
+ "estado": "ok",
+ "errores": [],
+ "alertas": [
+  "documento SIN PRECIOS: es una propuesta técnica para validar el alcance, NO una cotización para aprobar",
+  "el N° 'PENDIENTE-2026' no es un correlativo real (NNNN-AAAA)"
+ ],
+ "avisos": [],
+ "id": "20261012-0244-1lj8-v024403",
+ "modo": "vista",
+ "numero": "PENDIENTE-2026",
+ "png": "PENDIENTE-2026.png",
+ "subtotal": 0.0,
+ "igv": 0.0,
+ "total": 0.0,
+ "sin_precios": true,
+ "pdf": "PENDIENTE-2026.pdf"
+}
