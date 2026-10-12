@@ -11,6 +11,19 @@ previa o la cotización emitida, y la app la muestra. Al emitir, guarda el PDF e
 | `Code.gs` | Servidor: conversa con GitHub, Drive y el registro |
 | `Index.html` | Pantalla del celular: formulario, vista previa, emitir, registrar gasto |
 
+## Tipos de trabajo
+
+| Tipo | Qué pide | Cómo se arma |
+|---|---|---|
+| Carretillas | N°, precio por carretilla, 3 preguntas, repuestos | Ficha `mantenimiento-carretillas` |
+| Balanzas | N°, precio por balanza (paquete), las preguntas de su ficha, repuestos y trabajos aparte | Ficha `mantenimiento-balanza-plataforma`: la pantalla dibuja sus preguntas, así que cambiar la ficha cambia la app |
+| Laminado | Piezas (zona, tipo, ancho y alto en metros, cantidad), certificado, precio total | `herramientas/cotizar_laminado.py`: rollo de cada pieza, metros a comprar y reparto del total como en COT-2026-001. Sin precio total sale la propuesta sin precios |
+| General | Líneas libres y hasta 4 fotos | Tal cual |
+
+En la vista previa, Balanzas muestra los avisos de su ficha (provincia, KELI, pintura) y
+Laminado muestra los rollos a comprar y el precio por m² de cada rollo. Eso lo ve solo quien
+cotiza: no sale en el PDF.
+
 ## Registrar gasto
 
 Segunda pestaña de la app. Se usa en el momento en que se gasta, con el mismo código personal.

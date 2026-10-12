@@ -382,6 +382,59 @@ def asistente_crea_una_ficha_que_el_motor_usa():
 # ---------------------------------------------------------------- registro
 
 @prueba()
+def laminado_reproduce_cot_2026_001():
+    import datetime, re
+    import cotizar_laminado as cl
+    real = cargar("cotizaciones-emitidas/COT-2026-001.json")
+    piezas, esperados = [], []
+    for it in real["items"]:
+        if it.get("separador"):
+            continue
+        zona, tipo, a, b = re.search(r"— (.+?): (\w+?)s? de ([\d.]+)m x ([\d.]+)m", it["descripcion"]).groups()
+        piezas.append({"zona": zona, "tipo": tipo, "ancho": float(a), "alto": float(b), "cant": it["cant"]})
+        esperados.append(it["precio_unit"])
+    cot, resumen = cl.armar({"cliente": "X", "local": "Y", "piezas": piezas, "precio_total": 4980},
+                            datetime.date(2026, 10, 12))
+    items = [i for i in cot["items"] if not i.get("separador")]
+    igual([i["precio_unit"] for i in items], esperados, "los 19 precios unitarios de COT-2026-001")
+    igual(sum(i["cant"] * i["precio_unit"] for i in items), 4980, "subtotal exacto")
+    assert sum(1 for i in cot["items"] if i.get("separador")) == 1, "un separador antes del rollo especial"
+    assert any("1.82 m → 10 m" in r for r in resumen), resumen
+
+
+@prueba()
+def laminado_sin_precio_y_piezas_imposibles():
+    import datetime
+    import cotizar_laminado as cl
+    base = {"cliente": "X", "local": "Y"}
+    cot, _ = cl.armar(dict(base, piezas=[{"zona": "A", "tipo": "ventana", "ancho": 1, "alto": 1, "cant": 2}]),
+                      datetime.date(2026, 10, 12))
+    assert all(i.get("pendiente") for i in cot["items"]), "sin precio total: propuesta sin precios"
+    for piezas, texto in (([{"zona": "A", "tipo": "espejo", "ancho": 2.0, "alto": 1.9, "cant": 1}], "empalme"),
+                          ([{"zona": "A", "tipo": "ventana", "ancho": 97, "alto": 96, "cant": 1}], "metros"),
+                          ([], "al menos una pieza")):
+        try:
+            cl.armar(dict(base, piezas=piezas), datetime.date(2026, 10, 12))
+            raise AssertionError(f"debió rechazar: {piezas}")
+        except motor.Problema as e:
+            assert texto in str(e), e
+
+
+@prueba()
+def balanza_desde_la_app_reproduce_8211():
+    import datetime
+    pedido = {"cliente": "TOTTUS", "local": "SANTA ANITA", "trabajo": "mantenimiento-balanza-plataforma",
+              "unidades": 1, "precio_unidad": 1980,
+              "respuestas": {"localidad": "lima", "componentes": "marvin", "indicador": "si", "pintura": "no"},
+              "lineas": [{"descripcion": "Cambio de plataforma metálica con plancha estriada", "cant": 1, "precio": 3800},
+                         {"repuesto": "Indicador de peso T-Scale BW", "cant": 1, "precio": 1380}]}
+    cot, _ = motor.armar(pedido, borrador=True, hoy=datetime.date(2026, 10, 12))
+    igual(sum(i["cant"] * i["precio_unit"] for i in cot["items"]), 7160, "mismo subtotal que 8211-2026")
+    contiene([cot["items"][0]["descripcion"]], "MAVIN NB2", "la marca elegida va en el texto")
+    assert "(" not in cot["items"][2]["descripcion"], "sin notas del catálogo en el texto del cliente"
+
+
+@prueba()
 def tablero_formulas_y_graficos_en_su_lugar():
     import re
     import armar_tablero as tab

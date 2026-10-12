@@ -91,12 +91,26 @@ Las 4 cotizaciones reales analizadas en `balanzas-industriales/casuistica-balanz
 | Marvin 1T — celdas + caja sumatoria, sin indicador | 5,785.00 | Por validar | N° 3032-2026 (Ica Panamericana — la única aprobada) |
 | Marvin 1T — celdas (04) + caja sumatoria + cableado, sin indicador | 7,690.00 | Por validar | N° 8202-2026 (Tottus Olivos — rechazada) |
 | KELI 1T — kit celdas + patas + caja sumatoria 4 canales + cable 6m, sin indicador | 8,520.00 | Por validar | N° 6112/7171-2026 (Tarapoto/Moyobamba — rechazadas) |
-| Indicador de peso T-Scale BW (suministro, aparte) | 1,350.00 | Por validar | N° 6112/7171-2026 |
+| Indicador de peso T-Scale BW | 1,350.00 | Por validar | N° 6112/7171-2026. Suministro aparte del paquete |
 
 Comparando: el paquete de venta de Marvin sin indicador (S/5,785) contra el costo de compra de
 celdas + caja Mavin (S/212.40 + S/59.00 = S/271.40) deja un margen amplio que incluye mano de
 obra, cableado y ganancia — pero no se puede separar cuánto de eso es cada cosa sin el dato de
 horas/personas de esa cotización puntual (ver punto 2 de `criterios-actuales.md`).
+
+## Lámina de seguridad — rollos (costo de compra)
+
+La lámina se compra por rollo, no por m² (casuistica.md, 16/09/2026): el costo depende de cómo
+encajan las piezas en el ancho del rollo. `herramientas/cotizar_laminado.py` lee esta tabla
+para repartir el precio total entre las piezas, como se hizo en COT-2026-001.
+
+| Ancho (m) | Largo (m) | Precio del rollo | Precio por metro | Se compra en | Estado | Fuente |
+|---|---|---|---|---|---|---|
+| 1.52 | 30 | 300.00 | | rollo completo | Por validar | Dato dado el 17/09/2026 (COT-2026-001) |
+| 1.82 | 30 | 900.00 | 40.00 | tramos de 10 m | Por validar | Dato dado el 17/09/2026: rollo a S/900; se compraron 10 m por S/400 |
+
+Las piezas cuyo lado menor (más 2 cm de sangría por lado) pasa de 1.52 m van al rollo de
+1.82 m; si tampoco entran ahí, necesitan empalme y se cotizan aparte.
 
 ## Mano de obra — NO es un precio de catálogo fijo
 

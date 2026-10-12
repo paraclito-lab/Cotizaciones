@@ -18,6 +18,7 @@ const REGISTRO_ID = '1bsj4PmGSDWN2S8Bb0x5ECIuDAaXtiyU3vVhiys2rb7k';
 const CARPETA_PDF_ID = '17Kx_gtJesPAJL-EDT_2N5hkGR4FbcXr0';
 const HOJA = 'Cotizaciones';
 const FICHA_CARRETILLAS = 'trabajos/mantenimiento-carretillas.json';
+const FICHA_BALANZAS = 'trabajos/mantenimiento-balanza-plataforma.json';
 const SECCION_CATALOGO = '## Repuestos — Carretillas';
 
 // Gastos operativos: hoja del mismo registro y carpeta de comprobantes junto a "PDF emitidos".
@@ -154,18 +155,12 @@ function subir_(path, base64, mensaje) {
 
 // ------------------------------------------------------------------ datos para el formulario
 
-/** Repuestos de carretillas (catalogo.md) y adicionales de la ficha, para autocompletar. */
-function catalogo(codigo) {
-  verificarCodigo_(codigo);
-  const cache = CacheService.getScriptCache();
-  const guardado = cache.get('catalogo');
-  if (guardado) return JSON.parse(guardado);
-
-  const lineas = leer_('catalogo.md').getContentText('UTF-8').split('\n');
+/** Filas de una sección de catalogo.md con precio de venta en la segunda columna. */
+function repuestosDe_(lineas, seccion) {
   const repuestos = [];
   let dentro = false;
   lineas.forEach(function (l) {
-    if (l.indexOf('## ') === 0) dentro = l.indexOf(SECCION_CATALOGO) === 0;
+    if (l.indexOf('## ') === 0) dentro = l.indexOf(seccion) === 0;
     if (!dentro || l.indexOf('|') !== 0) return;
     const c = l.replace(/^\||\|$/g, '').split('|').map(function (s) { return s.trim(); });
     const precio = Number((c[1] || '').replace(/,/g, ''));
@@ -173,14 +168,38 @@ function catalogo(codigo) {
       repuestos.push({ nombre: c[0], precio: precio });
     }
   });
+  return repuestos;
+}
+
+/**
+ * Para autocompletar: repuestos de carretillas y adicionales de su ficha; y de balanzas, las
+ * preguntas de su ficha (la pantalla las dibuja tal cual) y sus repuestos del catálogo.
+ */
+function catalogo(codigo) {
+  verificarCodigo_(codigo);
+  const cache = CacheService.getScriptCache();
+  const guardado = cache.get('catalogo-v2');
+  if (guardado) return JSON.parse(guardado);
+
+  const lineas = leer_('catalogo.md').getContentText('UTF-8').split('\n');
   const ficha = JSON.parse(leer_(FICHA_CARRETILLAS).getContentText('UTF-8'));
   const adicionales = Object.keys(ficha.adicionales || {}).map(function (id) {
     const a = ficha.adicionales[id];
     return { id: id, nombre: a.descripcion, precio: a.precio_ref };
   });
-  const res = { repuestos: repuestos, adicionales: adicionales,
-                piso: (ficha.precio_referencia || {}).piso || null };
-  cache.put('catalogo', JSON.stringify(res), 3600);
+  const fb = JSON.parse(leer_(FICHA_BALANZAS).getContentText('UTF-8'));
+  const balanzas = {
+    trabajo: fb.id, unidad: fb.unidad, unidad_plural: fb.unidad_plural,
+    preguntas: (fb.preguntas || []).map(function (q) {
+      return { id: q.id, pregunta: q.pregunta, opciones: Object.keys(q.opciones).map(function (k) {
+        return { id: k, texto: q.opciones[k].texto };
+      }) };
+    }),
+    repuestos: repuestosDe_(lineas, '## ' + fb.seccion_catalogo)
+  };
+  const res = { repuestos: repuestosDe_(lineas, SECCION_CATALOGO), adicionales: adicionales,
+                piso: (ficha.precio_referencia || {}).piso || null, balanzas: balanzas };
+  cache.put('catalogo-v2', JSON.stringify(res), 3600);
   return res;
 }
 

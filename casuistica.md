@@ -287,3 +287,18 @@ convertirse en una regla nueva dentro de `criterios-actuales.md`.
   recorta antes de ir a una cotización. El subtipo, a evaluar: si se repiten trabajos de
   soldadura en equipos de cocina o producción, considerar un subtipo `soldadura` al llegar al
   umbral de 3.
+
+### 12/10/2026 — La app no tenía laminado ni balanzas
+
+- **Contexto**: con la app del celular ya funcionando, solo había dos tipos: carretillas y
+  servicio general. Laminado y balanzas, que tienen su propio cálculo y su ficha, había que
+  escribirlos como líneas libres, y el cálculo de rollos y el checklist de balanzas no se usaban.
+- **Cómo se resolvió**: la app suma "Balanzas" (las preguntas salen de la ficha, y la marca de
+  celdas y la pintura ahora entran al texto del cliente) y "Laminado" (piezas con medidas y
+  precio total). El laminado se arma con `herramientas/cotizar_laminado.py`, que reproduce los
+  19 precios de COT-2026-001: el total dado se reparte entre los rollos según su material y,
+  dentro de cada rollo, según el área de cada pieza. Los precios de los rollos (S/300 el de
+  1.52 m; S/40 por metro el de 1.82 m, en tramos de 10 m) quedaron en `catalogo.md`.
+- **¿Debería ser una regla permanente?** Sí: un trabajo con cálculo propio entra a la app con
+  su propio formulario; como línea libre se pierde lo que el sistema ya sabe hacer.
+

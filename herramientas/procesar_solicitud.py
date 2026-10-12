@@ -7,6 +7,8 @@ Cada solicitud es una carpeta solicitudes/<id>/ con:
     fotos/*.jpg      (opcional) las fotos que el pedido nombra con ruta relativa
 
 El "pedido" es una de dos cosas:
+  - laminado de seguridad (trabajo "laminado-seguridad"): piezas y precio total, se arma con
+    herramientas/cotizar_laminado.py (rollos y reparto como en COT-2026-001)
   - un pedido de ficha (trae "trabajo"): se arma con herramientas/cotizar_trabajo.py
   - una cotización directa (trae "items" y "tipo"): va tal cual a plantilla/generar.py
 
@@ -28,6 +30,7 @@ RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [os.path.join(RAIZ, "plantilla"), os.path.join(RAIZ, "herramientas")]
 import generar as g          # noqa: E402
 import cotizar_trabajo as motor  # noqa: E402
+import cotizar_laminado as laminado  # noqa: E402
 
 SOLICITUDES = os.path.join(RAIZ, "solicitudes")
 MODOS = ("vista", "emitir")
@@ -89,8 +92,12 @@ def procesar(carpeta):
         pedido = sol["pedido"]
         hoy = hoy_lima()
 
-        if "trabajo" in pedido:
-            cot, _ = motor.armar(pedido, borrador=(modo == "vista"), hoy=hoy)
+        resumen = []
+        if pedido.get("trabajo") == "laminado-seguridad":
+            cot, resumen = laminado.armar(pedido, hoy)
+        elif "trabajo" in pedido:
+            cot, info = motor.armar(pedido, borrador=(modo == "vista"), hoy=hoy)
+            resumen = list(info.get("avisos", []))   # lo que la ficha advierte a quien cotiza
             # Lo que la ficha no decide y quien cotiza sí: cómo se llama el archivo.
             for clave in ("etiqueta_archivo", "detalle_archivo"):
                 if pedido.get(clave):
@@ -112,7 +119,7 @@ def procesar(carpeta):
                                               for it in items)
         final = modo == "emitir"
         errores, alertas, avisos = g.validar(cot, servicio, sub, sin_precios, final, final)
-        res.update(errores=errores, alertas=alertas, avisos=avisos)
+        res.update(errores=errores, alertas=resumen + alertas, avisos=avisos)
         if errores:
             raise motor.Problema("hay que corregir el pedido antes de generar")
 

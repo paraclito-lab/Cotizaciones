@@ -16,6 +16,9 @@
   textarea { min-height: 70px; }
   .fila { display: grid; grid-template-columns: 1fr 70px 90px 34px; gap: 6px; margin-bottom: 6px; align-items: center; }
   .fila input { padding: 9px 6px; }
+  .pieza { display: grid; grid-template-columns: 1fr 62px 62px 50px 34px; gap: 6px; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px dashed var(--borde); align-items: center; }
+  .pieza .zona { grid-column: 1 / -1; }
+  .pieza input, .pieza select { padding: 9px 6px; }
   .dos { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
   .seg { display: flex; gap: 6px; }
   .seg label { flex: 1; margin: 0; text-align: center; border: 1px solid var(--borde); border-radius: 8px; padding: 10px 4px; background: #fff; font-size: 14px; color: #1a1a1a; }
@@ -70,7 +73,9 @@
     <h2>Tipo de trabajo</h2>
     <div class="seg">
       <label><input type="radio" name="tipo" value="carretillas" checked><span>Carretillas</span></label>
-      <label><input type="radio" name="tipo" value="general"><span>Servicio general</span></label>
+      <label><input type="radio" name="tipo" value="balanzas"><span>Balanzas</span></label>
+      <label><input type="radio" name="tipo" value="laminado"><span>Laminado</span></label>
+      <label><input type="radio" name="tipo" value="general"><span>General</span></label>
     </div>
   </div>
 
@@ -116,6 +121,36 @@
     <div id="lineas-c"></div>
     <button type="button" class="mas" onclick="agregarLinea('c')">+ Agregar repuesto</button>
     <datalist id="repuestos"></datalist>
+  </div>
+
+  <div class="card oculto" id="bloque-balanzas">
+    <h2>Mantenimiento de balanzas</h2>
+    <div class="dos">
+      <div><label>N° de balanzas</label><input id="b-unidades" type="number" min="1" value="1" inputmode="numeric"></div>
+      <div><label>Precio por balanza (S/, sin IGV)</label><input id="b-precio" type="number" min="0" step="0.01" inputmode="decimal"></div>
+    </div>
+    <div class="nota">El precio por balanza es el del mantenimiento con celdas y caja, como paquete.</div>
+    <div id="b-preguntas"></div>
+    <label>Repuestos y trabajos aparte</label>
+    <div class="nota">Nombre · cantidad · precio. Sin precio se usa el del catálogo; un trabajo que no está en el catálogo (ej.: cambio de plataforma) necesita precio.</div>
+    <div id="lineas-b"></div>
+    <button type="button" class="mas" onclick="agregarLinea('b')">+ Agregar línea</button>
+    <datalist id="repuestos-b"></datalist>
+  </div>
+
+  <div class="card oculto" id="bloque-laminado">
+    <h2>Laminado de seguridad</h2>
+    <div class="nota">Una fila por medida, en metros (ej.: 0.97). Cantidad = cuántas piezas iguales hay.</div>
+    <div id="piezas" style="margin-top:10px"></div>
+    <button type="button" class="mas" onclick="agregarPieza()">+ Agregar pieza</button>
+    <label>¿Con certificado?</label>
+    <div class="seg">
+      <label><input type="radio" name="lam-cert" value="si" checked><span>Sí</span></label>
+      <label><input type="radio" name="lam-cert" value="no"><span>No</span></label>
+    </div>
+    <label>Precio total del trabajo (S/, sin IGV)</label>
+    <input id="lam-total" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Vacío = propuesta sin precios">
+    <div class="nota">El sistema reparte el total entre las piezas según el rollo que usa cada una y su área, como en COT-2026-001.</div>
   </div>
 
   <div class="card oculto" id="bloque-general">
@@ -238,28 +273,61 @@ function nuevoGrupo() {
 
 document.querySelectorAll('input[name=tipo]').forEach(function (r) {
   r.addEventListener('change', function () {
-    $('bloque-carretillas').classList.toggle('oculto', tipo() !== 'carretillas');
-    $('bloque-general').classList.toggle('oculto', tipo() !== 'general');
+    ['carretillas', 'balanzas', 'laminado', 'general'].forEach(function (t) {
+      $('bloque-' + t).classList.toggle('oculto', tipo() !== t);
+    });
   });
 });
 
 function agregarLinea(cual) {
   var d = document.createElement('div');
   d.className = 'fila';
-  d.innerHTML = '<input class="nom" ' + (cual === 'c' ? 'list="repuestos" placeholder="Repuesto"' : 'placeholder="Descripción"') + '>' +
+  var lista = { c: 'list="repuestos" placeholder="Repuesto"', b: 'list="repuestos-b" placeholder="Repuesto o trabajo"' }[cual] ||
+              'placeholder="Descripción"';
+  d.innerHTML = '<input class="nom" ' + lista + '>' +
     '<input class="cant" type="number" min="1" value="1" inputmode="numeric">' +
-    '<input class="pre" type="number" min="0" step="0.01" placeholder="' + (cual === 'c' ? 'Catálogo' : 'Precio') + '" inputmode="decimal">' +
+    '<input class="pre" type="number" min="0" step="0.01" placeholder="' + (cual === 'g' ? 'Precio' : 'Catálogo') + '" inputmode="decimal">' +
     '<button type="button" class="quitar" onclick="this.parentNode.remove()">✕</button>';
   $('lineas-' + cual).appendChild(d);
 }
 agregarLinea('g');
 
+function agregarPieza() {
+  var d = document.createElement('div');
+  d.className = 'pieza';
+  d.innerHTML = '<input class="zona" placeholder="Zona (ej.: Altillos, Baño hombres)">' +
+    '<select class="tipo"><option value="ventana">Ventana</option><option value="espejo">Espejo</option>' +
+    '<option value="vidrio">Vidrio</option><option value="mampara">Mampara</option></select>' +
+    '<input class="ancho" type="number" min="0" step="0.01" placeholder="Ancho" inputmode="decimal">' +
+    '<input class="alto" type="number" min="0" step="0.01" placeholder="Alto" inputmode="decimal">' +
+    '<input class="cant" type="number" min="1" value="1" inputmode="numeric">' +
+    '<button type="button" class="quitar" onclick="this.parentNode.remove()">✕</button>';
+  $('piezas').appendChild(d);
+}
+agregarPieza();
+
+function piezas() {
+  return Array.prototype.map.call(document.querySelectorAll('#piezas .pieza'), function (f) {
+    return { zona: f.querySelector('.zona').value.trim(), tipo: f.querySelector('.tipo').value,
+             ancho: Number(f.querySelector('.ancho').value), alto: Number(f.querySelector('.alto').value),
+             cant: Number(f.querySelector('.cant').value || 1) };
+  }).filter(function (p) { return p.zona || p.ancho || p.alto; });
+}
+
 function cargarCatalogo() {
 google.script.run.withSuccessHandler(function (c) {
   CAT = c;
-  $('repuestos').innerHTML = c.repuestos.concat(c.adicionales).map(function (r) {
-    return '<option value="' + r.nombre.replace(/"/g, '&quot;') + '">' + soles(r.precio) + '</option>';
-  }).join('');
+  var opcion = function (r) { return '<option value="' + r.nombre.replace(/"/g, '&quot;') + '">' + soles(r.precio) + '</option>'; };
+  $('repuestos').innerHTML = c.repuestos.concat(c.adicionales).map(opcion).join('');
+  if (c.balanzas) {
+    $('repuestos-b').innerHTML = c.balanzas.repuestos.map(opcion).join('');
+    $('b-preguntas').innerHTML = c.balanzas.preguntas.map(function (q) {
+      return '<label>' + escapar(q.pregunta) + '</label><div class="seg">' + q.opciones.map(function (o, i) {
+        return '<label><input type="radio" name="bq-' + q.id + '" value="' + escapar(o.id) + '"' + (i === 0 ? ' checked' : '') +
+          '><span>' + escapar(o.texto.replace(/[.:].*$/, '')) + '</span></label>';
+      }).join('') + '</div>';
+    }).join('');
+  }
 }).withFailureHandler(function (e) { mostrarErrores([e.message]); }).catalogo(CODIGO);
 }
 
@@ -326,7 +394,8 @@ function armarPedido() {
   if ($('corto').value.trim()) base.cliente_corto = $('corto').value.trim().toUpperCase();
   // En servicios generales la palabra reemplaza a "SERVICIOS GENERALES" en el nombre del PDF
   // (N° 10112-2026 RAMPA NGR LINCE MUNAY); en carretillas va antes de MUNAY.
-  if ($('etiqueta').value.trim()) base[tipo() === 'general' ? 'etiqueta_archivo' : 'detalle_archivo'] = $('etiqueta').value.trim().toUpperCase();
+  var esGeneral = tipo() === 'general' || tipo() === 'laminado';
+  if ($('etiqueta').value.trim()) base[esGeneral ? 'etiqueta_archivo' : 'detalle_archivo'] = $('etiqueta').value.trim().toUpperCase();
   if ($('garantia').value.trim()) base.condiciones = ['Garantía: ' + $('garantia').value.trim()];
   var p;
   if (tipo() === 'carretillas') {
@@ -342,6 +411,29 @@ function armarPedido() {
         return x;
       }) });
     if ($('precio').value !== '') p.precio_unidad = Number($('precio').value);
+  } else if (tipo() === 'balanzas') {
+    var nb = Number($('b-unidades').value);
+    if (!nb) errores.push('Falta el número de balanzas.');
+    if (!CAT.balanzas) errores.push('El catálogo de balanzas todavía se está cargando: espera un segundo.');
+    var respuestas = {};
+    ((CAT.balanzas || {}).preguntas || []).forEach(function (q) { respuestas[q.id] = radio('bq-' + q.id); });
+    p = Object.assign(base, { trabajo: (CAT.balanzas || {}).trabajo, unidades: nb, respuestas: respuestas,
+      lineas: lineas('b').map(function (l) {
+        var esRep = ((CAT.balanzas || {}).repuestos || []).some(function (r) { return r.nombre.toLowerCase() === l.nombre.toLowerCase(); });
+        var x = esRep ? { repuesto: l.nombre } : { descripcion: l.nombre };
+        x.cant = l.cant; if (l.precio !== null) x.precio = l.precio;
+        return x;
+      }) });
+    if ($('b-precio').value !== '') p.precio_unidad = Number($('b-precio').value);
+  } else if (tipo() === 'laminado') {
+    var ps = piezas();
+    if (!ps.length) errores.push('Agrega al menos una pieza con su zona y medidas.');
+    ps.forEach(function (x, i) {
+      if (!x.zona || !(x.ancho > 0) || !(x.alto > 0)) errores.push('Pieza ' + (i + 1) + ': falta la zona, el ancho o el alto.');
+      else if (x.ancho > 6 || x.alto > 6) errores.push('Pieza ' + (i + 1) + ': las medidas van en metros (0.97, no 97).');
+    });
+    p = Object.assign(base, { trabajo: 'laminado-seguridad', piezas: ps, certificado: radio('lam-cert') === 'si' });
+    if ($('lam-total').value !== '') p.precio_total = Number($('lam-total').value);
   } else {
     var ls = lineas('g');
     if (!ls.length) errores.push('Agrega al menos una línea con la descripción del trabajo.');
