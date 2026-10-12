@@ -1,0 +1,15 @@
+{
+ "estado": "error",
+ "errores": [
+  "ítem 1 tiene precio 0",
+  "el subtotal es S/ 0.00: no se emite una cotización sin monto"
+ ],
+ "alertas": [
+  "Con KELI + indicador se perdió dos veces a S/9,870 (6112 y 7171). Revisar si el indicador es imprescindible antes de incluirlo.",
+  "Definir el tipo de pintura y sumarla: no hay costo de pintura registrado para balanzas.",
+  "el N° 'PENDIENTE-2026' no es un correlativo real (NNNN-AAAA)"
+ ],
+ "avisos": [],
+ "id": "20261012-0305-5tj3-v030603",
+ "modo": "vista"
+}
