@@ -19,8 +19,8 @@ Segunda pestaña de la app. Se usa en el momento en que se gasta, con el mismo c
   inicio de `Code.gs`).
 - **A qué corresponde:** activo (equipo), cliente, local o una descripción; basta con uno. No
   lleva N° de cotización.
-- **Opcional:** tipo de comprobante y su foto. Con **factura**, la columna "Costo sin IGV" guarda
-  el monto ÷ 1.18 (el IGV es crédito fiscal); con boleta o sin comprobante, el monto completo.
+- **Opcional:** tipo de comprobante y su foto. El monto se registra **con IGV**, tal cual se
+  pagó, también con factura (criterios-actuales.md §13).
 
 No pasa por GitHub: escribe directo en la hoja **Gastos** del registro (la crea sola la primera
 vez) y guarda la foto en la carpeta **Comprobantes de gastos**, junto a `PDF emitidos` (si a la

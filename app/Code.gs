@@ -26,9 +26,9 @@ const CARPETA_COMPROBANTES = 'Comprobantes de gastos';
 const CATEGORIAS_GASTO = ['Repuestos y materiales', 'Mano de obra', 'Pasajes y viáticos',
   'Transporte y combustible', 'Consumibles', 'SCTR y EPP', 'Herramientas', 'Otros'];
 const COMPROBANTES = ['Sin comprobante', 'Boleta', 'Factura', 'Otro'];
-const IGV = 0.18;
-const COLUMNAS_GASTOS = ['Fecha', 'Categoría', 'Monto pagado (S/)', 'Comprobante',
-  'Costo sin IGV (S/)', 'Cliente', 'Local', 'Activo', 'Descripción', 'Foto del comprobante',
+// El gasto se registra con IGV, tal cual se pagó (decidido 12/10/2026, criterios §13).
+const COLUMNAS_GASTOS = ['Fecha', 'Categoría', 'Monto pagado con IGV (S/)', 'Comprobante',
+  'Cliente', 'Local', 'Activo', 'Descripción', 'Foto del comprobante',
   'Registrado por', 'Registrado el', 'ID'];
 
 // Bloqueo por códigos incorrectos. Se pueden cambiar; vale al publicar una versión nueva.
@@ -297,7 +297,7 @@ function registrarGasto(datos) {
     if (ultima > 1) {
       const ids = hoja.getRange(2, col, ultima - 1, 1).getValues();
       for (let i = 0; i < ids.length; i++) {
-        if (String(ids[i][0]) === g.id) return { fila: i + 2, repetido: true, costo: g.costo };
+        if (String(ids[i][0]) === g.id) return { fila: i + 2, repetido: true };
       }
     }
     let enlace = '';
@@ -307,10 +307,10 @@ function registrarGasto(datos) {
         Utilities.newBlob(Utilities.base64Decode(g.foto), 'image/jpeg', nombre)).getUrl();
     }
     const f = g.fecha.split('-').map(Number);
-    hoja.appendRow([new Date(f[0], f[1] - 1, f[2]), g.categoria, g.monto, g.comprobante, g.costo,
+    hoja.appendRow([new Date(f[0], f[1] - 1, f[2]), g.categoria, g.monto, g.comprobante,
       texto_(g.cliente), texto_(g.local), texto_(g.activo), texto_(g.descripcion), enlace,
       usuario, new Date(), g.id]);
-    return { fila: hoja.getLastRow(), repetido: false, costo: g.costo };
+    return { fila: hoja.getLastRow(), repetido: false };
   } finally {
     lock.releaseLock();
   }
@@ -354,10 +354,8 @@ function validarGasto_(d) {
   }
   if (errores.length) throw new Error(errores.join(' '));
 
-  // Con factura el IGV es crédito fiscal: el costo real es el neto. Sin factura no se recupera.
-  const costo = comprobante === 'Factura' ? Math.round(monto / (1 + IGV) * 100) / 100 : monto;
   return Object.assign({ id: id, fecha: fecha, monto: monto, categoria: categoria,
-                         comprobante: comprobante, costo: costo, foto: foto }, campos);
+                         comprobante: comprobante, foto: foto }, campos);
 }
 
 /** Texto libre a la hoja sin que se interprete como fórmula (=, +, -, @). */
@@ -374,10 +372,12 @@ function hojaGastos_() {
   hoja.getRange(1, 1, 1, col).setValues([COLUMNAS_GASTOS]).setFontWeight('bold')
     .setBackground('#1f9e6e').setFontColor('#ffffff');
   hoja.setFrozenRows(1);
-  hoja.getRange('A2:A').setNumberFormat('dd/mm/yyyy');
-  hoja.getRange('C2:C').setNumberFormat('#,##0.00');
-  hoja.getRange('E2:E').setNumberFormat('#,##0.00');
-  hoja.getRange('L2:L').setNumberFormat('dd/mm/yyyy hh:mm');
+  const columna = function (nombre) { return COLUMNAS_GASTOS.indexOf(nombre) + 1; };
+  hoja.getRange(2, columna('Fecha'), hoja.getMaxRows() - 1, 1).setNumberFormat('dd/mm/yyyy');
+  hoja.getRange(2, columna('Monto pagado con IGV (S/)'), hoja.getMaxRows() - 1, 1)
+    .setNumberFormat('#,##0.00');
+  hoja.getRange(2, columna('Registrado el'), hoja.getMaxRows() - 1, 1)
+    .setNumberFormat('dd/mm/yyyy hh:mm');
   return hoja;
 }
 

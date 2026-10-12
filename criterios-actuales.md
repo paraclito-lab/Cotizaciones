@@ -329,6 +329,7 @@ Cada una dice dónde quedó aplicada. Si el código y este texto no coinciden, m
 Los gastos se registran en el momento, desde la app del celular (pestaña "Registrar gasto"),
 en la hoja **Gastos** del registro. Obligatorio: fecha, monto y categoría. Se identifica a qué
 corresponde por activo, cliente, local o descripción (al menos uno); **no** lleva N° de
-cotización. El comprobante y su foto son opcionales. Con factura, el costo se guarda **sin
-IGV** (crédito fiscal); sin factura, el monto pagado completo. Detalle en `app/README.md`.
+cotización. El comprobante y su foto son opcionales. **Todo gasto se registra con IGV**, tal cual se pagó,
+haya o no factura (decidido 12/10/2026; reemplaza la regla anterior de guardar el neto con
+factura). Detalle en `app/README.md`.
 Queda fuera por ahora lo administrativo (planilla, alquiler, contador, impuestos).
