@@ -1,0 +1,22 @@
+{
+ "id": "20261012-0305-5tj3-v030603",
+ "grupo": "20261012-0305-5tj3",
+ "modo": "vista",
+ "creado_por": "Andres",
+ "creado": "2026-10-12T08:06:03.086Z",
+ "pedido": {
+  "cliente": "TOTTUS",
+  "unidades": 1,
+  "respuestas": {
+   "componentes": "keli",
+   "localidad": "lima",
+   "indicador": "no",
+   "pintura": "si"
+  },
+  "atencion": "Manuel Lagos",
+  "trabajo": "mantenimiento-balanza-plataforma",
+  "local": "LOS OLIVOS",
+  "precio_unidad": 0,
+  "lineas": []
+ }
+}
