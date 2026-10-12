@@ -136,12 +136,14 @@ def leer_catalogo(seccion):
 
 def buscar_repuesto(nombre, catalogo):
     """Devuelve (nombre en el catálogo, datos) o None si no está. Acepta el comienzo del nombre
-    ("Rueda direccional" encuentra "Rueda direccional / rueda giratoria…"), sin tildes."""
+    ("Rueda direccional" encuentra "Rueda direccional / rueda giratoria…"), sin tildes, y
+    cualquiera de los nombres separados por " / " ("Tapa protector de resorte")."""
     n = normalizar(nombre)
     exactos = [k for k in catalogo if normalizar(k) == n]
     if exactos:
         return exactos[0], catalogo[exactos[0]]
-    parecidos = [k for k in catalogo if normalizar(k).startswith(n)]
+    parecidos = [k for k in catalogo
+                 if any(normalizar(parte).startswith(n) for parte in [k] + k.split(" / ")[1:])]
     if len(parecidos) > 1:
         raise Problema(f"'{nombre}' coincide con varios repuestos del catálogo: "
                        f"{unir(parecidos)}. Escribir el nombre más completo")
@@ -440,7 +442,7 @@ def armar(pedido, borrador=False, hoy=None):
                     precio = datos["precio"]
                     validar_txt = ", POR VALIDAR" if "por validar" in datos["estado"].lower() else ""
                     trazas.append(f"{nombre}: {soles(precio)} de catálogo{validar_txt}.")
-            texto = linea.get("descripcion") or texto_repuesto(nombre)
+            texto = linea.get("descripcion") or texto_repuesto(nombre.split(" / ")[0])
         elif "adicional" in linea:
             ad = ficha.get("adicionales", {}).get(linea["adicional"])
             if ad is None:

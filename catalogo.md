@@ -22,7 +22,7 @@ precaución hasta confirmar.
 | Rueda de carga | 40.00 | **Confirmado** (14/09/2026) | Precio de venta vigente. Corrige el S/65 que aparece en Moyobamba y Porongoche — ese S/65 fue un error o un ajuste de conveniencia puntual, no el precio real. **Ojo: en 9196-2026 (TT Pucallpa, 20/09) se cobró S/60** — sin decidir si el catálogo cambia (hallazgos-abiertos.md, Q2). |
 | Resorte de retorno de brazo | 55.00 | **Confirmado** (14/09/2026) | Coincide con Moyobamba |
 | Rueda direccional / rueda giratoria o delantera (mismo ítem, nombre unificado) | 80.00 | **Confirmado** (14/09/2026) | Precio de venta vigente. Corrige el S/95 de Moyobamba y Porongoche. **Ojo: en 9196-2026 (TT Pucallpa, 20/09) se cobró S/95** — sin decidir si el catálogo cambia (Q2). |
-| Protector soporte de pistón | 29.00 | Por validar | Moyobamba |
+| Protector soporte de pistón / tapa protector de resorte | 29.00 | Por validar | Moyobamba. "Tapa (protector) de resorte" es el mismo repuesto: así se pidió en 9197-2026 y 10082-2026. |
 | Trapecio y ejes de rueda de carga | 300.00 | Por validar | Moyobamba |
 | Eje de brazo | 55.00 | Por validar | Moyobamba |
 | Bocina de eje (por par) | 18.00 | Validado | Fijado el 08/10/2026. Antes: 10082-2026 (TT Calle 7) salió a S/15, Tarapoto S/15, Excel histórico S/30. |

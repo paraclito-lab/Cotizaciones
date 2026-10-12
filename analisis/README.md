@@ -9,6 +9,9 @@ alguna vez se pone en duda, el porqué está acá, no solo el "qué".
 - **`tarapoto-excel.md`** — análisis del Excel de la balanza de Tarapoto, que reveló cómo se
   arma realmente un costeo (costo → ganancia → precio) y el hábito de dejar preguntas
   pendientes antes de cerrar una cotización.
+- **`propuesta-tecnico-economica.md`** — recomendación (sin construir) de sumar un formato de
+  propuesta de venta al mismo generador, tomado de la receta de propuesta comercial del curso,
+  sin dejar que la IA ponga precios.
 
 **Decidido**: los archivos .xlsx originales NO se suben al repo — tienen errores y
 redundancias propias del sistema anterior que no vale la pena arrastrar. Lo que sí queda,

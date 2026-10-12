@@ -189,6 +189,8 @@ def catalogo_se_lee_y_no_adivina():
     igual(motor.buscar_repuesto("rueda de carga", cat)[1]["precio"], Decimal("40.00"), "rueda de carga")
     assert motor.buscar_repuesto("Rueda direccional", cat)[0].startswith("Rueda direccional")
     assert motor.buscar_repuesto("Protector soporte de piston", cat) is not None, "sin tilde"
+    igual(motor.buscar_repuesto("Tapa protector de resorte", cat)[1]["precio"], Decimal("29.00"),
+          "otro nombre del mismo repuesto")
     assert motor.buscar_repuesto("Cilindro que no existe", cat) is None
     try:
         motor.buscar_repuesto("Rueda", cat)
