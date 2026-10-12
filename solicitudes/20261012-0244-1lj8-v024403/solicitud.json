@@ -1,0 +1,22 @@
+{
+ "id": "20261012-0244-1lj8-v024403",
+ "grupo": "20261012-0244-1lj8",
+ "modo": "vista",
+ "creado_por": "Andres",
+ "creado": "2026-10-12T07:44:03.687Z",
+ "pedido": {
+  "cliente": "TOTTUS",
+  "subtipo": "laminado-seguridad",
+  "local": "LURIN",
+  "tipo": "generales",
+  "items": [
+   {
+    "descripcion": "SERVICIO: Laminado ventana 1.2m x 1.2m.",
+    "cant": 2,
+    "pendiente": true
+   }
+  ],
+  "unidades": 2,
+  "atencion": ""
+ }
+}
