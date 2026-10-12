@@ -45,7 +45,18 @@
 <header>Cotizaciones Munay</header>
 <main>
 
-<section id="formulario">
+<section id="entrada">
+  <div class="card">
+    <h2>Entrar</h2>
+    <label>Tu código personal</label>
+    <input id="codigo" type="password" autocomplete="off" placeholder="Ej.: ana-4821">
+    <div id="errores-entrada"></div>
+    <div style="height:8px"></div>
+    <button class="prim" onclick="entrar()">Entrar</button>
+  </div>
+</section>
+
+<section id="formulario" class="oculto">
   <div class="card">
     <h2>Tipo de trabajo</h2>
     <div class="seg">
@@ -158,6 +169,7 @@
 </main>
 <script>
 var CAT = { repuestos: [], adicionales: [] };
+var CODIGO = '', NOMBRE = '';
 var grupo = null, fotosSubidas = [], fotosNuevas = [], ultimoPedido = null;
 
 function $(id) { return document.getElementById(id); }
@@ -187,12 +199,29 @@ function agregarLinea(cual) {
 }
 agregarLinea('g');
 
+function cargarCatalogo() {
 google.script.run.withSuccessHandler(function (c) {
   CAT = c;
   $('repuestos').innerHTML = c.repuestos.concat(c.adicionales).map(function (r) {
     return '<option value="' + r.nombre.replace(/"/g, '&quot;') + '">' + soles(r.precio) + '</option>';
   }).join('');
-}).withFailureHandler(function (e) { mostrarErrores([e.message]); }).catalogo();
+}).withFailureHandler(function (e) { mostrarErrores([e.message]); }).catalogo(CODIGO);
+}
+
+function entrar(automatico) {
+  var c = $('codigo').value.trim() || CODIGO;
+  if (!c) return;
+  google.script.run.withSuccessHandler(function (nombre) {
+    CODIGO = c; NOMBRE = nombre;
+    try { localStorage.setItem('codigo', c); } catch (e) {}
+    $('entrada').classList.add('oculto'); ver('formulario');
+    cargarCatalogo();
+  }).withFailureHandler(function (e) {
+    try { localStorage.removeItem('codigo'); } catch (x) {}
+    if (!automatico) $('errores-entrada').innerHTML = '<div class="error">' + e.message + '</div>';
+  }).validar(c);
+}
+try { var guardado = localStorage.getItem('codigo'); if (guardado) { $('codigo').value = guardado; entrar(true); } } catch (e) {}
 
 $('fotos').addEventListener('change', function (ev) {
   var archivos = Array.prototype.slice.call(ev.target.files, 0, 4);
@@ -280,7 +309,7 @@ function mostrarErrores(lista, dondeId) {
   $(dondeId || 'errores-form').innerHTML = lista.map(function (e) { return '<div class="error">' + e + '</div>'; }).join('');
 }
 function ver(seccion) {
-  ['formulario', 'espera', 'vista'].forEach(function (s) { $(s).classList.toggle('oculto', s !== seccion); });
+  ['entrada', 'formulario', 'espera', 'vista'].forEach(function (s) { $(s).classList.toggle('oculto', s !== seccion); });
   window.scrollTo(0, 0);
 }
 
@@ -309,7 +338,7 @@ function enviarAlMotor(modo, pedido) {
     fotosNuevas = [];
     esperar(r.id, modo, Date.now());
   }).withFailureHandler(function (e) { ver('formulario'); mostrarErrores([e.message]); })
-    .enviar({ grupo: grupo, modo: modo, pedido: pedido, fotos: fotos });
+    .enviar({ codigo: CODIGO, grupo: grupo, modo: modo, pedido: pedido, fotos: fotos });
 }
 
 function esperar(id, modo, inicio) {
@@ -327,7 +356,7 @@ function esperar(id, modo, inicio) {
     }
     mostrarResultado(r, modo);
   }).withFailureHandler(function () { setTimeout(function () { esperar(id, modo, inicio); }, 8000); })
-    .consultar(id);
+    .consultar(id, CODIGO);
 }
 
 function mostrarResultado(r, modo) {
@@ -351,7 +380,6 @@ function mostrarResultado(r, modo) {
 function volver() { ver('formulario'); }
 function nueva() {
   if (!confirm('¿Empezar una cotización nueva?')) return;
-  google.script.run.withSuccessHandler(function () {}).catalogo();
   location.reload();
 }
 </script>

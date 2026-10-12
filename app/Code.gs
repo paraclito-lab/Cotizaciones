@@ -8,7 +8,7 @@
  * Configuración (una sola vez, ver app/README.md):
  *   Proyecto > Configuración > Propiedades del script:
  *     GITHUB_TOKEN  = el token fine-grained (solo el repositorio Cotizaciones, Contents: RW)
- *     USUARIOS      = (opcional) correos autorizados separados por coma
+ *     CODIGOS       = códigos personales:  Ana:ana-4821,Luis:luis-9370
  * El token nunca va escrito en este archivo.
  */
 
@@ -21,15 +21,20 @@ const FICHA_CARRETILLAS = 'trabajos/mantenimiento-carretillas.json';
 const SECCION_CATALOGO = '## Repuestos — Carretillas';
 
 function doGet() {
-  verificarUsuario_();
   return HtmlService.createHtmlOutputFromFile('Index')
     .setTitle('Cotizaciones Munay')
     .addMetaTag('viewport', 'width=device-width, initial-scale=1, maximum-scale=1');
 }
 
+/** Primer código de la lista, solo para la prueba de conexión desde el editor. */
+function codigoPrueba_() {
+  const par = (PropertiesService.getScriptProperties().getProperty('CODIGOS') || '').split(',')[0] || '';
+  return par.slice(par.indexOf(':') + 1).trim();
+}
+
 /** Correr una vez desde el editor: pide los permisos y revisa que todo esté conectado. */
 function probarConexion() {
-  const cat = catalogo();
+  const cat = catalogo(codigoPrueba_());
   Logger.log('Catálogo: %s repuestos, %s adicionales', cat.repuestos.length, cat.adicionales.length);
   Logger.log('Registro: %s', SpreadsheetApp.openById(REGISTRO_ID).getName());
   Logger.log('Carpeta de PDF: %s', DriveApp.getFolderById(CARPETA_PDF_ID).getName());
@@ -38,14 +43,32 @@ function probarConexion() {
 
 // ------------------------------------------------------------------ acceso
 
-function verificarUsuario_() {
-  const correo = (Session.getActiveUser().getEmail() || '').toLowerCase();
-  const dueno = (Session.getEffectiveUser().getEmail() || '').toLowerCase();
-  const lista = (PropertiesService.getScriptProperties().getProperty('USUARIOS') || '')
-    .toLowerCase().split(',').map(function (s) { return s.trim(); }).filter(String);
-  if (correo && (correo === dueno || lista.indexOf(correo) >= 0)) return correo;
-  if (!correo && !lista.length) return dueno;   // publicada como "Solo yo"
-  throw new Error('Esta cuenta no tiene acceso a la app de cotizaciones.');
+/**
+ * Cada cotizador entra con su código personal. Se guardan en la propiedad CODIGOS del script,
+ * separados por coma:  Ana:ana-4821,Luis:luis-9370   (nombre:código, mínimo 6 caracteres).
+ * Para dar de baja a alguien se borra su par y se guarda. Devuelve el nombre.
+ */
+function verificarCodigo_(codigo) {
+  const cache = CacheService.getScriptCache();
+  const fallos = Number(cache.get('fallos') || 0);
+  if (fallos >= 8) throw new Error('Demasiados intentos fallidos. Esperar 10 minutos.');
+  const lista = (PropertiesService.getScriptProperties().getProperty('CODIGOS') || '')
+    .split(',').map(function (par) { return par.trim(); }).filter(String);
+  for (let i = 0; i < lista.length; i++) {
+    const corte = lista[i].indexOf(':');
+    if (corte < 1) continue;
+    const clave = lista[i].slice(corte + 1).trim();
+    if (clave.length >= 6 && String(codigo || '').trim() === clave) {
+      return lista[i].slice(0, corte).trim();
+    }
+  }
+  cache.put('fallos', String(fallos + 1), 600);
+  throw new Error('Código incorrecto.');
+}
+
+/** La pantalla de entrada llama a esta función: devuelve el nombre si el código es válido. */
+function validar(codigo) {
+  return verificarCodigo_(codigo);
 }
 
 // ------------------------------------------------------------------ GitHub
@@ -99,8 +122,8 @@ function subir_(path, base64, mensaje) {
 // ------------------------------------------------------------------ datos para el formulario
 
 /** Repuestos de carretillas (catalogo.md) y adicionales de la ficha, para autocompletar. */
-function catalogo() {
-  verificarUsuario_();
+function catalogo(codigo) {
+  verificarCodigo_(codigo);
   const cache = CacheService.getScriptCache();
   const guardado = cache.get('catalogo');
   if (guardado) return JSON.parse(guardado);
@@ -136,7 +159,7 @@ function catalogo() {
  * pedido las nombra con ruta relativa. La solicitud se sube al final: es la que activa el motor.
  */
 function enviar(datos) {
-  const usuario = verificarUsuario_();
+  const usuario = verificarCodigo_(datos.codigo);
   if (['vista', 'emitir'].indexOf(datos.modo) < 0) throw new Error('Modo inválido.');
   if (!/^[0-9a-z-]{8,40}$/.test(datos.grupo || '')) throw new Error('Grupo inválido.');
   const sello = Utilities.formatDate(new Date(), 'America/Lima', 'HHmmss');
@@ -159,8 +182,8 @@ function enviar(datos) {
 }
 
 /** Lo que respondió el motor. Si la cotización se emitió, guarda el PDF y la fila (una vez). */
-function consultar(id) {
-  verificarUsuario_();
+function consultar(id, codigo) {
+  verificarCodigo_(codigo);
   if (!/^[0-9a-z-]{8,60}$/.test(id || '')) throw new Error('Solicitud inválida.');
   const r = leer_('solicitudes/' + id + '/salida/resultado.json');
   if (!r) return { estado: 'pendiente' };
