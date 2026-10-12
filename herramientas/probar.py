@@ -382,6 +382,30 @@ def asistente_crea_una_ficha_que_el_motor_usa():
 # ---------------------------------------------------------------- registro
 
 @prueba()
+def tablero_formulas_y_graficos_en_su_lugar():
+    import re
+    import armar_tablero as tab
+    filas, _, g = tab.armar()
+    assert all(len(f) == tab.ANCHO for f in filas), "todas las filas con el mismo ancho"
+    formulas = [c for f in filas for c in f if isinstance(c, str) and c.startswith("=")]
+    assert formulas, "el tablero tiene fórmulas"
+    for f in formulas:
+        assert f.count("(") == f.count(")"), f"paréntesis sin cerrar: {f[:60]}"
+        # SUMIFS no se expande dentro de ARRAYFORMULA: daría el mismo número en toda la columna.
+        assert not ("ARRAYFORMULA" in f and "SUMIFS" in f), f"SUMIFS dentro de ARRAYFORMULA: {f[:60]}"
+        for hoja, col in re.findall(r"(Cotizaciones|Gastos)!\$([A-Z]+)\$", f):
+            limite = "AE" if hoja == "Cotizaciones" else "L"
+            assert len(col) < len(limite) or col <= limite, f"columna {hoja}!{col} fuera de la hoja"
+    tipos = tab.tipos_de_servicio()
+    assert set(tipos) == {"Carretillas", "Balanzas", "Servicios Generales"}, tipos
+    # Los gráficos (unas 16 filas cada uno) no se tapan entre sí.
+    anclas = [r["addChart"]["chart"]["position"]["overlayPosition"]["anchorCell"]["rowIndex"]
+              for r in tab.formato(0) if "addChart" in r]
+    assert all(b - a >= 16 for a, b in zip(anclas, anclas[1:])), anclas
+    assert g["seguimiento"][1] < g["meses"][0], "el seguimiento no invade la sección de meses"
+
+
+@prueba()
 def registro_agrega_columnas_al_final():
     try:
         import armar_registro as reg

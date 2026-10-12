@@ -137,7 +137,7 @@ sirven.
 
 | ID | Pregunta | Destraba |
 |---|---|---|
-| Q1 | ¿Se está llenando el registro desde el 15/09? — **Registro creado el 12/10/2026 como Google Sheet en Drive (carpeta "MUNAY - Cotizaciones"), con las 7 cotizaciones emitidas (8211-2026 agregada el 12/10) y la pestaña Gastos, con listas de categoría y comprobante; falta decidir quién llena las etapas 2 y 3** | N08 |
+| Q1 | ¿Se está llenando el registro desde el 15/09? — **Registro creado el 12/10/2026 como Google Sheet en Drive (carpeta "MUNAY - Cotizaciones"), con las 7 cotizaciones emitidas (8211-2026 agregada el 12/10) la pestaña Gastos, con listas de categoría y comprobante, y la pestaña **Tablero** (`herramientas/armar_tablero.py`); falta decidir quién llena las etapas 2 y 3, sin eso el tablero no muestra ganadas ni resultado** | N08 |
 | Q2 | Los precios de Pucallpa (60/95/50): **rueda de carga S/40 y direccional S/80 quedan en el catálogo (12/10/2026)**; falta definir la botella (38 en catálogo, 50 cobrado) | N09, N10 |
 | Q3 | "Margen 60-80%": **es markup sobre el costo (confirmado 12/10/2026); las fichas ya lo aplican así** | N11 |
 | Q4 | Numeración real: formato, quién lleva el correlativo y qué rango usa cada cotizador — **Formato confirmado (12/10/2026): mes + día + n° del día (10121-2026); la app lo asigna al emitir. Falta: qué pasa con los N° dados fuera de la app el mismo día** | N14, N23, R3 |
