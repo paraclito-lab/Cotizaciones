@@ -547,6 +547,26 @@ def armar(pedido, borrador=False, hoy=None):
     return cot, info
 
 
+def referencias_para_vista(info):
+    """Lo ya cobrado por este trabajo, en líneas cortas para la vista previa de quien cotiza.
+    Solo informa: el precio no se pone solo (criterios-actuales.md §11.8)."""
+    f, uno = info["ficha"], info["ficha"]["unidad"]
+    lineas = []
+    for r in f.get("referencias", []):
+        por_u = d(r["precio_final"]) / d(r["unidades"])
+        resultado = f" — {r['resultado']}" if r.get("resultado") else ""
+        lineas.append(f"Ya cobrado: {soles(por_u)} por {uno} ({r.get('fuente', '')}){resultado}")
+    limite = techo(f.get("referencias", []))
+    if limite:
+        lineas.append(f"Se ganó hasta {soles(limite[0])} por {uno} y se perdió desde "
+                      f"{soles(limite[1])}; comparar alcances, no todos incluyen lo mismo.")
+    for h in info["historial"]:
+        if h["precio_unidad"] is not None:
+            lineas.append(f"Ya cobrado: {soles(h['precio_unidad'])} por {uno} "
+                          f"({h['numero']}, {h['cliente']} {h['local']})")
+    return lineas
+
+
 # ---------------------------------------------------------------- informe
 
 def imprimir_informe(cot, info):

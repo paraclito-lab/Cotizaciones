@@ -438,6 +438,11 @@ def balanza_desde_la_app_reproduce_8211():
     igual(sum(i["cant"] * i["precio_unit"] for i in cot["items"]), 7160, "mismo subtotal que 8211-2026")
     contiene([cot["items"][0]["descripcion"]], "MAVIN NB2", "la marca elegida va en el texto")
     assert "(" not in cot["items"][2]["descripcion"], "sin notas del catálogo en el texto del cliente"
+    # La vista previa le muestra a quien cotiza lo que ya se cobró por una balanza y cómo salió.
+    _, info = motor.armar(pedido, borrador=True, hoy=datetime.date(2026, 10, 12))
+    ref = motor.referencias_para_vista(info)
+    assert any("S/5,785.00" in r and "ganada" in r for r in ref), ref
+    assert any("Se ganó hasta S/5,785.00" in r and "desde S/7,690.00" in r for r in ref), ref
 
 
 @prueba()

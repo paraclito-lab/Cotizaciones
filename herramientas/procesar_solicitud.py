@@ -98,6 +98,7 @@ def procesar(carpeta):
         elif "trabajo" in pedido:
             cot, info = motor.armar(pedido, borrador=(modo == "vista"), hoy=hoy)
             resumen = list(info.get("avisos", []))   # lo que la ficha advierte a quien cotiza
+            resumen += motor.referencias_para_vista(info)   # y lo que ya se cobró por este trabajo
             # Lo que la ficha no decide y quien cotiza sí: cómo se llama el archivo.
             for clave in ("etiqueta_archivo", "detalle_archivo"):
                 if pedido.get(clave):
