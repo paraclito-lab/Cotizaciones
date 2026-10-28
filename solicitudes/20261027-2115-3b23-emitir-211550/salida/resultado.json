@@ -1,0 +1,36 @@
+{
+ "estado": "ok",
+ "errores": [],
+ "alertas": [],
+ "avisos": [],
+ "id": "20261027-2115-3b23-emitir-211550",
+ "modo": "emitir",
+ "numero": "10271-2026",
+ "png": "10271-2026.png",
+ "subtotal": 998.0,
+ "igv": 179.64,
+ "total": 1177.64,
+ "sin_precios": false,
+ "pdf": "N° 10271-2026 SERVICIOS GENERALES TT MEGAPLAZA MUNAY.pdf",
+ "archivado": [
+  "cotizaciones-emitidas/10271-2026.jpg",
+  "cotizaciones-emitidas/10271-2026.json"
+ ],
+ "registro": {
+  "numero": "10271-2026",
+  "fecha": "27 de octubre de 2026",
+  "fecha_iso": "2026-10-27",
+  "cliente": "TOTTUS",
+  "local": "MEGAPLAZA",
+  "tipo": "Servicios Generales",
+  "subtipo": "otros",
+  "descripcion": "SERVICIO: Cambio de 02 bisagras de apertura 90° a puerta…",
+  "unidades": 2,
+  "subtotal": 998.0,
+  "igv": 179.64,
+  "total": 1177.64,
+  "costo_estimado": null,
+  "subtotal_calculado": null,
+  "nota_interna": ""
+ }
+}
