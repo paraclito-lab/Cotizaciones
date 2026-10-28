@@ -1,0 +1,23 @@
+{
+ "id": "20261027-2115-3b23-emitir-211550",
+ "grupo": "20261027-2115-3b23",
+ "modo": "emitir",
+ "creado_por": "Andres",
+ "creado": "2026-10-28T02:15:50.756Z",
+ "pedido": {
+  "local": "MEGAPLAZA",
+  "atencion": "Manuel Lagos",
+  "tipo": "generales",
+  "cliente_corto": "TT",
+  "unidades": 2,
+  "cliente": "TOTTUS",
+  "items": [
+   {
+    "descripcion": "SERVICIO: Cambio de 02 bisagras de apertura 90° a puerta Vaivén.",
+    "precio_unit": 499,
+    "cant": 2
+   }
+  ],
+  "subtipo": "otros"
+ }
+}
