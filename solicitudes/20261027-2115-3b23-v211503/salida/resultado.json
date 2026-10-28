@@ -1,0 +1,17 @@
+{
+ "estado": "ok",
+ "errores": [],
+ "alertas": [
+  "el N° 'PENDIENTE-2026' no es un correlativo real (NNNN-AAAA)"
+ ],
+ "avisos": [],
+ "id": "20261027-2115-3b23-v211503",
+ "modo": "vista",
+ "numero": "PENDIENTE-2026",
+ "png": "PENDIENTE-2026.png",
+ "subtotal": 998.0,
+ "igv": 179.64,
+ "total": 1177.64,
+ "sin_precios": false,
+ "pdf": "PENDIENTE-2026.pdf"
+}
